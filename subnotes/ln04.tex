@@ -1,0 +1,162 @@
+\chapter{Principal Component Analysis}
+
+\section{Symmetric Matrix}
+Let us begin with a formal definition of Symmetric Matrix:
+\begin{ln-define}{Symmetric Matrix}{}
+    A matrix $A \in \R^{n \times n}$ is a \textbf{symmetric matrix} if
+    \[A = A^T\]
+    or equivalently,
+    \[\forall i, j \in \{1, \cdots, n\}, a_{i,j} = a_{j,i}\]
+    and in such case we express,
+    \[A \in \mathbb{S}^n\]
+\end{ln-define}
+Symmetric Matrices have such properties summarized by the Spectral Theorem:
+\begin{ln-theorem}{Spectral Theorem}{}
+    If $A \in \mathbb{S}^n$, then:
+    \begin{bindenum}
+        \item[1.] All of its eigenvalues are real.
+        \item[2.] Eigenspaces corresponding to distinct eigenvalues are orthogonal.
+        \item[3.] The algebraic multiplicity of an eigenvalue is equal to its geometric multiplicity
+        \subitem (alternatively, the matrix is diagonalizable, such that there exists an orthonormal $U$ and diagonal $\Sigma$ to compose $A = U \Sigma U^T$).
+    \end{bindenum}
+    An interlude here:
+    \begin{ln-define}{Multiplicity of Eigenvalues}{}
+        A review from EECS 16B:
+        \begin{bindenum}
+            \item The algebraic multiplicity of an eigenvalue $(m_A)$ is the number of times such eigenvalue appears in its matrix's characteristic polynomial.
+            \item The geometric multiplicity of an eigenvalue $(m_G)$ is the number of lienarly independent eigenvectors that such eigenvalue corresponds to.
+        \end{bindenum}
+    \end{ln-define}
+\end{ln-theorem}
+Meanwhile, symmetric matrices also enjoy special properties in their eigenvalues:
+\begin{ln-theorem}{Variational Characteristics of Rayleigh Coefficient}{}
+    The Rayleigh Coefficient of some symmetric matrix $A \in \S^n$ and vector $\vec{x} \in \R^n$ is defined as:
+    \[
+        R_{A, \vec{x}} = \frac{\vec{x}^T A \vec{x}}{\vec{x}^T \vec{x}}
+    \]
+    \textbf{Theorem.}
+    Then, we may acknowledge via proof that:
+    \[
+        \forall \vec{x} \neq \vec{0}, \lambda_{min}(A) \leq R_{A, \vec{x}} \leq \lambda_{max}(A)
+    \]
+    and alternatively we may formulate the above inequality such that,
+    \[
+        \begin{cases}
+            \lambda_{max}(A) = \max_{{\lVert \vec{x} \rVert}_2^2 = 1}\vec{x}^T A \vec{x} \\
+            \lambda_{min}(A) = \min_{{\lVert \vec{x} \rVert}_2^2 = 1}\vec{x}^T A \vec{x}
+        \end{cases}
+    \]
+    \tcblower
+    \textbf{Proof.}
+    Let us define that $\vec{y} = U^T \vec{x}$, and we will proceed onto the algebraic work:
+    \begin{align*}
+        \vec{x}^T A \vec{x}
+        &= \vec{x} U \Lambda U^T \vec{x} \\
+        &= \vec{y}^T \Lambda \vec{y} \\
+        {\lVert \vec{y} \rVert}_2^2 &= 1
+    \end{align*}
+    And, furthermore,
+    \begin{align*}
+        \vec{y}^T \Lambda \vec{y}
+        &= \sum \lambda_i y_i^2 \\
+        &< \sum \lambda_{max} y_i^2 = \lambda_{max} \\
+        \vec{y}^T \Lambda \vec{y}
+        &= \sum \lambda_i y_i^2 \\
+        &> \sum \lambda_{min} y_i^2 = \lambda_{min}
+    \end{align*}
+    So we have now found the upper bound and lower bound of the optimization problem, justifying the boundaries of inequality. \\
+    And, we may also acknowledge that providing $\vec{x}$ as the normalized eigenvector of maximum and minimum eigenvalues provide the solution for achieving the lower and upper bound:
+    \begin{align*}
+        \vec{v}_{\lambda_{max}}^T A \vec{v}_{\lambda_{max}}
+        &= \lambda_{max} {\lVert \vec{v}_{\lambda_{max}} \rVert}_2^2 \\
+        &= \lambda_{max} \\
+        \vec{v}_{\lambda_{min}}^T A \vec{v}_{\lambda_{min}}
+        &= \lambda_{min} {\lVert \vec{v}_{\lambda_{min}} \rVert}_2^2 \\
+        &= \lambda_{min}
+    \end{align*}
+\end{ln-theorem}
+Below, let us discuss how we may use the properties of symmetric matrices to solve Principal Component Analysis, which is a problem we were studying in the previous lecture.
+
+\section{PCA}
+\begin{quote}
+    Principal Component Analysis is a technique to reduce dimensionality in high-dimension datapoints, so to find underlying feature patterns and enable plotting.
+    This can be achieved via projecting data onto a lower dimension structure to recover lower dimensional structure from the original high dimensional data. \\
+\end{quote}
+We will pick up from last lecture with a new formulation for optimization problem:
+\begin{ln-explain}{Introduction of Principal Component Analysis as Problem}{}
+    Suppose we have a set of vectors:
+    \[
+        \{\vec{x_1}, \dots, \vec{x_n}\}, \forall i (\vec{v_i} \in \R^p)
+    \]
+    And we would like to project our data into a lower dimensional subspace, such that we may reduce computational cost, and projected vectors are close to the original data.
+\end{ln-explain}
+Let us find the first principal component, $\vec{w}$, then, such that the dataset projected on this direction is as close to the original data as possible. Then, we will repeat the process of:
+\begin{bindenum}
+    \item Find principal component $\vec{w_i}$
+    \item[$\downarrow$] Remove all projected components onto principal component $i$
+    \item Repeat process to find principal component $\vec{w_{i + 1}}$
+\end{bindenum}
+Let us now formulate the mathematical aspects of PCA:
+\begin{ln-explain}{Mathematical Formulation of Principal Component Analysis as Problem}{}
+    \textbf{Metric of Optimization.}
+    Suppose we have a set of vectors:
+    \[
+        \{\vec{x_1}, \dots, \vec{x_n}\}, \forall i (\vec{v_i} \in \R^p)
+    \]
+    Let us find a vector $\vec{w}$ such that:
+    \[
+        \begin{cases}
+            {\lVert \vec{w} \rVert}_2 = 1 \\
+            MSE(\vec{w}) = \frac{1}{n} \sum_{i = 1}^n e_i^2
+        \end{cases}
+    \]
+    where, the individual error terms were defined and derived into:
+    \begin{align*}
+        {\lVert \vec{e_i} \rVert}_2^2
+        &= {(\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w})}^T \cdot (\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w}) \\
+        &= {\lVert \vec{x_i} \rVert}_2^2 - 2 {\langle \vec{x_i}, \vec{w} \rangle}^2 + {\langle \vec{x_i}, \vec{w} \rangle}^2 {\lVert \vec{w_i} \rVert}_2^2 \\
+        &= {\lVert \vec{x_i} \rVert}_2^2 - {\langle \vec{x_i}, \vec{w} \rangle}^2
+    \end{align*}
+    Therefore,
+    \[
+        MSE(\vec{w}) = \frac{1}{n} \sum_{i = 1}^n ({\lVert \vec{x} \rVert}_2^2 - {\langle \vec{w}, \vec{x_i} \rangle}^2)
+    \]
+    \tcblower
+    \textbf{Formulation of Optimization.}
+    To consider the optimization problem holistically, we should formulate that,
+    \[
+        \underset{\vec{w}}{argmin} MSE(\vec{w}) = \underset{\vec{w}}{argmin} -\frac{1}{n} \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
+    \]
+    which is equivalently solving for
+    \[
+        \underset{\vec{w}}{argmax} \frac{1}{n} \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
+    \]
+    and we would recognize so becuase the aspect of MSE, $\frac{1}{n} \sum_{i = 1}^n {\lVert \vec{x} \rVert}_2^2$, is a fixed cost.
+\end{ln-explain}
+Now, let us attempt to solve for the above formulation:
+\begin{ln-explain}{Solving PCA Optimization Problem}{}
+    Keep in mind that our data matrix would appear as:
+    \[
+        X = \begin{bmatrix} \vec{x_1}^T \\ \vdots \\ \vec{x_n}^T \end{bmatrix}
+    \]
+    We may begin with the algebraic work then.
+    \[
+        X \vec{w} = \begin{bmatrix} \vec{x_1}^T \vec{w} \\ \vdots \\ \vec{x_n}^T \vec{w} \end{bmatrix}
+    \]
+    Let us capture the information and make some algebraic derivation:
+    \begin{align*}
+        \frac{1}{n} \sum {\langle \vec{w}, \vec{x_i} \rangle}^2
+        &= \frac{1}{n} \sum {(\vec{x_i}^T \vec{w})}^2 \\
+        &= \frac{1}{n} {\lVert X \vec{w} \rVert}_2^2 \\
+        &= \vec{w}^T \frac{X^T X}{n} \vec{w}
+    \end{align*}
+    We call the matrix in above intermediate form the covariance matrix:
+    \[
+        C = \frac{X^T X}{n} = C^T
+    \]
+    And, using the knowledge from Section 4.1, we obtain that the solution of:
+    \[
+        {argmax}_{\vec{w}} \vec{w}^T C \vec{w} \text{ subject to } {\lVert \vec{w} \rVert}_2^2
+    \]
+    would be the eigenvector of $\lambda_{max}(C)$.
+\end{ln-explain}

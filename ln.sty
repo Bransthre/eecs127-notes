@@ -1,0 +1,151 @@
+%%%%% Basic Setup
+\usepackage[utf8]{inputenc}
+\usepackage{fancyvrb}
+\VerbatimFootnotes
+\newsavebox{\codebox}
+
+%%%%%% Copied from ee16.sty
+\usepackage{amsmath,textcomp,enumerate,mathtools,etoolbox}
+\usepackage{pgfplots}
+\usepackage{times,latexsym,comment,latexsym,epsf,amssymb,graphicx,url,amsmath,amsfonts,textcomp}
+\usepackage[T1]{fontenc} % to get proper curly braces with \tt
+\textheight=9in
+\textwidth=6.5in
+\addtolength{\voffset}{-1in}
+\oddsidemargin=0in
+\evensidemargin=-0.25in
+\parindent=0pt
+\parskip=5pt
+\itemsep=-1pt
+\floatsep 9pt plus 2pt minus 3pt
+\intextsep 9pt plus 2pt minus 3pt
+\textfloatsep=9pt plus 2pt minus 3pt
+\renewcommand{\baselinestretch}{1.0}
+\font\dunhd=cmdunh10 scaled \magstep5
+\font\dunhc=cmdunh10 scaled \magstep4
+\font\dunhbb=cmdunh10 scaled \magstep4
+\font\dunhb=cmdunh10 scaled \magstep2
+\font\dunha=cmdunh10 scaled \magstep2
+\date{}
+\usepackage{changepage}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{color,hyperref,listings,enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tkz-euclide}
+\usepackage{physics}
+\usepackage{pgfplots}
+\usepackage{adjustbox}
+\usepackage{cancel}
+\usepackage{commath}
+\usepackage{mathdots}
+\usepackage{subcaption}
+\usepackage[american,siunitx]{circuitikz}
+\sisetup{per-mode=fraction}
+\sisetup{quotient-mode=fraction}
+\DeclareSIUnit \decade {dec}
+\lstset{basicstyle=\ttfamily}
+\newcommand{\fillin}[1]{\underline{\hskip #1}}
+\newcommand{\doublehrule}{\hrule \vskip 0.02in \hrule}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+  \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\U{\mathbb{U}}
+\def\C{\mathbb{C}}
+\def\E{\mathbb{E}}
+\def\X{\mbf{X}}
+\def\x{\mbf{x}}
+\def\sx{\smbf{x}}
+\def\Y{\mbf{Y}}
+\def\y{\mbf{y}}
+\def\sy{\smbf{y}}
+\def\e{\mbf{e}}
+\def\T{\mbf{T}}
+\def\O{\textrm{O}}  % repeated below because it gets redefined by some package?
+\def\Q{\mathbb{Q}}
+\def\se{\smbf{e}}
+\def\Z{\mathbb{Z}}
+\def\z{\mbf{z}}
+\def\sz{\smbf{z}}
+\def\F{\mathbb{F}}
+\def\f{\mbf{f}}
+\def\A{\mbf{A}}
+\def\P{\mathbb{P}}
+\def\B{\mbf{B}}
+\def\b{\mbf{b}}
+\def\m{\mbf{m}}
+\def\I{\mbf{I}}
+\def\ones{\mbf{1}}
+\def\ev{\mbf{ev}}
+\def\fv{\mbf{ev}}
+\def\sv{\mbf{sv}}
+\def\e{\mathop{\mathrm{e}}\nolimits}  % for e = 2.718...
+
+\def\third{{\textstyle{1\over 3}}}
+\def\half{{\textstyle{1\over 2}}}
+\def\quarter{{\textstyle{1\over 4}}}
+\def\VarOmega{\mathchar"10A }
+\def\Ex#1{{\mathbb E}(#1)}
+\def\Var#1{{\rm Var}(#1)}
+\def\Aset{{\cal A}}
+\def\Bset{{\cal B}}
+
+\def\Bin{\text{Bin}}
+\def\Geom{\text{Geom}}
+\def\Poiss{\text{Poiss}}
+\def\Exp{\text{Exp}}
+
+%%%%%% tcolorbox
+
+\newcommand{\pnorm}[3][]{{\| #2 \|}_{#3}^{#1}}
+\newcommand{\proj}[2]{\text{proj}_{#1}(#2)}
+\definecolor{silver}{rgb}{0.75, 0.75, 0.75}
+\definecolor{ice}{rgb}{0.44, 0.65, 0.82}
+\definecolor{mayablue}{rgb}{0.45, 0.76, 0.98}
+\definecolor{lavenderblue}{rgb}{0.8, 0.8, 1.0}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\newenvironment{bindenum}{\begin{itemize}}{\end{itemize}}
+\tcolorboxenvironment{bindenum}
+  {blanker, before skip = 6pt, after skip = 6pt,
+    borderline west = {1mm}{0pt}{blue!65!black!45!}}
+\newtcbtheorem[number within=section]{ln-theorem}{Theorem}%
+  {enhanced, breakable,
+    colback = white, colframe = silver!40!black!60!, colbacktitle = cyan,
+    attach boxed title to top left = {yshift = -2mm, xshift = 5mm},
+    boxed title style = {sharp corners}, separator sign = {.}}{}
+\newtcbtheorem[number within=section]{ln-define}{Definition}%
+  {enhanced, breakable,
+    colback = white, colframe = silver!40!black!60!, colbacktitle = ice!85!black!70!,
+    attach boxed title to top left = {yshift = -2mm, xshift = 5mm},
+    boxed title style = {sharp corners}, separator sign = {.}}{}
+\newtcbtheorem[number within=section]{ln-symbol}{Symbol}%
+  {enhanced, breakable,
+    colback = white, colframe = silver!40!black!60!, colbacktitle = mayablue!70!black!95!,
+    attach boxed title to top left = {yshift = -2mm, xshift = 5mm},
+    boxed title style = {sharp corners}, separator sign = {.}}{}
+\newtcbtheorem[number within=section]{ln-fig}{Figure}%
+  {enhanced, breakable,
+    colback = white, colframe = silver!40!black!60!, colbacktitle = lavenderblue!70!black!95!,
+    attach boxed title to top left = {yshift = -2mm, xshift = 5mm},
+    boxed title style = {sharp corners}, separator sign = {.}}{}
+\newtcbtheorem[number within=section]{ln-explain}{Explain}%
+  {enhanced, breakable,
+    colback = white, colframe = silver!40!black!60!, colbacktitle = violet,
+    attach boxed title to top left = {yshift = -2mm, xshift = 5mm},
+    boxed title style = {sharp corners}, separator sign = {.}}{}
+\newtcbtheorem[number within=section]{ln-todo}{Todo}%
+  {enhanced, breakable,
+    colback = white, colframe = silver!40!black!60!, colbacktitle = violet!70!black!90!,
+    attach boxed title to top left = {yshift = -2mm, xshift = 5mm},
+    boxed title style = {sharp corners}, separator sign = {.}}{}
+\newtcbtheorem[number within=section]{ln-quest}{Example Question}%
+{enhanced, breakable, colback=ice!5,colframe=ice!35!black!55!}{}
+\newtcbtheorem[number within=section]{ln-think}{Exercise Reader! Exercise!}%
+{enhanced, breakable, colback=lavenderblue!5,colframe=lavenderblue!35!black!55!}{}
+\newtcbtheorem[number within=section]{ln-practice}{Practice}%
+{enhanced, breakable, colback=lavenderblue!5,colframe=lavenderblue!35!black!55!}{}

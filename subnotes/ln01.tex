@@ -1,0 +1,136 @@
+\chapter{Introduction and Least Squares}
+For this lecture, we will traverse through the Spring 2023 versions of course logistics, and then an introduction towards optimization.
+
+\section{An Introductory Prompt}
+In this course, we discuss a problem in Computer Science called, ``optimization''.
+Understanding optimization is not limited to just understanding mathematical details, and has more to do with ``problem formulation'': for whatever technology comes, optimization is an involved technique of critical thinking.
+
+\section{Administratives, Summary}
+\textbf{Logistics.} For Discussion, Homework policies, please check the lecture slides. Friday sections are equivalent to the subsequent Monday sections. \\
+\textbf{Advices from Instructor.} Do homeworks, collaborate with people. \\
+\textbf{New: Projects.} We will have an option to do a project at the end of the semester, where we complete a project of choice.
+This is an effort to bridge the gap between students and research experience; where, provided a research paper, the student will extend that literature at the end of project.
+This will count towards grade and remove weight from exams if the project grade helps.
+Schemes will be announced. Projects will be in groups, released after the midterm and due during RRR week.
+
+\section{Introduction to The Subject Topic: Optimization}
+Optimization is an approach to problems. \\
+It is the technique where we attempt to optimize some statistic resembling of a result.
+For example, in machine learning from DATA C100 (or EECS 16A/B), we have chosen appropriate loss functions for our learning task to characterize the performance of a model:
+\begin{bindenum}
+    \item Minimizing the MSE of a linear regresssion model.
+    \item Minimizing the cross-entropy loss of a logistic regression model.
+    \item Minimizing the distance traveled by an agent in a maze.
+\end{bindenum}
+Here, we model learning tasks and attempt to optimize a metric. Depending on how we model and represent a problem, the model will perform differently on its learning task.
+Therefore, optimization is a study about ``picking the right loss function'' for some same objective.
+We consider these design choices, study how they affect learning process.
+
+For another example, Air Traffic control is another optimization problem (at the point of writing, US has just experienced a flight paralysis); for another example, queueing and revenue computation are also common optimization problems.
+Optimization itself is omnipresent in modern applications.
+
+In this course, we will learn about:
+\begin{bindenum}
+    \item Low rank approximation
+    \item Ridge regression
+    \item Stochastic Gradient Descent
+    \item Dual Program (which always provides a lower bound for some optimization problem)
+    \item Applications: LQR Control, Classification, SVM
+\end{bindenum}
+
+Let's get into the Math now!!!
+
+\subsection{An Example of Problem Formulation}
+Say, we work in an oil production firm (I know, very US).
+We are allowed to make 10,000 barrels of crude oil, which may be produced into either \textit{Jet Fuel} or \textit{Gasoline}. \\
+For every barrel of Jet Fuel produced, a revenue of 30 cents; for Gasoline, 20 cents. Meanwhile, 1 barrel of crude oil produces 0.6 barrels of Jet Fuel or 0.7 barrels of Gasoline. \\
+Furthermore, the firm demands that we produce more than some amount of Jet Fuel and Gasoline (respectively, say, 1000 and 2000 barrels). \\
+Finally, there are transportation capacities, where 180000 barrel miles are available. Distributing Gasoline costs 30 miles, and distributing Jet Fuel costs 10 miles. \\
+
+We have now been presented a prompt: provided the above conditions, how can I maximize my revenue? \\
+Let us first formulate this prompt mathematically:
+\[
+    \begin{cases}
+        x_j = \text{ Quantity of Jet Fuel in barrels} \\
+        x_g = \text{ Quantity of Gasoline in barrels}
+    \end{cases}
+\]
+The revenue we generate would be formulated as
+\[R(x_j, x_g) = 0.3 x_j + 0.2 x_g\]
+such that we are presented the \textbf{constraints}:
+\[
+    \begin{cases}
+        \text{Production Quantity Minimum: } &x_j \geq 1000, x_g \geq 2000 \\
+        \text{Total Available Resources: } &\frac{x_j}{0.7} + \frac{x_g}{0.6} \leq 10000 \\
+        \text{Transportation Capacity: } &10 x_j + 30 x_g \leq 180000
+    \end{cases}
+\]
+which are mathematically translated from the above English text.
+
+In an optimization framework, we formualte a problem with the following frame:
+\begin{ln-explain}{Formulating Optimization Problems}{}
+    In a general optimization problem, we attempt to minimize some function $f_0(\vec{x})$, such that some constraint exists:
+    \[\forall i \in \{1, \dots, m\}, f_i(\vec{x}) \leq b_i\]
+    and here, $\vec{x}$ is listed as a representation of some system's state, existing within the domain of possible inputs (states). \\
+    The general objective of optimization is to find a state of system that minimizes $f_0(\vec{x})$, which we mathematically express the solution as:
+    \[\vec{x}^* = {argmin}_{\forall i \in \{1, \dots, m\}, f_i(\vec{x}) \leq b_i} f_0(\vec{x})\]
+\end{ln-explain}
+See the example from above, and try matching the parts of optimization problem with the above framework!
+
+There are some more types of optimization problems! One of them is the famous Least Squares Regression:
+
+\section{Least Squares Regression}
+The problem statement:
+\begin{center}
+    For some matrix $A$ and a vector $\vec{b}$, solve for:
+    \[\min_{\vec{x}} {\lvert\lvert A \vec{x} - \vec{b} \rvert\rvert}_2^2\]
+\end{center}
+
+Such problem can be widely applied to many mathematical problems, such as regression and projection.
+
+\begin{ln-explain}{Formulating Least Squaresd Regression}{}
+    Provided a dataset of points:
+    \[\{(x_1, y_1), \dots, (x_n, y_n)\}\]
+    where we attempt to model a linear equation
+    \[y = mx + c\]
+    
+    First of all, what is the variable we attempt to search/optimize for? It would be $m, c$ that are the unknowns. \\
+    To formulate the Least Squares Problem, we would need to formulate our linear equation for points into some matrix-vector multiplication, and knowing that we are solving for $m$ and $c$, the formulation follows:
+    \[
+        A
+        \begin{bmatrix} m \\ c \end{bmatrix}
+        = \vec{b}
+    \]
+    Let us now fill in the contents of $A$ and $\vec{b}$ for formulation, where $A$ and $\vec{b}$ are of known quantities:
+    \[
+        \begin{bmatrix} \vec{x} & \vec{1} \end{bmatrix}
+        \begin{bmatrix} m \\ c \end{bmatrix}
+        = \vec{y}
+    \]
+\end{ln-explain}
+From prior coursework we also know that there is a closed-form solution:
+\[\vec{x}^* = {(A^T A)}^{-1} A^T \vec{b}\]
+for matrices $A$ with nontrivial nullspaces (see EECS16A for a proof that $N(A) = N(A^T A)$).
+
+\begin{ln-explain}{Closed-Form Solution of Least Squares}{}
+    To minimize the L2 norm of difference between $A \vec{x}$ and $\vec{b}$, we attempt to find a vector $\vec{x}$ that minimizes the differences between them. \\
+    Note that for any choice of $\vec{x}$, it is by definition that $A \vec{x} \in Col(A)$. \\
+
+    We now face two claims that we resolve to proceed on solving this problem:
+    \begin{bindenum}
+        \item[1.] The endpoint of ${proj}_{Col(A)} \vec{b}$ is the point closest to the endpoint of $\vec{b}$ (if they share a same starting point) in $Col(A)$.
+        \item[2.] $\vec{OP} = A \vec{x}^*$, where $\vec{x}^*$ has the closed-form solution as previously described.
+    \end{bindenum}
+
+    Claim 1 can be proven by contradiction: assume another point $C$ closer than $P$ to $B$ (such that $\vec{OB}$ is closer to $\vec{b}$). However, Pythagorean Theorem argues against it. \\
+    Claim 2 is a series of algebraic manipulation as outlined in previous courseworks, based on that the error vector $\vec{e} = \vec{b} - A\vec{x}$ should be orthogonal to the columnspace $Col(A)$ by geometry:
+    \begin{align*}
+        A^T \vec{e} &= 0 \\
+        A^T (A \vec{x}^* - \vec{b}) &= 0 \\
+        A^T A \vec{x}^* &= A^T \vec{b} \\
+        \vec{x}^* &= {(A^T A)}^{-1} A^T \vec{b}
+    \end{align*}
+    Such result is also known as the \textbf{Normal Equation}.
+\end{ln-explain}
+
+Interestingly, Least Squares Algorithm has a quadratic property, causing it to be some parabolic object that performs a \textbf{convex function} to optimize along; that is, the local minimum of this function is a global minimum.

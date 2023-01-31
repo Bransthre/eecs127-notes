@@ -1,0 +1,136 @@
+\chapter{Linear Algebra: Symmetric Matrices}
+
+\section{Fundamental Theorem of Linear Algebra}
+\begin{ln-theorem}{Orthogonal Decomposition of Space}{}
+    Let us consider some vector space $\mathcal{X}$ and some subspace $\mathcal{S} \subseteq \mathcal{X}$. \\
+    Then, we may state that,
+    \[\forall \vec{x} \in \mathcal{X}, \vec{x} = \vec{s} + \vec{r} \text{ uniquely, s.t. } \vec{s} \in \mathcal{S} \land \vec{r} \in \mathcal{S}^\perp\]
+    such that, 
+    \[\mathcal{S}^\perp = \{\vec{y} : \langle \vec{x}, \vec{y} \rangle = 0, \vec{x} \in \mathcal{S}\}\]
+    Conseuqeuntially, we are stating that for the space $\mathcal{X}$,
+    \[\mathcal{X} = \mathcal{S} \oplus \mathcal{S}^\perp\]
+    it is a \textbf{direct sum} of the vector spaces $\mathcal{S}$ and $\mathcal{S}^\perp$ (we may write any vector in $\mathcal{X}$ as the sum of two components where each component belongs to some specific subspace of the direct sum.)
+\end{ln-theorem}
+This leads to a theorem about decomposing a vector space from some given matrix:
+\begin{ln-theorem}{Fundamental Theorem of Linear Algebra}{}
+    \textbf{Theorem.} Consider a matrix $A \in \R^{m \times n}$, then,
+    \[\R^n = N(A) \oplus R(A^T)\]
+    where, similarly,
+    \[\R^m = \mathcal{R}(A) \oplus N(A^T)\]
+    \tcblower
+    \textbf{Proof.} We may use Orthogonal Decomposition of Space (Theorem 3.1.1) to aid our proof. If so, we would only need to show the two following facts:
+    \begin{enumerate}
+        \item $N(A) \perp \mathcal{R}(A^T)$, or equivalently, $N(A) = \mathcal{R}(A^T)^\perp$
+        \item $N(A^T) \perp \mathcal{R}(A)$
+    \end{enumerate}
+    Let us perform a proof on the first fact, which would be to prove the equivalence of two sets. \\
+    First, we may prove that $N(A) \subseteq \mathcal{R}(A^T)^\perp$:
+    \begin{quote}
+        Suppose that there is an arbitrary vector $\vec{u} \in N(A)$, where $A \vec{u} = \vec{0}$. \\
+        Then, we realize that,
+        \[(A \vec{u}) = \vec{0}, \vec{0}^T = \vec{u}^T A^T\]
+        then, for any arbitrary vector $\vec{u}'$, we may find that
+        \[\vec{u}^T A^T \vec{u}' = \vec{0}^T \vec{u}' = 0\]
+        Therefore, the vector $\vec{u}$ is orthogonal to any vector belonging to $\mathcal{R}(A^T)$, which would mathematically state,
+        \[\vec{u} \in \mathcal{R}(A^T)^\perp\]
+    \end{quote}
+    Then, we may prove the opposite direction: $\mathcal{R}(A^T)^\perp \subseteq N(A)$
+    \begin{quote}
+        Suppose that there is an arbitrary vector $\vec{w} \in \mathcal{R}(A^T)$, and $\vec{x} \in \mathcal{R}(A^T)^\perp$; by which, we would state for the arbitrary pair $(\vec{w}, \vec{x})$ that
+        \[
+            \forall \vec{w} \in \mathcal{R}(A^T), \vec{x} \in \vec{x} \mathcal{R}(A^T)^\perp (\vec{x} \cdot \vec{w} = 0)
+        \]
+        Thus, $\forall \vec{w} \in \mathcal{R}(A^T)$:
+        \begin{align*}
+            \langle \vec{x}, \vec{w} \rangle &= 0 \\
+            \langle \vec{x}, A^T \vec{w} \rangle &= 0 \\
+            \vec{x}^T A^T \vec{w} &= 0
+        \end{align*}
+        Which qualifies us to state that $A \vec{x} = \vec{0}$. \\
+        Therefore, $\vec{x} \in N(A)$.
+    \end{quote}
+    Applying a symmetrical proof to the second fact allows us to provide a complete proof for this theorem.
+\end{ln-theorem}
+
+\section{Minimum Norm Problem}
+This is some sister problem to the Least Squares Problem:
+\begin{center}
+    \begin{tabular}{l || l}
+        Least Squares & Minimum Norm \\
+        \hline
+        \hline
+        Solves an overdetermined system & Solves an underdetermined system \\
+        \hline
+        Formulation: $\min_{\vec{x}} {\lVert A\vec{x} - \vec{b} \rVert}_2^2$ & Formulation: $\min_{A\vec{x} = \vec{b}} {\lVert \vec{x} \rVert}_2^2$
+    \end{tabular}
+\end{center}
+\begin{ln-explain}{Solution to Minimum Norm Problem}{}
+    Let us provide some $\vec{x}$ that is a solution to $A \vec{x} = \vec{b} \neq \vec{0}$. \\
+    Some component of $\vec{x}$ might belong to the nullspace of $A$. Meanwhile, we also acknowledge that $\vec{x}$ is some arbitrary vector in the real space.
+    Therefore, the vector $\vec{x}$ may be decomposed into $\vec{x} = \vec{n} + \vec{r}$, where 
+    \[
+        \vec{n} \in N(A), \vec{r} \in \mathcal{R}(A^T)
+    \]
+    In that case, we now minimize for $\vec{r} \in \mathcal{R}(A^T)$ under the setup that,
+    \[
+        A \vec{x} = A(\vec{n} + \vec{r}) = A \vec{r} = \vec{b}
+    \]
+    We may recognize that $\vec{n} \cdot \vec{r} = 0$ due to the orthogonal decomposition's nature. Therefore,
+    \[
+        {\lVert \vec{x} \rVert}_2^2 = {\lVert \vec{n} \rVert}_2^2 + {\lVert \vec{r} \rVert}_2^2
+    \]
+    Therefore, $\vec{x}^* = A^T \vec{w}$
+    \begin{align*}
+        A \vec{x} &= \vec{b} \\
+        (A A^T) \vec{w} &= \vec{b} \\
+        \vec{w} &= {(A A^T)}^{-1} \vec{b} \\
+        \vec{x}^* &= A^T {(A A^T)}^{-1} \vec{b}
+    \end{align*}
+\end{ln-explain}
+
+\section{Principal Component Analysis}
+Principal Component Analysis is a technique to reduce dimensionality in high-dimension datapoints, so to find underlying feature patterns and enable plotting. \\
+This can be achieved via projecting data onto a lower dimension structure to recover lower dimensional structure from the original high dimensional data. \\
+Mathematically, it would be to project $\vec{x_1}, \dots, \vec{x_n}$ onto $\vec{w} \in \R^p$ such that the projected vectors are all as close to the original vectors as possible.
+\begin{ln-explain}{Projections}{}
+    For projecting some vector $\vec{x}$ onto $\vec{w}$, we would obtain result
+    \[
+        {(\vec{w}^T \vec{w})}^{-1} \vec{w}^T \vec{x}
+    \]
+    Where, projection vector $\vec{x}$ onto a columnspace of matrix $A$ then follows the least squares formula,
+    \[
+        {(A^T A)}^{-1} A^T \vec{x}
+    \]
+\end{ln-explain}
+Now, let's discuss how would PCA work:
+\begin{ln-explain}{PCA as an Optimization Problem}{}
+    \textbf{Formulation.} 
+    Let the individual projection errors be phrased as
+    \[{\lVert \vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w} \rVert}_2^2\]
+    Where, the average projection error can thus be quantified as,
+    \[
+        R(\vec{w}) = \frac{1}{n} \sum_{i = 1}^n {\lVert \vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w} \rVert}_2^2 = MSE(\vec{w})
+    \]
+    Therefore, the formulation of optimization problem is:
+    \[
+        \min_{\vec{w}} R(\vec{w}) \text{ subject to } {\lVert \vec{w} \rVert}_2^2 = 1
+    \]
+    And the assumption of PCA dataset is that it is zero-meaned, because de-meaned data will allow less bias when deciding the weight vector for PCA.
+    \tcblower
+    \textbf{Solution.}
+    Let us consider the projection error,
+    \[
+        {\lVert \vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w} \rVert}_2^2 = {\lVert \vec{e_i} \rVert}_2^2
+    \]
+    The error can be algebraically simplified:
+    \begin{align*}
+        {\lVert \vec{e_i} \rVert}_2^2
+        &= {(\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w})}^T \cdot (\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w}) \\
+        &= {\lVert \vec{x_i} \rVert}_2^2 - 2 {\langle \vec{x_i}, \vec{w} \rangle}^2 + {\langle \vec{x_i}, \vec{w} \rangle}^2 {\lVert \vec{w_i} \rVert}_2^2 \\
+        &= {\lVert \vec{x_i} \rVert}_2^2 - {\langle \vec{x_i}, \vec{w} \rangle}^2
+    \end{align*}
+    Therefore, removing the fixed costs in the error, we are essentially facing the following optimization problem:
+    \[
+        \max_{\vec{w}} \frac{1}{n} \sum_{i = 1}^n {\langle \vec{x_i}, \vec{w} \rangle}^2
+    \]
+\end{ln-explain}
