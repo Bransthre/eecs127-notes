@@ -1,0 +1,144 @@
+\chapter{Low-Rank Approximation}
+
+\section{Discussion of L-RA}
+Suppose we have some matrix $A \in \R^{m \times n}$, where storing this matrix would take significant computational resources.
+Is there a method to store an approximation of this matrix, such that the approximation is more efficient to store for, and we would thus reduce computational cost of storage? \\
+We have discussed the possibility of such technique within the previous lecture, where we have solved the optimization problem:
+\[\max_{\pnorm{\vec{x}}{2} = 1} \pnorm{A \vec{x}}{2}\]
+
+Today, we will discuss the extension of such solution: Low-Rank Approximation. \\
+It would be characterized from the optimization problem:
+\[
+    \underset{B \in \R^{m \times n}, rk(B) = k}{\text{argmin}} \pnorm{A - B}{F}
+\]
+where we may see a contextually similar optimization problem:
+\[
+    \underset{B \in \R^{m \times n}, rk(B) = k}{\text{argmin}} \pnorm{A - B}{2}
+\]
+Let us perform a proof on this:
+\begin{ln-explain}{The LRA Optimization Problem on Spectral Norm}{}
+    \textbf{Problem.}
+    \[
+        \underset{B \in \R^{m \times n}, rk(B) = k}{\text{argmin}} \pnorm{A - B}{2}
+    \]
+    \tcblower
+    \textbf{Solution.} \\
+    Keep in mind that our proof proceeds in the direction of:
+    \begin{bindenum}
+        \item Finding a possible upper bound
+        \item Finding the achievability of such upper bound
+        \item Finding the legitimacy of such upper bound
+    \end{bindenum}
+    Now, let us move on with the subparts of a proof. \\
+    \par
+    \textbf{\textit{Finding a Possible Upper Bound.}} \\
+    Let us define
+    \[
+        A_k = \sum_{i = 1}^k \sigma_i \vec{u_i} \vec{v_i}^T
+    \]
+    Then, the difference between such approximation and $A$ would be:
+    \[\pnorm{A - A_k}{2} = \pnorm{A_n - A_k}{2} = {\Bigg\| \sum_{i = k + 1}^n \sigma_i \vec{u_i} \vec{v_i}^T \Bigg\|}_2\]
+    which, following along the optimization problem phrased last lecture, we would obtain the solution to be:
+    \[
+        {\Bigg\| \sum_{i = k + 1}^n \sigma_i \vec{u_i} \vec{v_i}^T \Bigg\|}_2 = \sigma_{k + 1} (A)
+    \]
+    \par
+    \textbf{\textit{Finding the Legitimacy (and Achievability) of Upper Bound.}} \\
+    Then, let us show that for every $B$ where $rk(B) \leq k$, the difference $\pnorm{A - B}{2}$ is larger than our current possible minimum, $\sigma_{k + 1}$. By proving so we secure the result of maximization is as illustrated above. \\
+    Let us first define $\vec{w}$ that,
+    \[
+        \pnorm{A - B}{2} = \max_{\pnorm{\vec{w}}{} = 1} \pnorm{(A - B) \vec{w}}{2}
+    \]
+    Where, if $\vec{w} \in N(B)$, then we would be able to simplify the above optimization problem into something easier to solve: along such above constraint, let us note that,
+    \[
+        \pnorm[2]{A - B}{2} \geq \pnorm[2]{(A - B) \vec{w}}{2} = \pnorm[2]{A \vec{w}}{2}
+    \]
+    And decomposing $A$ into SVD form, which contains orthonormal matrices,
+    \[
+        \pnorm[2]{A - B}{2} \geq \pnorm[2]{U \Sigma V^T \vec{w}}{2} = \pnorm[2]{\Sigma V^T \vec{w}}{2}
+    \]
+    Provided that $\vec{w}$ is a unit vector, and $V$ is invertible, we can guarantee that
+    \[
+        \exists \vec{a}, V \vec{a} = \vec{w}
+    \]
+    Therefore, let us now substitute such value in, and we will obtain that
+    \begin{align*}
+        \pnorm[2]{A - B}{2}
+        &\geq \pnorm[2]{\Sigma V^T \vec{w}}{2} \\
+        &= \pnorm[2]{\Sigma \vec{a}}{2} \\
+        &= \vec{a}^T \Sigma^T \Sigma \vec{a} = \vec{a}^T \Lambda \vec{a}
+    \end{align*}
+    Let us come back to our assumption that $\vec{w} \in N(B)$, and extract more insights from it. \\
+    Now, we may define along the $V$ of $A = U \Sigma V^T$ that:
+    \[
+        V_{k + 1} = \begin{bmatrix} \vec{v}_1 & \cdots & \vec{v}_{k + 1}\end{bmatrix}
+    \]
+    where along the property of SVD we understand that $rk(V_{k + 1}) = k + 1$. \\
+    To find some $\vec{w}$ such that $\vec{w} \in N(B) \land \vec{w} \in \mathcal{R}(V_{k + 1})$, we should notice that:
+    \begin{enumerate}
+        \item Along rank-nullity theorem, $\dim(N(B)) \geq n - k$.
+        \item Along above description, $\dim(R(V_{k + 1})) = k + 1$
+    \end{enumerate}
+    At this point, we must note that the achievability in our proposed upper bound exists in the possibility of having such $\vec{w}$. Therefore, \textbf{the achievability of upper bound is protected by the existence of $\vec{w}$, which we must guarantee}. \\
+    These two subspaces of $\R^n$ must have overlap. Therefore, there must exist some vector that belongs to both subspaces. This guarantees the existence of our $\vec{w}$.
+    \par
+    \textbf{\textit{Back to the Achievability of Upper Bound, Final Step}}. \\
+    Let us now follow along, and revisit the derivation that $\vec{a} = V^T \vec{w}$ on the change of basis. \\
+    Then, here we perform the final computations:
+    \begin{align*}
+        \vec{a} &= V^T \vec{w} \\
+        &= V^T (\sum_{i = 1}^{k + 1} a_i \vec{V}_i) \\
+        &= \begin{bmatrix} a_1 & \cdots & a_{k + 1} & 0 & \cdots & 0 \end{bmatrix}^T \\
+        \vec{a}^T \Lambda \vec{a}
+        &= \sum_{i = 1}^{k + 1} a_{i}^2 \lambda_i \\
+        &\geq \sum_{i = 1}^{k + 1} a_{i}^2 \lambda_{k + 1} = \lambda_{k + 1} \sum_{i = 1}^{k + 1} a_{i}^2 \\
+        &= \lambda_{k + 1} = \sigma_{k + 1}^2 \textit{(Note, $\mathit{\pnorm{\vec{a}}{2} = \pnorm{\vec{w}}{2} = 1}$)}
+    \end{align*}
+\end{ln-explain}
+
+\begin{ln-explain}{The LRA Optimization Problem on Frobenius Norm}{}
+    \textbf{Problem.}
+    \[
+        \underset{B \in \R^{m \times n}, rk(B) = k}{\text{argmin}} \pnorm{A - B}{F}
+    \]
+    \tcblower
+    \textbf{Solution.} \\
+    Let us consider $A_k$ as priorly defined to be the solution of optimization again.
+    \begin{align*}
+        \pnorm[2]{A}{F} &= \pnorm[2]{U \Sigma V^T}{F} \\
+        &= \pnorm[2]{\Sigma}{F} = \sum_{i = 1}^n \sigma_i^2 \\
+        \pnorm[2]{A - A_k}{F} &= \sum_{i = k + 1}^n \sigma_i^2 \\
+        \pnorm[2]{A - B}{F} &= \sum_{i = 1}^n \sigma_i^2 (A - B)
+    \end{align*}
+    Now, following the logic before, we want to prove this upperbound:
+    \begin{quote}
+        Prove that $\forall B \in \R^{m \times n}\ s.t.\ rk(B) = k, \pnorm{A - B}{F} \geq \pnorm{A - A_k}{F}$
+    \end{quote}
+    Using the aligned equations above, let us find an equivalent proof prompt,
+    \begin{quote}
+        Prove that $\forall i, \sigma_i (A - B) \geq \sigma_{k + i}(A)$
+    \end{quote}
+    Where, along spectral norm's definition, we can also obtain that,
+    \[
+        \sigma_{k + 1}(A) = \pnorm{A - A_{k + i - 1}}{2}
+    \]
+    translated in text stating that $A_{k + i - 1}$ is the best rank $(k + i - 1)$ approximation to $A$ in spectral norm sense. \\
+    Now, let us return to the above equivalent prompt and define such that $C := A - B$.
+    \begin{align*}
+        \sigma_i (A - B)
+        &= \sigma_i (C) \\
+        &= \pnorm{C - C_{i - 1}}{2} = \pnorm{A - B - C_{i - 1}}{2}
+    \end{align*}
+    Pay attention to the rank of these matrices:
+    \begin{align*}
+        B = B_k, &rk(B_k) \leq k \\
+        rank(C_{i - 1}) \leq i - 1 \\
+        rk(B_k + C_{i - 1}) \leq k + i - 1
+        \sigma_i (A - B) &= \pnorm{A - D}{2}\\
+        &, where\ rk(D) \leq k + i - 1
+    \end{align*}
+    Using the solution from spectral norm side proof of LRA,
+    \begin{align*}
+        \pnorm{A - D}{2} \geq \pnorm{A - A_{k + i - 1}}{2} = \sigma_{k + 1} (A)
+    \end{align*}
+\end{ln-explain}
