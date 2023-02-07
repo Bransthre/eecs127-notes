@@ -1,0 +1,167 @@
+\chapter{Vector Calculus}
+The motivation of vector calculus is to work with linear algebra problems more analytically, in more interpretable methods. \\
+The tools that help to optimize linear algebra expression is the calculus of vector: vector calculus.
+
+\section{Function Expansion}
+Let's start with functions, the basic of calculus.
+\begin{ln-define}{Scalar Valued Function of Vector}{}
+    Let a function $f$ be such that:
+    \[
+        f(\vec{x}): \R^n \rightarrow \R
+    \]
+    Such a function is by definition a scalar valued function of vector.
+\end{ln-define}
+Then, we may begin our effort to generalize the derivative of such functions, as follows.
+
+First of all, let us recap Calculus II knowledge of polynomial expansion of some fucntion:
+\begin{ln-theorem}{Taylor's Theorem (Expansion)}{}
+    Let $f$ be a scalar valued function for scalar:
+    \[
+        f(x) : \R \rightarrow \R, x_0 \in \R
+    \]
+    Then, Taylor expansion allows us to write such that:
+    \[
+        f(x_0 + \Delta x) = f(x_0) + \dv{f}{x} \bigg|_{x = x_0} \Delta x + \cdots
+    \]
+    Essentially, 
+    \[
+        f(x_0 + \Delta x) = \sum_{i = 0}^n \frac{f^{(i)}(x_0) {(\Delta x)}^2}{i!}
+    \]
+    where we call the Taylor expansion towards the $n^{th}$ degree term be an $n^{th}$ order Taylor expansion.
+\end{ln-theorem}
+What is the purpose of introducing Taylor's expansion here? The fact is, we may approximate a value $f(x_0 + \Delta x)$ based on $f(x)$ along the product of $\Delta x$ and a derivative.
+\textbf{The derivative affects how large the ``perturbation'' is that occurs in the approximation of $f(x_0 + \Delta x)$}.
+Similar logic is applied for upcoming $n$-order derivatives.
+
+Then, along the above reintroduction of Taylor's Series, let us look at a vector edition of Taylor's Theorem:
+\begin{ln-theorem}{Taylor's Theorem for Vectors}{}
+    Let $f$ be a scalar valued function for vector. \\
+    Then, we may express that:
+    \begin{align*}
+        f(\vec{x_0} + \Delta \vec{x})
+        &= f(\vec{x_0}) + \pdv{f}{x} \bigg|_{\vec{x} = \vec{x_0}} \Delta \vec{x} + \frac{1}{2!} {(\Delta \vec{x})}^T \nabla^2 f(\vec{x}) \bigg|_{\vec{x} = \vec{x_0}} \Delta \vec{x}
+    \end{align*}
+\end{ln-theorem}
+We usually stop at the second order approximation when using Taylor's Theorem for vectors, because this is usually a good equilibrium point for computational precision and simplification.
+
+In addition, we define the derivative of vectors as follows:
+\begin{ln-define}{Derivatives of Scalar Valued Vector Function}{}
+    Here, we observe that the first order derivative of such functions are row vectors, and the second order derivative is a matrix called \textbf{Hessian}:
+    \begin{align*}
+        \pdv{f}{x} = {(\nabla_{\vec{x}}f)}^T &= \begin{bmatrix} \pdv{f}{x_1} & \cdots & \pdv{f}{x_n} \end{bmatrix} \\
+        {(\nabla^2 f(\vec{x}))}_{i,j} &= \pdv{f}{x_i}{x_j} \\
+        \nabla^2 f(\vec{x}) &\in \mathcal{S}^n
+    \end{align*}
+\end{ln-define}
+Let us provide an example in approximating a scalar valued vector function via Taylor's Theorem:
+\begin{ln-explain}{Polynomial Expansion of 2-Norm}{}
+    Let us attempt to find a Taylor Expansion for the function
+    \[f(\vec{x}) = \pnorm[2]{\vec{x}}{2}\]
+    We will define the level sets of this function as:
+    \[
+        \{\vec{x} \big| f(\vec{x}) = C\}
+    \]
+    which would be circles centered at the origin with radius $\sqrt{C}$. \\
+    The gradient of such function would be:
+    \[
+        \nabla_{\vec{x}}f = \begin{bmatrix} 2x_1 \\ 2x_2 \end{bmatrix}
+    \]
+    And the Hessian:
+    \[
+        H_{\vec{x}}f = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix}
+    \]
+    Therefore, upon Taylor's Theorem,
+    \begin{align*}
+        f(\vec{x_0} + \Delta \vec{x})
+        &= f(\vec{x_0}) + {(\nabla_{\vec{x}}f)}^T \Delta \vec{x} + \frac{1}{2!} {(\Delta \vec{x})}^T H_{\vec{x}}f \Delta \vec{x} \\
+        &= {x_0}_1^2 + {x_0}_2^2 + 2{x_0}_1 \Delta x_1 + 2{x_0}_2 \Delta x_2 + {(\Delta x_1)}^2 + {(\Delta x_2)}^2 \\
+        &= {({x_0}_1 + \Delta x_1)}^2 + {({x_0}_2 + \Delta x_2)}^2 = \pnorm[2]{\vec{x_0} + \Delta \vec{x}}{2}
+    \end{align*}
+\end{ln-explain}
+Since the Hessian is symmetric, we can perform a lot of interesting mathematics with it. \\
+A third order derivative is known as a tensor, but this is out of scope for EECS 127.
+
+Let's look at some more examples of Taylor Expansion:
+\begin{ln-explain}{Polynomial Expansion of Euclidean Inner Product}{}
+    Let us find a Taylor Expansion to the function:
+    \[
+        f(\vec{x}) = \vec{x}^T \vec{a}, \vec{a} \in \R^n
+    \]
+    The gradient of such function is then,
+    \[
+        \nabla_{\vec{x}} f = \vec{a}
+    \]
+    Then, the Hessian of such function would be a zero matrix. \\
+    Therefore,
+    \begin{align*}
+        f(\vec{x_0} + \Delta \vec{x})
+        &= f(\vec{x_0}) + {(\nabla_{\vec{x}} f)}^T \Delta \vec{x} \\
+        &= \sum_{i = 1}^n a_i ({x_0}_i + \Delta x_i) = {(\vec{x_0} + \Delta \vec{x})}^T \vec{a}
+    \end{align*}
+\end{ln-explain}
+
+\begin{ln-explain}{Derivatives of Matrix-Involving Inner Product}{}
+    Let us find the derivative expressions to the function:
+    \[
+        f(\vec{x}) = \vec{x}^T A \vec{x}, A \in \R^{n \times n}
+    \]
+    The gradient of such function is then (this method of computation might be proven unrigorous due to the ambiguity of inner product definition),
+    \begin{align*}
+        \pdv{f}{x}
+        &= \frac{\partial}{\partial x} \vec{x} \cdot A \vec{x} \\
+        &= \vec{1} \cdot A \vec{x} + \vec{x} \cdot A \\
+        &= A \vec{x} + A^T \vec{x} = (A + A^T) \vec{x}
+    \end{align*}
+    And, \textit{\textbf{on a more rigorous convention}}, we can derive the gradient as follows:
+    \begin{align*}
+        \frac{\partial}{\partial x_i} \vec{x}^T A \vec{x}
+        &= \frac{\partial}{\partial x_i} \vec{x}^T \begin{bmatrix} \vec{A_1} & \cdots & \vec{A_n} \end{bmatrix} \vec{x} \\
+        &= \frac{\partial}{\partial x_i} \begin{bmatrix} \vec{x} \cdot \vec{A_1} & \cdots & \vec{x} \cdot \vec{A_n} \end{bmatrix} \vec{x} \\
+        &= \frac{\partial}{\partial x_i} \sum_{k = 1}^n \sum_{j = 1}^n A_{j, k} x_k x_j \\
+        &= \frac{\partial}{\partial x_i} \bigg( \sum_{j = 1}^n A_{j, i} x_i x_j + \sum_{k = 1}^n A_{i, k} x_i x_k \bigg) \\
+        &= \sum_{j = 1}^n A_{j, i} x_j + \sum_{k = 1}^n A_{i, k} x_k
+        = \vec{(A^T)}_i \cdot \vec{x} + \vec{A}_i \cdot\vec{x} \\
+        \frac{\partial}{\partial x} \vec{x}^T A \vec{x} &= (A + A^T) \vec{x}
+    \end{align*}
+    And, uh, Hessians.
+    \begin{align*}
+        \nabla^2 f(\vec{x})
+        &= \frac{\partial}{\partial x} (A + A^T) \vec{x} = A + A^T
+    \end{align*}
+\end{ln-explain}
+
+And last but not least, Jacboians.
+\begin{ln-define}{Derivative of Vector-Valued Vector Function}{}
+    For some function $f(\vec{x}) = \vec{y}$ such that:
+    \[
+        f: \R^n \rightarrow \R^m
+    \]
+    Then,
+    \[
+        J = \begin{bmatrix} \pdv{\vec{f}}{x_1} & \cdots & \pdv{\vec{f}}{x_n} \end{bmatrix}
+    \]
+\end{ln-define}
+Let us view the example of a Jacobian:
+\begin{ln-explain}{The Jacobian of Polar-Cartesian Coordinate Translator}{}
+    Let $f$ be the function:
+    \[
+        f(\vec{v}) = \begin{bmatrix} r \cos(\theta) \\ r \sin(\theta) \end{bmatrix}
+    \]
+    Then the Jacobian of it would be:
+    \[
+        J =
+        \begin{bmatrix}
+            \cos(\theta) & -r \sin(\theta) \\
+            \sin(\theta) & r \cos(\theta)
+        \end{bmatrix}
+    \]
+    whose determinant would then be $\det(J) = r$.
+\end{ln-explain}
+Finally, chain rules:
+\begin{ln-define}{Chain Rule}{}
+    Let a function $f$ be
+    \[
+        f(\vec{x}) = g(h(\vec{x}))
+    \]
+    Then, (continued in next lecture)
+\end{ln-define}

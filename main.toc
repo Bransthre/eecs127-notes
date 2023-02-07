@@ -24,3 +24,5 @@
 \contentsline {subsection}{\numberline {5.2.1}Matrix Norms}{21}{subsection.5.2.1}%
 \contentsline {chapter}{\numberline {6}Low-Rank Approximation}{23}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Discussion of L-RA}{23}{section.6.1}%
+\contentsline {chapter}{\numberline {7}Vector Calculus}{27}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Function Expansion}{27}{section.7.1}%
