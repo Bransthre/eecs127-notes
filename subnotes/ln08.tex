@@ -1,0 +1,94 @@
+\chapter{The Extension of Vector Calculus}
+\textit{Note: This lecture's content will be shorter than other notes because half of the lecture was put on reviewing MATH 53 (as written in Lecture 7)}
+
+\section{The Main Theorem}
+The. Main. 
+\begin{ln-theorem}{The Main Theorem}{}
+    \textbf{Theorem.} Let $\Omega$ be an open subset of $\R^n$, and let function $f$ be differentiable and such that
+    \[
+        f : \R^n \rightarrow \R
+    \]
+    then, for an optimal solution $\vec{x}^*$ that solves the optimization problem:
+    \[
+        \min_{\vec{x} \in \Omega} f(\vec{x})
+    \]
+    Then, the Main Theorem states that,
+    \[
+        \dv{f}{\vec{x}} \big|_{\vec{x} = \vec{x}^*} = 0
+    \]
+    \tcblower
+    \textbf{Proof.} 
+    We realize that $\Omega$ is an open set, meaning $\vec{x}^* + \Delta \vec{x}$ can be guaranteed to be involved in $\Omega$, for the definition of an open set is such that,
+    \[\forall x \in \Omega, \exists \epsilon > 0 \ (|x - y| < \epsilon \implies y \in \Omega)\]
+    Then, by the Taylor expansion and optimality assumption, we may state that:
+    \begin{align*}
+        f(\vec{x}^* + \Delta \vec{x}) &= f(\vec{x}^*) + \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) + \frac{1}{2} {(\Delta \vec{x})}^T \dv[2]{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) \geq f(\vec{x}^*)
+    \end{align*}
+    Manipulating the above inequality,
+    \begin{align*}
+        \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) &+ \frac{1}{2} {(\Delta \vec{x})}^T \dv[2]{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) &&\geq 0 \\
+        \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} &&\geq 0 \\
+        \lim_{\Delta \vec{x} \rightarrow 0} \bigg( \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} \bigg) = \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &&\geq 0
+    \end{align*}
+    We may then provide a symmetric argument on the value $\vec{x}^* - \Delta \vec{x}$:
+    \begin{align*}
+        - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) &+ \frac{1}{2} {(\Delta \vec{x})}^T \dv[2]{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) &&\geq 0 \\
+        - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} &&\geq 0 \\
+        \lim_{\Delta \vec{x} \rightarrow 0} - \bigg( \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} \bigg) = - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &&\geq 0 \\
+    \end{align*}
+    \[
+        \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} \leq 0
+    \]
+    Consequently, we reach the following conclusion:
+    \[
+        \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} \geq 0 \land \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} \leq 0 \implies \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} = 0 
+    \]
+    \textit{Note: H.O.T. means ``Higher Order Terms'' of Taylor Expansion, starting from the second-order term}
+\end{ln-theorem}
+
+\section{Perturbation Analysis, Effect of Noise}
+In this problem, we consider the following concern:
+\begin{quote}
+    Let $A \vec{x} = \vec{y}$, where $A$ is a square invertible matrix. \\
+    Then, for some change in $\vec{y}$ (characterized as $\Delta \vec{y}$), how would this affect $\vec{x}$?
+    \par
+    In other words, we compare $\frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}$ with $\frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}$
+\end{quote}
+Let us now set up the problem:
+\begin{ln-explain}{Formulating the Perturbation Analysis}{}
+    Let us see that,
+    \begin{align*}
+        A \vec{x} &= \vec{y} \\
+        A (\vec{x} + \Delta \vec{x}) &= \vec{y} + \Delta \vec{y}
+    \end{align*}
+    Then, we may manipulate the expressions to find that,
+    \begin{align*}
+        A \Delta \vec{x} = \Delta \vec{y} \implies \Delta \vec{x} &= A^{-1} \Delta \vec{y} \\
+        \pnorm{\Delta \vec{x}}{2} &= \pnorm{A^{-1} \Delta \vec{y}}{2} \leq \pnorm{A^{-1}}{2} \pnorm{\Delta \vec{y}}{2}
+    \end{align*}
+    The last line is certified because the spectral norm of $A^{-1}$ measures how much can it transform the norm of a vector.
+    \par
+    Then, we may provide a minimization problem:
+    \[
+        \min \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}
+    \]
+    Now, let us observe the following work of upperbounding such denominator:
+    \begin{align*}
+        A \vec{x} = \vec{y} &\implies \pnorm{A \vec{x}}{2} \leq \pnorm{A}{2} \pnorm{\vec{x}}{2} \\
+        \pnorm{\vec{y}}{2} &\leq \pnorm{A}{2} \pnorm{\vec{x}}{2} \\
+        \pnorm{\vec{x}}{2} &\geq \frac{\pnorm{\vec{y}}{2}}{\pnorm{A}{2}}
+    \end{align*}
+    And therefore,
+    \begin{align*}
+        \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}
+        &\leq \pnorm{A^{-1}}{2} \pnorm{\vec{y}}{2} \frac{\pnorm{A}{2}}{\pnorm{\vec{y}}{2}} \\
+        &= \pnorm{A^{-1}}{2} \pnorm{A}{2} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}} \\
+        &= \sigma_{\max}(A) \sigma_{\max}(A^{-1}) \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
+        = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
+    \end{align*}
+    Consequently, we arrive at the conclusion (summary) of:
+    \[
+        \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}} \leq \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
+    \]
+    where we call the fraction $\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$ the \textbf{condition number}.
+\end{ln-explain}

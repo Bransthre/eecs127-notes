@@ -2,7 +2,7 @@
 The motivation of vector calculus is to work with linear algebra problems more analytically, in more interpretable methods. \\
 The tools that help to optimize linear algebra expression is the calculus of vector: vector calculus.
 
-\section{Function Expansion}
+\section{Function Expansion: Taylor Series}
 Let's start with functions, the basic of calculus.
 \begin{ln-define}{Scalar Valued Function of Vector}{}
     Let a function $f$ be such that:
@@ -44,6 +44,7 @@ Then, along the above reintroduction of Taylor's Series, let us look at a vector
 \end{ln-theorem}
 We usually stop at the second order approximation when using Taylor's Theorem for vectors, because this is usually a good equilibrium point for computational precision and simplification.
 
+\section{Function Expansion: Derivative of Vector Functions}
 In addition, we define the derivative of vectors as follows:
 \begin{ln-define}{Derivatives of Scalar Valued Vector Function}{}
     Here, we observe that the first order derivative of such functions are row vectors, and the second order derivative is a matrix called \textbf{Hessian}:
@@ -130,8 +131,8 @@ Let's look at some more examples of Taylor Expansion:
     \end{align*}
 \end{ln-explain}
 
-And last but not least, Jacboians.
-\begin{ln-define}{Derivative of Vector-Valued Vector Function}{}
+\subsection{Matrix in Vector Calculus}
+\begin{ln-define}{Jacobian (Derivative) of Vector-Valued Vector Function}{}
     For some function $f(\vec{x}) = \vec{y}$ such that:
     \[
         f: \R^n \rightarrow \R^m
@@ -141,7 +142,7 @@ And last but not least, Jacboians.
         J = \begin{bmatrix} \pdv{\vec{f}}{x_1} & \cdots & \pdv{\vec{f}}{x_n} \end{bmatrix}
     \]
 \end{ln-define}
-Let us view the example of a Jacobian:
+
 \begin{ln-explain}{The Jacobian of Polar-Cartesian Coordinate Translator}{}
     Let $f$ be the function:
     \[
@@ -157,11 +158,33 @@ Let us view the example of a Jacobian:
     \]
     whose determinant would then be $\det(J) = r$.
 \end{ln-explain}
-Finally, chain rules:
 \begin{ln-define}{Chain Rule}{}
     Let a function $f$ be
     \[
         f(\vec{x}) = g(h(\vec{x}))
     \]
-    Then, (continued in next lecture)
+    Then, we may express that
+    \[
+        \dv{f}{x} = \dv{g}{y} \dv{h}{x}
+    \]
+    \tcblower
+    \textbf{Example.} \\
+    For an example in some single-variable context:
+    \begin{align*}
+        f(x) &= \sin(x^2) \\
+        \dv{f}{x} &= 2x \cos(x^2)
+    \end{align*}
+    Now, let's look at the least squares problem:
+    \begin{align*}
+        f(x)
+        &= \pnorm[2]{A \vec{x} - \vec{b}}{2} \\
+        &= {(A \vec{x} - \vec{b})}^T ((A \vec{x} - \vec{b})) \\
+        &= \vec{x}^T A^T A \vec{x} - 2 \vec{x}^T A \vec{b} + \vec{b}^T \vec{b} \\
+        \nabla_{\vec{x}} f(\vec{x})
+        &= (A^T A + A^T A) \vec{x} - 2 A^T \vec{b} \\
+        &= 2 A^T A \vec{x} - 2 A \vec{b} \\
+        \vec{x}^* &= {(A^T A)}^{-1} A^T \vec{b} \\
+        \dv{f}{x}
+        &= 2(A \vec{x} - \vec{b})^T \cdot A \text{\ \ \ (using Chain Rule)}
+    \end{align*}
 \end{ln-define}
