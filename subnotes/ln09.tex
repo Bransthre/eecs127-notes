@@ -1,0 +1,176 @@
+\chapter{Ridge Regression}
+
+\section{Perturbation Analysis Guides into Ridge Regression}
+In the concept of perturbation analysis, we ask that, for some system
+\[A \vec{x} = \vec{y}\]
+with a square, invertible $A$, how much would $\vec{x}$ change provided some small change $\vec{y} \rightarrow \vec{y} + \vec{\partial y}$?
+
+Then, our solution (cited in Chapter 8, or Lecture 8) is as follows:
+\[
+    \frac{\pnorm{\vec{\partial x}}{2}}{\pnorm{\vec{x}}{2}} \leq \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\vec{\partial y}}{2}}{\pnorm{\vec{y}}{2}}
+\]
+From whcich, we discover the characteristic of a matrix called \textbf{condition number}:
+\[\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}\]
+
+In the context of least squares problem, we are provided a more robust normal equation via the use of pseudoinverse:
+\[
+    (A^\dagger A) \vec{x} = A^T \vec{b}
+\]
+Then, provided that our least square system is sensitive to noise, we may investigate the condition number of $A^T A$ to observe the system's change in its solution provided the perturbation in system measurements. \\
+This is significant in computations. A high condition number makes a system's matrix highly unstable for numerical precisions to persist provided noise in measurements and systems.
+Such property is, in fact, demonstrated by the convergence warnings in Jupyter iPython notebooks! \\
+But, provided the significance of condition number, we may also discuss ways to alleviate its problems.
+To reduce the condition number of some matrix, we may attempt to reduce the ratio of singular values via adding some multiple of identity matrix ($\lambda I$) to it.
+This allows us to greatly reduce the condition number, shifting it away from instability and being less prone to variance in training data:
+\[A^T A + \lambda I\]
+
+\section{Ridge Regression}
+In the least squares problem, we have a formulated optimization problem of:
+\[
+    \min_{\vec{x}} \pnorm{A \vec{x} - \vec{b}}{2}
+\]
+to offer insight to the optimization problem to prevent its divergence from true parameter value, is to present a new formulation of the problem:
+\[
+    \min_{\vec{x}} \pnorm[2]{A \vec{x} - \vec{b}}{2} + \lambda^2 \pnorm[2]{\vec{x}}{2}
+\]
+where, we regularize the least squares solution by stating that large solutions of $\vec{x}$ must lead to unidealistic increase in the cost (loss) function.
+We penalize a large least squares solution $\vec{x}$.
+
+Here, using different norms in the regularizer will provide different properties.
+The L1 regularizer has the LASSO property (as outlined in DATA C100), while the L2 regularizer we use now provides a convex function as well as a closed-form solution unlike the L1 effort (once again, as outlined in DATA C100).
+
+Let us first compute the gradient of such loss function:
+\begin{align*}
+    \nabla_{\vec{x}} \pnorm[2]{A \vec{x} - \vec{b}}{2} + \lambda^2 \pnorm[2]{\vec{x}}{2}
+    &= 2A^T (A \vec{x} - \vec{b}) + 2 \lambda^2 I \vec{x} \\
+    \vec{x}^* &= {(A^T A + \lambda^2 I)}^{-1} A^T \vec{b}
+\end{align*}
+The eigenvalues of $A^T A + \lambda^2 I$, meanwhile, would be the eigenvalues of $A^T A$ added the value $\lambda^2$ (by manipulating the definition of eigenvalues and eigenvectors). \\
+This is also known as the shift property of eigenvalues:
+\begin{ln-theorem}{Shift Property of Eigenvalues}{}
+    Let $\vec{v}$ be an eigenvector of $A^T A$. \\
+    Then, provided that:
+    \[
+        A^T A \vec{v} = \mu \vec{v}
+    \]
+    we may see that,
+    \[
+        (A^T A + \lambda^2 I) \vec{v} = (\mu + \lambda^2) \vec{v}
+    \]
+    Thus determine that:
+    \begin{quote}
+        for any eigenpair of $A^T A$ being $(\mu, \vec{v})$, a corresponding eigenpair exists in $A^T A + \lambda^2 I$ being $(\mu + \lambda^2, \vec{v})$.
+    \end{quote}
+\end{ln-theorem}
+Therefore, small $\lambda$ corresponds to less regularizaiton effort, and vice versa.
+
+\subsection{Development of Ridge Regression}
+Now, suppose we have a least square system where $\vec{x}$ has a smaller norm, where perhaps $\lambda^2 I \vec{x} \sim \vec{0}$. \\
+Then, adding the information of $\lambda^2 I$ into the least squares problem formulation would not alter the original formulation too much, due to the close-to-zero-ness of ridge regression's current least squares solution. \\
+This allows us to use larger $\lambda$ (have greater regularization). We have two ways of incorporating such information into the least squares problem now:
+\begin{bindenum}
+    \item Vertically concatenate $\lambda I$ below $A$.
+    \item Use Ridge Regression's format, which uses a similar idea to preserve the original system as muvh as possible.
+\end{bindenum}
+In the concatenation idea, our system of least squares problem is reformulated as:
+\[
+    \begin{bmatrix} A \\ \lambda I \end{bmatrix} \vec{x} = \begin{bmatrix} \vec{b} \\ \lambda I \vec{x} \end{bmatrix}
+\]
+Let's use both block matrix and normal equation to further explore the idea of concatenating $\lambda I$:
+\begin{align*}
+    &{\bigg( \begin{bmatrix} A^T & \lambda I \end{bmatrix} \begin{bmatrix} A \\ \lambda I \end{bmatrix} \bigg)}^{-1}
+    \begin{bmatrix} A^T & \lambda I \end{bmatrix} \begin{bmatrix} \vec{b} \\ \lambda I \vec{x} \end{bmatrix} \\
+    &= (A^T A + \lambda^2 I) (A^T \vec{b} + \lambda^2 I \vec{x}) \\
+    &\sim (A^T A + \lambda^2 I) A^T \vec{b}
+\end{align*}
+and we have therefore demonstrated the similarity between the two ideas of ridge regression.
+
+Once we expand the idea to adding weights for matrices, creating the system:
+\[
+    \begin{bmatrix} W_1 A \\ W_2 I \end{bmatrix} \vec{x} = \begin{bmatrix} W_1 \vec{b} \\ W_2 \vec{x_0} \end{bmatrix}
+\]
+we end up with a new optimization problem:
+\[
+    \min_{\vec{x}} \pnorm[2]{W_1 (A \vec{x} - \vec{b})}{2} + \pnorm[2]{W_2 (\vec{x} - \vec{x_0})}{2}
+\]
+which we call the \textbf{Tikhonov Regularization} technique. \\
+\textit{Note: $\vec{x_0}$ is an arbitrary piece of information.}
+
+\section{Probabilistic Information from Ridge Regression}
+Suppose that we instead now have probabilistic information:
+\[
+    (\vec{x_i}, y_i), y_i = g(x_i) + z_i
+\]
+where, $z_i \sim \mathcal{N}(0, \sigma_i^2)$. \\
+And, suppose we have a linear model,
+\[
+    y_i = \vec{w}^T \vec{x} + z_i
+\]
+Then, we may state that,
+\[
+    f_{z_i} (z_i) = \frac{\exp(-\frac{z_i^2}{2\sigma_i^2})}{\sqrt{2 \pi} \sigma_i}
+\]
+and we attempt to learn the weights $\vec{w}$ to complete the model. \\
+Therefore, with multivariate Gaussian noise $\vec{z}$ and datapoint matrices $X$, we formulate this as a least square system,
+\[
+    X \vec{w} + \vec{z} = \vec{y}
+\]
+
+\subsection{Maximum Likelihood Estimation and Maximum A-Posteriori}
+Now, we may attempt to estimate the parameters that makes the observed data most likely. \\
+This is related to the technique of Maximum Likelihood Estimation. Let me shamelessly copy a segment of my CS189 notes here to provide a brief explanation:
+\begin{ln-explain}{MLE from CS189}{}
+    Suppose that we go back to the coin flip example (just like 126 does), where heads appear with a probability $p$ (and otherwise for tails). \\
+    Then, statisticians world ask, provided the real data of coin, what value of $p$ (the parameter of coin flip probability distribution) is closest to its true inherent value.
+
+    Let us suppose that the number of heads we obtain is a discrete random variable, $X \sim Binomial(n, p)$:
+    \[
+        \P(X = x) = \binom{n}{x} p^x {(1 - p)}^{n - x}
+    \]
+    Then, let us propose that the real data presents $k$ heads, and we would defined the Likelihood function $\mathcal{L}$ as:
+    \[
+        \mathcal{L}(p) = \P(X = k) = \binom{n}{k} p^k {(1 - p)}^{n - k}
+    \]
+    where it is a function of distribution parameters.
+    Then, Maximum Likelihood Estimation (MLE) is the method of estimating the praameters of a statistical distribution by picking the parameters that maximize $\mathcal{L}$.
+    Furthermore, it would be a method of density estimation, where we estimate some probability density function from the provided dataset.
+\end{ln-explain}
+Here, we would thus solve the optimization problem of:
+\[
+    {argmax}_{\vec{w_0}} f (\vec{y} | \vec{w} = \vec{w_0})
+\]
+\begin{ln-explain}{Solving Maximum Likelihood Estimation Phrased Optimization}{}
+    Let us begin from the prompt:
+    \begin{align*}
+        {argmax}_{\vec{w_0}} f (\vec{y} | \vec{w} = \vec{w_0})
+        &= {argmax}_{\vec{w_0}} \prod_{i = 1}^n f(Y_i = y_i | \vec{w} = \vec{w_0}) \\
+        &= {argmax}_{\vec{w_0}} \prod_{i = 1}^n f(z_i = y_i - \vec{x_i}^T \vec{w} | \vec{w} = \vec{w_0}) \\
+        &= {argmax}_{\vec{w_0}} \prod_{i = 1}^n \frac{\exp(-\frac{{(y_i - \vec{x_i}^T)}^2}{2\sigma_i^2})}{\sqrt{2 \pi} \sigma_i} \\
+        &= {argmax}_{\vec{w_0}} \frac{1}{{\sqrt{2\pi}}^n} \exp \bigg( \sum_{i = 1}^n \frac{-(y_i - \vec{x_i}^T \vec{w})}{2 \sigma_i^2} \bigg) \prod_{i = 1}^n \frac{1}{\sigma_i} \\
+        &= {argmin}_{\vec{w_0}} \sum_{i = 1}^n \frac{-{(y_i - \vec{x_i}^T \vec{w})}^2}{2 \sigma_i^2} \\
+        &= {argmin}_{\vec{w_0}} \pnorm[2]{S(X \vec{w_0} - \vec{y})}{2}
+    \end{align*}
+    where,
+    \[
+        S =
+        \begin{bmatrix}
+            \frac{1}{\sqrt{2} \sigma_1} & & \\
+            & \ddots & \\
+            & & \frac{1}{\sqrt{2} \sigma_n}
+        \end{bmatrix}
+    \]
+    and we end up on a weighted least squares setup. \\
+    Furthermore, upon IID uniform Gaussians, we will end up with $S = \frac{1}{\sqrt{2} \sigma_i}$.
+\end{ln-explain}
+
+Meanwhile, the Maximum A-Posteriori approach attempts to provide a priori distribution on $\vec{w}$, which is precisely what we attempt with CS189's Bayesian Analysis.
+We solve the optimization problem of:
+\[
+    {argmax}_{\vec{w_0}} f(\vec{w} = \vec{w_0} | \vec{y})
+\]
+
+As you may observe, both techniques offer the most likely weights for some condition, but the conditions are framed quite differently:
+\begin{bindenum}
+    \item MLE find the most likely $\vec{w}$ to \textbf{lead to current observation}.
+    \item MAP find the most likely $\vec{w}$ \textbf{given the current observation} that occurs.
+\end{bindenum}
