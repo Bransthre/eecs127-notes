@@ -1,0 +1,169 @@
+\chapter{Convexity}
+
+\section{Convex Set}
+Let us first define a convex set geometrically,
+\begin{ln-define}{Convex Set}{}
+    A set $C \subseteq \R^n$ is convex if the line segment between any two points in $C$ is contained in $C$. \\
+    For example, convex polygons resemble a convex set of points.
+\end{ln-define}
+Then, to express such concept algebraically, we would arrive at the algebraic addenda to definition:
+\begin{ln-define}{Convex Set in Algebraic Perspective}{}
+    The set of points within a line segment terminated by points $\vec{x}, \vec{y} \in C$ would be expressable as
+    \[
+        L_{\vec{x}, \vec{y}} := \{\theta \vec{x} + (1 - \theta) \vec{y} | \theta \in [0, 1]\}
+    \]
+    And, a set $C$ is convex iff
+    \[
+        \forall \vec{x}, \vec{y} \in C, L_{\vec{x}, \vec{y}} \subseteq C
+    \]
+\end{ln-define}
+
+Upon the algebraic interpretation of convexity in sets, we may also define convexity of combinations:
+\begin{ln-define}{Convex Combination}{}
+    The combination $\vec{x} = \sum_i \theta_i \vec{x_i}$ is a convex combination iff it satisfies the following qualities:
+    \begin{bindenum}
+        \item[1.] $\forall i, \theta_i \geq 0$
+        \item[2.] $\sum_i \theta_i = 1$
+    \end{bindenum}
+\end{ln-define}
+Along which, we may then define convexity on numerous mathematical objects. Another example is shown here,
+\begin{ln-define}{Convex Hull}{}
+    The convex hull of some set $S \subseteq \R^n$ is the set of all convex combinations of members of $S$. \\
+    This formulates a concept very similar to ``span''.
+\end{ln-define}
+
+\subsection{Proof of Convexity}
+Sets do not need to contain only points to be convex.
+Sets of mathematical objects (like matrices) can be convex as well.
+Let us demonstrate with the following proofs, where we in unison practice to prove convexity of sets.
+\begin{ln-explain}{The Convexity of Set of Rank-1 Matrices}{}
+    \textbf{Problem.} Let us find a set of all rank-1 Matrices:
+    \[
+        \{M_1 = \{A \in \R^{m \times n} | rk(A) = 1\}\}
+    \]
+    decide whether it is convex or not.
+    \tcblower
+    \textbf{Proof.}
+    Let us observe whether for any arbitrary matrices $X, Y \in M_1$, the ``line segment'' along these matrices are included in $M_1$. \\
+    In other words, we ask, whether the matrix $\theta X + (1 - \theta) Y$ belongs to $M_1$. \\
+    The answer would be no. Suppose $X_0$ and $Y_0$ each have a basis $\{\vec{x}\}$, $\{\vec{y}\}$, and let $\vec{x}$ and $\vec{y}$ be linearly independent vectors.
+    \[
+        X_0 = \begin{bmatrix} 2 \vec{x} & \vec{x} \end{bmatrix},
+        Y_0 = \begin{bmatrix} \vec{y} & \vec{y} \end{bmatrix}
+    \]
+    Consequently,
+    \[
+        \forall \theta \in [0, 1], rk(\theta X_0 + (1 - \theta) Y_0) > 1
+    \]
+    And thus,
+    \[
+        \neg (\forall X, Y \in C, L_{\vec{x}, \vec{y}} \subseteq C)
+    \]
+\end{ln-explain}
+Similalry, let's explore another example of proof/disproof for convexity:
+\begin{ln-explain}{The Convexity of Set of PSD Matrices}{}
+    \textbf{Problem.} Let us find a set of all rank-1 Matrices:
+    \[
+        \{P = \{ A | A \succcurlyeq 0 \land A \in \mathbb{S}^n \}\}
+    \]
+    decide whether it is convex or not.
+    \tcblower
+    \textbf{Proof.}
+    To prove that a matrix is positive-semidefinite by definition, we need only prove it suits one of the three definitions of positive-semidefiniteness. \\
+    For most convenience, I'd like to use the definition that:
+    \[
+        A \succcurlyeq 0 \iff \forall \vec{x} \in \R^n, \vec{x}^T A \vec{x} \geq 0
+    \]
+    Now, let me work with two arbitrary matrices $X, Y \in P$, and attempt to prove the following equivalent problem:
+    \begin{quote}
+        \textbf{Equivalent Prompt.} Prove that $\forall \theta \in [0, 1], \theta X + (1 - \theta) Y \in P$.
+    \end{quote}
+    Fortunately, we may observe that,
+    \begin{align*}
+        \forall \vec{x}, \vec{x}^T (\theta X + (1 - \theta) Y) \vec{x}
+        &= \vec{x}^T \theta X \vec{x} + \vec{x}^T (1 - \theta) Y \vec{x} \\
+        \forall \vec{x}, \vec{x}^T X \vec{x} \geq 0 \land \vec{x}^T Y \vec{x} \geq 0 &\implies \forall \vec{x}, \vec{x}^T \theta X \vec{x} + \vec{x}^T (1 - \theta) Y \vec{x} \geq 0
+    \end{align*}
+    Furthermore, 
+    \begin{align*}
+        {(\theta X + (1 - \theta) Y)}^T &= \theta X^T + (1 - \theta) Y^T \\
+        &= \theta X + (1 - \theta) Y
+    \end{align*}
+    Therefore,
+    \[
+        \forall \theta \in [0, 1], \theta X + (1 - \theta) Y \succcurlyeq 0 \land \forall \theta \in [0, 1], \theta X + (1 - \theta) Y \in \mathbb{S}^n
+    \]
+    then by definition it must belong to the set $P$.
+    \par
+    Via this subproof, we conclude that $P$ is convex.
+\end{ln-explain}
+
+\subsection{Hyperplanes}
+Hyperplanes are prevalent mathematical objects in Computer Science applications (such as the infamous Machine Learning), and its formal definition follows:
+\begin{ln-define}{Hyperplane}{}
+    Hyperplanes are sets of points that have the two following alternative forms:
+    \begin{align*}
+        H &= \{\vec{x} \in \R^n | \vec{a}^T \vec{x} = \vec{b}\} \\
+        H &= \{\vec{x} \in \R^n | \vec{a}^T (\vec{x} - \vec{x_0}) = 0\}, \vec{b} = \vec{a}^T \vec{x_0}
+    \end{align*}
+    in the above notes, you may see the equivalence of two forms via adjusting the names of variables in the set-builder notation. \\
+\end{ln-define}
+Upon defining it, let us then discuss the properties of such mathematical object.
+Is the hyperplane per se a convex set?
+\begin{ln-explain}{Convexity of Hyperplane}{}
+    \textbf{Proof.} For a hyperplane defined as,
+    \[
+        H = \{\vec{x} \in \R^n | \vec{a}^T (\vec{x} - \vec{x_0}) = 0\}
+    \]
+    Let us take two arbitrary points $\vec{y}, \vec{z} \in H$. \\
+    Then, for some $\theta \in [0, 1]$,
+    \begin{align*}
+        \vec{a}^T (\theta \vec{y} + (1 - \theta) \vec{z} - \vec{x_0})
+        &= \vec{a}^T \theta \vec{y} + \vec{a}^T (1 - \theta) \vec{z} - \vec{a}^T \vec{x_0} \\
+        &= \theta \vec{a}^T \vec{x_0} + (1 - \theta) \vec{a}^T \vec{x_0} - \vec{a}^T \vec{x_0} = 0
+    \end{align*}
+    Therefore, by definition,
+    \[
+        \forall \vec{y}, \vec{z} \in H, L_{\vec{y}, \vec{z}} \subseteq H
+    \]
+    and we have proven the convexity of hyperplanes by its definition.
+\end{ln-explain}
+Furthermore, we can define specific subsets of a space defined by some hyperplane:
+\begin{ln-define}{Halfspace}{}
+    For a hyperplane
+    \[H = \{\vec{x} \in \R^n | \vec{a}^T (\vec{x} - \vec{x_0}) = 0\} \in \R^n\]
+    it partitions the real space $\R^n$ into two halves, which we formally call the halfspace. \\
+    The halfspaces can then be defined as follows:
+    \begin{align*}
+        H_+ &= \{\vec{x} \in \R^n | \vec{a}^T (\vec{x} - \vec{x_0}) \geq 0\} \\
+        H_- &= \{\vec{x} \in \R^n | \vec{a}^T (\vec{x} - \vec{x_0}) \leq 0\}
+    \end{align*}
+    We call $H_+$ the positive halfspace, and $H_-$ the negative halfspace.
+\end{ln-define}
+And, along this concept of halfspace, we have developed the following theorem:
+\begin{ln-theorem}{Separating Hyperplane Theorem}{}
+    Let $C, D \in \R^n$ be nonempty disjoint convex sets, then
+    \[
+        \exists \vec{a} \neq \vec{0}, \vec{x_0} \in \R^n \big( \forall \vec{x} \in C, \vec{a}^T (\vec{x} - \vec{x_0} \geq 0) \land \forall \vec{x} \in D, \vec{a}^T (\vec{x} - \vec{x_0} \leq 0) \big)
+    \]
+    In other words, there must exist a hyperplane that separates the members of $C$ and $D$. \\
+    Such theorem is incredibly relevant to linear classifiers (specifically, this is an insight extracted from SVMs in CS189). \\
+    On a side note, the proof of this theorem is essentially the mathematical work to construct such a separating hyperplane, whose normal vector would ideally be some vector between a point of $C$ and a point of $D$ and the hyperplane crosses the midpoint of $\overline{pq}$.
+\end{ln-theorem}
+
+\section{Convex Functions}
+Once again, we will begin with a definition:
+\begin{ln-define}{Convex Functions}{}
+    A scalar-valued function $f: \R^n \rightarrow \R$ is convex iff the following qualities are satisfied:
+    \begin{bindenum}
+        \item The domain of $f$ is a convex set.
+        \item The function $f$ obeys the Jensen's Inequality:
+        \[
+            \forall \vec{x}, \vec{y} \in Domain(f), \theta \in [0, 1], f(\theta \vec{x} + (1 - \theta) \vec{y}) \leq \theta f(\vec{x}) + (1 - \theta) f(\vec{y})
+        \]
+    \end{bindenum}
+    Essentially, the Jensen's Inequality states that:
+    \begin{quote}
+        Any line segment between two points $(x, f(x)), (y, f(y))$ of a convex function would \underline{not be below} the function curve between those two points $(x, f(x)), (y, f(y))$.
+    \end{quote}
+\end{ln-define}
