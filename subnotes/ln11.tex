@@ -1,0 +1,139 @@
+\chapter{Convex Optimization Problems}
+We are slowly shifting to the second half of course.
+
+\section{Convex Functions, Continued}
+We have defined last time that
+\begin{ln-define}{Convex Functions}{}
+    A scalar-valued function $f: \R^n \rightarrow \R$ is convex iff the following qualities are satisfied:
+    \begin{bindenum}
+        \item The domain of $f$ is a convex set.
+        \item The function $f$ obeys the Jensen's Inequality:
+        \[
+            \forall \vec{x}, \vec{y} \in Domain(f), \theta \in [0, 1], f(\theta \vec{x} + (1 - \theta) \vec{y}) \leq \theta f(\vec{x}) + (1 - \theta) f(\vec{y})
+        \]
+    \end{bindenum}
+    Essentially, the Jensen's Inequality states that:
+    \begin{quote}
+        Any chord between two points $(x, f(x)), (y, f(y))$ of a convex function would \underline{not be below} the function curve between those two points $(x, f(x)), (y, f(y))$.
+    \end{quote}
+\end{ln-define}
+Concave functions are, on the other hand, the version of convex functions where many theories apply on maximization. \\
+For example, while convex functions' critical points are directly their global minimum, concave functions' critical points are directly their global maximum. \\
+By studying convex optimization, we equivalently study many aspects of concave optimization.
+(Moreover, inverting the sign of some concave function $f$ already make a convex objective function). \\
+Interestingly, linear functions are both concave and convex: they obey Jensen's Inequality by having the chord overlap with the objective function curve itself.
+
+Now, let us discuss the properties of functions further:
+\begin{ln-define}{Epigraph}{}
+    An epigraph of a function $f$ is the set:
+    \[
+        epi(f) = \{ (\vec{x}, t) \big| \vec{x} \in dom(f), f(\vec{x}) \leq t\}
+    \]
+    Reviewing the above definition, we discover that an epigraph is the space above the objective function value, the ``volume above curve''.
+\end{ln-define}
+Such figure is related to the convexity of a function:
+\begin{ln-theorem}{Epigraph and Convexity}{}
+    \textbf{Theorem.} Function $f$ is convex iff $epi(f)$ is a convex set.
+    \tcblower
+    \textbf{Proof.} Let us perform proof(s) for such theorem. \\
+    \textbf{Direction 1:} $f$ is convex $\implies$ $epi(f)$ is convex. \\
+    A set $C$ is convex if:
+    \[
+        \forall \vec{x}, \vec{y} \in C, L_{\vec{x}, \vec{y}} = \{\theta \vec{x} + (1 - \theta) \vec{y} | \theta \in [0, 1]\} \subseteq C
+    \]
+    A function $f$ is convex if:
+    \[
+        \forall \vec{x}, \vec{y} \in Domain(f), \theta \in [0, 1], f(\theta \vec{x} + (1 - \theta) \vec{y}) \leq \theta f(\vec{x}) + (1 - \theta) f(\vec{y})
+    \]
+    Let us take two arbitrary points from $epi(f)$ be $(\vec{x}, t_x), (\vec{y}, t_y)$ such that $t_x \geq f(\vec{x})$ and $t_y \geq f(\vec{y})$. \\
+    Let us consider some point in $L_{\vec{x}, \vec{y}}$ and see if it belongs to $C$:
+    \begin{align*}
+        \theta (\vec{x}, t_x) + (1 - \theta) (\vec{y}, t_y)
+        &= (\theta \vec{x} + (1 - \theta) \vec{y}, \theta t_x + (1 - \theta) t_y)
+    \end{align*}
+    Where, via the property of a convex function, we know that $\theta \vec{x} + (1 - \theta) \vec{y}$ is included in its convex domain. \\
+    Furthermore, via Jensen's Inequality
+    \begin{align*}
+        \theta t_x + (1 - \theta) t_y
+        &\geq \theta f(\vec{x}) + (1 - \theta) f(\vec{y}) \\
+        &\geq f(\theta \vec{x} + (1 - \theta) \vec{y})
+    \end{align*}
+    Therefore, by definition, a convex function $f$ has a convex epigraph $epi(f)$.
+    \par
+    \textbf{Direction 2:} $epi(f)$ is convex $\implies$ $f$ is convex. \\
+    Take two arbitrary points in $epi(f)$ to be $(\vec{x}, t_x = f(\vec{x})), (\vec{y}, t_y = f(\vec{y}))$, where by the definition of convexity, we realize that:
+    \[
+        \forall \theta \in [0, 1], (\theta \vec{x} + (1 - \theta) \vec{y}, \theta t_x + (1 - \theta) t_y) \in epi(f)
+    \]
+    Since such point exists in an epigraph, it must infer that,
+    \[
+        \theta t_x + (1 - \theta) t_y = \theta f(\vec{x}) + (1 - \theta) f(\vec{y}) \geq f(\theta \vec{x} + (1 - \theta) \vec{y})
+    \]
+    which is the Jensen's Inequality: what characterizes the definition of a convex function $f$.
+\end{ln-theorem}
+This thus connects the definitions of convex sets and convex functions.
+But, ready or not, there are more definitions of convexity:
+\begin{ln-define}{First Order Condition of Convexity}{}
+    Let $f$ be a differentiable function, then $f$ is convex iff the following condition is satisfied:
+    \[
+        f(\vec{y}) \geq f(\vec{x}) + \dv{f}{x} \big|_{\vec{x}} \cdot (\vec{y} - \vec{x})
+    \]
+    The implication of such definition is:
+    \[
+        \nabla f(\vec{x}) = 0 \implies \forall \vec{y}, f(\vec{y}) \geq f(\vec{x}) + 0
+    \]
+    \tcblower
+    \textbf{Proof.} \\
+    \textbf{Direction 1:} $f$ is convex implies the first order condition of convexity \\
+    The definition of convex function allows us to state for some $\theta \in [0, 1]$ that
+    \[
+        \forall \vec{x}, \vec{y} \in Domain(f), \theta \in [0, 1], f((1 - \theta) \vec{x} + \theta \vec{y}) \leq (1 - \theta) f(\vec{x}) + \theta f(\vec{y})
+    \]
+    Rearranging the above inequality grants
+    \begin{align*}
+        \theta f(\vec{y}) \geq f((1 - \theta) \vec{x} + \theta \vec{y}) - f(\vec{x}) + \theta f(\vec{x})
+        f(\vec{y}) \geq \frac{1}{\theta} f(\vec{x} + \theta (\vec{y} - \vec{x})) - \frac{1}{\theta} f(\vec{x}) + f(\vec{x})
+    \end{align*}
+    Upon aligning the above equation with the definition of derivative, we may discover that:
+    \[
+        \lim_{t \rightarrow 0} \frac{f(\vec{x} + \theta (\vec{y} - \vec{x})) - f(\vec{x})}{t (\vec{y} - \vec{x})} = \dv{f}{x}
+    \]
+    Therefore, let us substitute the above derivative term into the function:
+    \[
+        f(\vec{y}) \geq \dv{f}{x} \cdot (\vec{y} - \vec{x}) + f(\vec{x})
+    \]
+    which is exactly the first order condition of convexity.
+    \par
+    \textbf{Direction 2:} the first order condition of convexity implies $f$ is convex. \\
+    Suppose we have two arbitrary points $\vec{x}, \vec{y}$, and that:
+    \[
+        \vec{z} = \theta \vec{x} + (1 - \theta) \vec{y}
+    \]
+    Let us use the first order condition of convexity to state that,
+    \begin{align*}
+        f(\vec{x}) &\geq f(\vec{z}) + f'(\vec{z}) (\vec{x} - \vec{z}) \\
+        f(\vec{y}) &\geq f(\vec{z}) + f'(\vec{z}) (\vec{y} - \vec{z})
+    \end{align*}
+    Then,
+    \begin{align*}
+        \theta f(\vec{x}) + (1 - \theta) f(\vec{y})
+        &\geq f(\vec{z}) + \theta f'(\vec{z}) (\vec{x} - \vec{z}) + (1 - \theta) f'(\vec{z}) (\vec{y} - \vec{z}) \\
+        &= f(\vec{z}) + \theta f'(vec{z}) (\theta \vec{x} - \theta \vec{z} + (1 - \theta) \vec{y} - (1 - \theta) \vec{z}) \\
+        &= f(\vec{z})
+    \end{align*}
+\end{ln-define}
+
+Upon the first order condition, we also have a second order condition of convexity:
+\begin{ln-define}{Second Order Condition of Convexity}{}
+    Let $f$ be a twice-differentiable function, then $f$ is convex iff the following condition is satisfied:
+    \[
+        \nabla^2 f(x) \succcurlyeq 0
+    \]
+\end{ln-define}
+
+\section{Convex Optimization Problem}
+Let us have some problem:
+\[
+    p^* = \min f_0(\vec{x}) \text{ s.t. } f_i(\vec{x}) \leq 0
+\]
+A problem is a convex optimization problem if for all $i$, $f_i(x)$ is a convex function.

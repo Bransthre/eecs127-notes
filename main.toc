@@ -42,3 +42,6 @@
 \contentsline {subsection}{\numberline {10.1.1}Proof of Convexity}{42}{subsection.10.1.1}%
 \contentsline {subsection}{\numberline {10.1.2}Hyperplanes}{43}{subsection.10.1.2}%
 \contentsline {section}{\numberline {10.2}Convex Functions}{44}{section.10.2}%
+\contentsline {chapter}{\numberline {11}Convex Optimization Problems}{45}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Convex Functions, Continued}{45}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Convex Optimization Problem}{47}{section.11.2}%
