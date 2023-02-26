@@ -1,3 +1,7 @@
+\contentsline {section}{\numberline {0.1}Preface}{2}{section.0.1}%
+\contentsline {subsection}{\numberline {0.1.1}First of all, My Notes are Not Substitutes to the Course Readers}{2}{subsection.0.1.1}%
+\contentsline {subsection}{\numberline {0.1.2}How did Brandon Use This Note?}{2}{subsection.0.1.2}%
+\contentsline {subsection}{\numberline {0.1.3}What is the Last Four Digits of Your Social Security Number?}{2}{subsection.0.1.3}%
 \contentsline {chapter}{\numberline {1}Introduction and Least Squares}{5}{chapter.1}%
 \contentsline {section}{\numberline {1.1}An Introductory Prompt}{5}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Administratives, Summary}{5}{section.1.2}%
