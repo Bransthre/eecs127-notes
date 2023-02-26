@@ -25,7 +25,7 @@ First of all, let us recap Calculus II knowledge of polynomial expansion of some
     \]
     Essentially, 
     \[
-        f(x_0 + \Delta x) = \sum_{i = 0}^n \frac{f^{(i)}(x_0) {(\Delta x)}^2}{i!}
+        f(x_0 + \Delta x) = \sum_{i = 0}^n \frac{f^{(i)}(x_0) {(\Delta x)}^i}{i!}
     \]
     where we call the Taylor expansion towards the $n^{th}$ degree term be an $n^{th}$ order Taylor expansion.
 \end{ln-theorem}
@@ -51,10 +51,29 @@ In addition, we define the derivative of vectors as follows:
     \begin{align*}
         \pdv{f}{x} = {(\nabla_{\vec{x}}f)}^T &= \begin{bmatrix} \pdv{f}{x_1} & \cdots & \pdv{f}{x_n} \end{bmatrix} \\
         {(\nabla^2 f(\vec{x}))}_{i,j} &= \pdv{f}{x_i}{x_j} \\
-        \nabla^2 f(\vec{x}) &\in \mathcal{S}^n
+        \nabla^2 f(\vec{x}) &\in \mathbb{S}^n
     \end{align*}
 \end{ln-define}
-Let us provide an example in approximating a scalar valued vector function via Taylor's Theorem:
+Note that it is only for convex functions where the symmetric argument of Hessian applies. \\
+This is beacuse:
+\[
+    \pdv{f}{x_i}{x_j} = \frac{}{\partial x_i} \pdv{f}{x_j}
+\]
+where the order of variables put matters for functions. \\
+The reason why convex functions can host the symmetric Hessian is because of Clairaut's Theorem (not explicitly mentioned in lecture):
+\begin{ln-theorem}{Clairaut's Theorem}{}
+    If the second partial derivatives of a function are continuous, then the order of differentiation is immaterial. \\
+    Alternatively (quoted from Purdue University),
+    \begin{quote}
+        Let $f : \R^2 \rightarrow \R$ have all partial derivatives up to second derivative be continuous near $(a, b)$, then:
+        \[
+            \pdv{f}{x}{y} (a, b) = \pdv{f}{y}{x} (a, b)
+        \]
+    \end{quote}
+\end{ln-theorem}
+
+\subsection{Examples of Polynomial Expansion}
+Now, let us provide an example in approximating a scalar valued vector function via Taylor's Theorem:
 \begin{ln-explain}{Polynomial Expansion of 2-Norm}{}
     Let us attempt to find a Taylor Expansion for the function
     \[f(\vec{x}) = \pnorm[2]{\vec{x}}{2}\]
@@ -101,19 +120,15 @@ Let's look at some more examples of Taylor Expansion:
     \end{align*}
 \end{ln-explain}
 
+
+\subsection{Matrix in Vector Calculus}
+Let us discuss how the roles of matrices are when we take the derivative of a scalar-valued function by a vector.
 \begin{ln-explain}{Derivatives of Matrix-Involving Inner Product}{}
     Let us find the derivative expressions to the function:
     \[
         f(\vec{x}) = \vec{x}^T A \vec{x}, A \in \R^{n \times n}
     \]
-    The gradient of such function is then (this method of computation might be proven unrigorous due to the ambiguity of inner product definition),
-    \begin{align*}
-        \pdv{f}{x}
-        &= \frac{\partial}{\partial x} \vec{x} \cdot A \vec{x} \\
-        &= \vec{1} \cdot A \vec{x} + \vec{x} \cdot A \\
-        &= A \vec{x} + A^T \vec{x} = (A + A^T) \vec{x}
-    \end{align*}
-    And, \textit{\textbf{on a more rigorous convention}}, we can derive the gradient as follows:
+    We can derive the gradient as follows:
     \begin{align*}
         \frac{\partial}{\partial x_i} \vec{x}^T A \vec{x}
         &= \frac{\partial}{\partial x_i} \vec{x}^T \begin{bmatrix} \vec{A_1} & \cdots & \vec{A_n} \end{bmatrix} \vec{x} \\
@@ -131,7 +146,7 @@ Let's look at some more examples of Taylor Expansion:
     \end{align*}
 \end{ln-explain}
 
-\subsection{Matrix in Vector Calculus}
+Then, let us define the derivative of a vector-valued function with respect to some vector variable:
 \begin{ln-define}{Jacobian (Derivative) of Vector-Valued Vector Function}{}
     For some function $f(\vec{x}) = \vec{y}$ such that:
     \[
@@ -158,6 +173,8 @@ Let's look at some more examples of Taylor Expansion:
     \]
     whose determinant would then be $\det(J) = r$.
 \end{ln-explain}
+
+Last but not least, let us explore chain rule in matrix calculus:
 \begin{ln-define}{Chain Rule}{}
     Let a function $f$ be
     \[
@@ -169,12 +186,8 @@ Let's look at some more examples of Taylor Expansion:
     \]
     \tcblower
     \textbf{Example.} \\
-    For an example in some single-variable context:
-    \begin{align*}
-        f(x) &= \sin(x^2) \\
-        \dv{f}{x} &= 2x \cos(x^2)
-    \end{align*}
-    Now, let's look at the least squares problem:
+    Now, let's look at the least squares problem. \\
+    Originally, we perform this computation:
     \begin{align*}
         f(x)
         &= \pnorm[2]{A \vec{x} - \vec{b}}{2} \\
@@ -183,8 +196,17 @@ Let's look at some more examples of Taylor Expansion:
         \nabla_{\vec{x}} f(\vec{x})
         &= (A^T A + A^T A) \vec{x} - 2 A^T \vec{b} \\
         &= 2 A^T A \vec{x} - 2 A \vec{b} \\
-        \vec{x}^* &= {(A^T A)}^{-1} A^T \vec{b} \\
-        \dv{f}{x}
-        &= 2(A \vec{x} - \vec{b})^T \cdot A \text{\ \ \ (using Chain Rule)}
+        \vec{x}^* &= {(A^T A)}^{-1} A^T \vec{b}
     \end{align*}
+    Instead, we may use chain rule:
+    \begin{align*}
+        \dv{f}{x}
+        &= \dv{g}{y} \dv{h}{x} \\
+        &= {(\nabla_{\vec{y}} g)}^T \dv{}{x} {} (A \vec{x}) \\
+        &= 2(A \vec{x} - \vec{b})^T \cdot A
+    \end{align*}
+    We may thus obtain the gradient to be:
+    \[
+        \nabla_{\vec{x}} f = 2 A^T (A \vec{x} = \vec{b})
+    \]
 \end{ln-define}

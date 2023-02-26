@@ -1,5 +1,5 @@
 \chapter{The Extension of Vector Calculus}
-\textit{Note: This lecture's content will be shorter than other notes because half of the lecture was put on reviewing MATH 53 (as written in Lecture 7)}
+\textit{Note: This lecture's content will be shorter than other notes because half of the lecture was put on reviewing Lecture 7}
 
 \section{The Main Theorem}
 The. Main. 
@@ -32,9 +32,9 @@ The. Main.
     \end{align*}
     We may then provide a symmetric argument on the value $\vec{x}^* - \Delta \vec{x}$:
     \begin{align*}
-        - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) &+ \frac{1}{2} {(\Delta \vec{x})}^T \dv[2]{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (\Delta \vec{x}) &&\geq 0 \\
+        \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (- \Delta \vec{x}) &+ \frac{1}{2} {(- \Delta \vec{x})}^T \dv[2]{f}{x} \bigg|_{\vec{x} = \vec{x}^*} (- \Delta \vec{x}) &&\geq 0 \\
         - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} &&\geq 0 \\
-        \lim_{\Delta \vec{x} \rightarrow 0} - \bigg( \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} \bigg) = - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &&\geq 0 \\
+        \lim_{\Delta \vec{x} \rightarrow 0} - \bigg( \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &+ \frac{sum(H.O.T.)}{\Delta \vec{x}} \bigg) = - \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} &&\geq 0
     \end{align*}
     \[
         \dv{f}{x} \bigg|_{\vec{x} = \vec{x}^*} \leq 0
@@ -54,41 +54,38 @@ In this problem, we consider the following concern:
     \par
     In other words, we compare $\frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}$ with $\frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}$
 \end{quote}
-Let us now set up the problem:
-\begin{ln-explain}{Formulating the Perturbation Analysis}{}
-    Let us see that,
-    \begin{align*}
-        A \vec{x} &= \vec{y} \\
-        A (\vec{x} + \Delta \vec{x}) &= \vec{y} + \Delta \vec{y}
-    \end{align*}
-    Then, we may manipulate the expressions to find that,
-    \begin{align*}
-        A \Delta \vec{x} = \Delta \vec{y} \implies \Delta \vec{x} &= A^{-1} \Delta \vec{y} \\
-        \pnorm{\Delta \vec{x}}{2} &= \pnorm{A^{-1} \Delta \vec{y}}{2} \leq \pnorm{A^{-1}}{2} \pnorm{\Delta \vec{y}}{2}
-    \end{align*}
-    The last line is certified because the spectral norm of $A^{-1}$ measures how much can it transform the norm of a vector.
-    \par
-    Then, we may provide a minimization problem:
-    \[
-        \min \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}
-    \]
-    Now, let us observe the following work of upperbounding such denominator:
-    \begin{align*}
-        A \vec{x} = \vec{y} &\implies \pnorm{A \vec{x}}{2} \leq \pnorm{A}{2} \pnorm{\vec{x}}{2} \\
-        \pnorm{\vec{y}}{2} &\leq \pnorm{A}{2} \pnorm{\vec{x}}{2} \\
-        \pnorm{\vec{x}}{2} &\geq \frac{\pnorm{\vec{y}}{2}}{\pnorm{A}{2}}
-    \end{align*}
-    And therefore,
-    \begin{align*}
-        \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}
-        &\leq \pnorm{A^{-1}}{2} \pnorm{\vec{y}}{2} \frac{\pnorm{A}{2}}{\pnorm{\vec{y}}{2}} \\
-        &= \pnorm{A^{-1}}{2} \pnorm{A}{2} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}} \\
-        &= \sigma_{\max}(A) \sigma_{\max}(A^{-1}) \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
-        = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
-    \end{align*}
-    Consequently, we arrive at the conclusion (summary) of:
-    \[
-        \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}} \leq \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
-    \]
-    where we call the fraction $\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$ the \textbf{condition number}.
-\end{ln-explain}
+Let us now set up the problem, by priorly noting what we know about the relationship between matrices, measurements, and perturbations:
+\begin{align*}
+    A \vec{x} &= \vec{y} \\
+    A (\vec{x} + \Delta \vec{x}) &= \vec{y} + \Delta \vec{y}
+\end{align*}
+Then, we may manipulate the expressions to find that,
+\begin{align*}
+    A \Delta \vec{x} = \Delta \vec{y} \implies \Delta \vec{x} &= A^{-1} \Delta \vec{y} \\
+    \pnorm{\Delta \vec{x}}{2} &= \pnorm{A^{-1} \Delta \vec{y}}{2} \leq \pnorm{A^{-1}}{2} \pnorm{\Delta \vec{y}}{2}
+\end{align*}
+The last line is certified because the spectral norm of $A^{-1}$ measures how much can it transform the norm of a vector.
+\par
+Then, we may provide a minimization problem to attempt find some expression about the ratio of perturbation and actual measurement:
+\[
+    \min \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}
+\]
+Now, let us observe the following work of upperbounding such denominator:
+\begin{align*}
+    A \vec{x} = \vec{y} \implies \pnorm{A \vec{x}}{2} &\leq \pnorm{A}{2} \pnorm{\vec{x}}{2} \\
+    \pnorm{\vec{y}}{2} &\leq \pnorm{A}{2} \pnorm{\vec{x}}{2} \\
+    \frac{1}{\pnorm{\vec{x}}{2}} &\leq \frac{\pnorm{A}{2}}{\pnorm{\vec{y}}{2}}
+\end{align*}
+And therefore,
+\begin{align*}
+    \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}}
+    &\leq \pnorm{A^{-1}}{2} \pnorm{\vec{\Delta y}}{2} \frac{\pnorm{A}{2}}{\pnorm{\vec{y}}{2}} \\
+    &= \pnorm{A^{-1}}{2} \pnorm{A}{2} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}} \\
+    &= \sigma_{\max}(A) \sigma_{\max}(A^{-1}) \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
+    = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
+\end{align*}
+Consequently, we arrive at the conclusion (summary) of:
+\[
+    \frac{\pnorm{\Delta \vec{x}}{2}}{\pnorm{\vec{x}}{2}} \leq \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \frac{\pnorm{\Delta \vec{y}}{2}}{\pnorm{\vec{y}}{2}}
+\]
+where we call the fraction $\kappa(A) = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}$ the \textbf{condition number}.
