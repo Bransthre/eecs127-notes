@@ -88,49 +88,54 @@ The problem statement:
 
 Such problem can be widely applied to many mathematical problems, such as regression and projection.
 
-\begin{ln-explain}{Formulating Least Squaresd Regression}{}
+\subsection{Formulating Least Squares Regression}
+Let us discuss least squares algorithm in the context of linear regression:
+\begin{quote}
     Provided a dataset of points:
     \[\{(x_1, y_1), \dots, (x_n, y_n)\}\]
-    where we attempt to model a linear equation
+    let us attempt to model a linear equation
     \[y = mx + c\]
-    
-    First of all, what is the variable we attempt to search/optimize for? It would be $m, c$ that are the unknowns. \\
-    To formulate the Least Squares Problem, we would need to formulate our linear equation for points into some matrix-vector multiplication, and knowing that we are solving for $m$ and $c$, the formulation follows:
-    \[
-        A
-        \begin{bmatrix} m \\ c \end{bmatrix}
-        = \vec{b}
-    \]
-    Let us now fill in the contents of $A$ and $\vec{b}$ for formulation, where $A$ and $\vec{b}$ are of known quantities:
-    \[
-        \begin{bmatrix} \vec{x} & \vec{1} \end{bmatrix}
-        \begin{bmatrix} m \\ c \end{bmatrix}
-        = \vec{y}
-    \]
-\end{ln-explain}
+\end{quote}
+First of all, what is the variable we attempt to search/optimize for? \\
+It would be $m, c$ that are the unknowns. \\
+To formulate the Least Squares Problem, we would need to formulate our linear equation for points into some matrix-vector multiplication, and knowing that we are solving for $m$ and $c$, the formulation follows:
+\[
+    A
+    \begin{bmatrix} m \\ c \end{bmatrix}
+    = \vec{b}
+\]
+Let us now fill in the contents of $A$ and $\vec{b}$ for formulation, where $A$ and $\vec{b}$ are of known quantities:
+\[
+    \begin{bmatrix} \vec{x} & \vec{1} \end{bmatrix}
+    \begin{bmatrix} m \\ c \end{bmatrix}
+    = \vec{y}
+\]
+
+\subsection{Closed-Form Solution of Least Squares Problem}
 From prior coursework we also know that there is a closed-form solution:
 \[\vec{x}^* = {(A^T A)}^{-1} A^T \vec{b}\]
 for matrices $A$ with nontrivial nullspaces (see EECS16A for a proof that $N(A) = N(A^T A)$).
-
-\begin{ln-explain}{Closed-Form Solution of Least Squares}{}
-    To minimize the L2 norm of difference between $A \vec{x}$ and $\vec{b}$, we attempt to find a vector $\vec{x}$ that minimizes the differences between them. \\
-    Note that for any choice of $\vec{x}$, it is by definition that $A \vec{x} \in Col(A)$. \\
-
-    We now face two claims that we resolve to proceed on solving this problem:
-    \begin{bindenum}
-        \item[1.] The endpoint of ${proj}_{Col(A)} \vec{b}$ is the point closest to the endpoint of $\vec{b}$ (if they share a same starting point) in $Col(A)$.
-        \item[2.] $\vec{OP} = A \vec{x}^*$, where $\vec{x}^*$ has the closed-form solution as previously described.
-    \end{bindenum}
-
-    Claim 1 can be proven by contradiction: assume another point $C$ closer than $P$ to $B$ (such that $\vec{OB}$ is closer to $\vec{b}$). However, Pythagorean Theorem argues against it. \\
-    Claim 2 is a series of algebraic manipulation as outlined in previous courseworks, based on that the error vector $\vec{e} = \vec{b} - A\vec{x}$ should be orthogonal to the columnspace $Col(A)$ by geometry:
-    \begin{align*}
-        A^T \vec{e} &= 0 \\
-        A^T (A \vec{x}^* - \vec{b}) &= 0 \\
-        A^T A \vec{x}^* &= A^T \vec{b} \\
-        \vec{x}^* &= {(A^T A)}^{-1} A^T \vec{b}
-    \end{align*}
-    Such result is also known as the \textbf{Normal Equation}.
-\end{ln-explain}
-
+\par
+To minimize the L2 norm of difference between $A \vec{x}$ and $\vec{b}$, we attempt to find a vector $\vec{x}$ that minimizes the differences between them. \\
+Note that for any choice of $\vec{x}$, it is by definition that $A \vec{x} \in Col(A)$.
+\par
+We now face two claims that we resolve to proceed on solving this problem:
+\begin{bindenum}
+    \item[1.] The endpoint of ${proj}_{Col(A)} \vec{b}$ is the point closest to the endpoint of $\vec{b}$ (if they share a same starting point) in $Col(A)$.
+    \item[2.] $\vec{OP} = A \vec{x}^*$, where $\vec{x}^*$ has the closed-form solution as previously described.
+\end{bindenum}
+Claim 1 can be proven by contradiction:
+\begin{quote}
+    Assume another point $C$ closer than $P$ to $B$ (such that $\vec{OB}$ is closer to $\vec{b}$). However, Pythagorean Theorem argues against it.
+\end{quote}
+Claim 2 is a series of algebraic manipulation as outlined in previous courseworks: \\
+Based on that the error vector $\vec{e} = \vec{b} - A\vec{x}$ should be orthogonal to the columnspace $Col(A)$ (because of geometry):
+\begin{align*}
+    A^T \vec{e} &= 0 \\
+    A^T (A \vec{x}^* - \vec{b}) &= 0 \\
+    A^T A \vec{x}^* &= A^T \vec{b} \\
+    \vec{x}^* &= {(A^T A)}^{-1} A^T \vec{b}
+\end{align*}
+Such result is also known as the \textbf{Normal Equation}.
+\par
 Interestingly, Least Squares Algorithm has a quadratic property, causing it to be some parabolic object that performs a \textbf{convex function} to optimize along; that is, the local minimum of this function is a global minimum.

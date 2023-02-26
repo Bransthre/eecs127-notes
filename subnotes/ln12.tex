@@ -1,0 +1,149 @@
+\chapter{Descent Methods}
+
+\section{Strict Strong Convexity}
+Convexity also comes in different strictness. These more refined definition provide us flexibility and rigor in proofs. \\
+For example, we may first consider that, the zeroth order definition of convexity would be:
+\begin{quote}
+    For a function $f: \R^n \rightarrow \R$, the domain of $f$ needs to be convex, and Jensen's Inequality applies to any two arbitrary points on the domain.
+\end{quote}
+However, we fail to classify linear functions as either convex or concave. Linear functions were concluded to be both convex and concave, which is very confusing.
+\begin{ln-define}{Strict Convexity}{}
+    The zeroth order condition of strict convexity is altered to:
+    \begin{quote}
+        For a function $f: \R^n \rightarrow \R$, the domain of $f$ needs to be convex, and:
+        \[
+            f(\theta \vec{x} + (1 - \theta) \vec{y}) < \theta f(\vec{x}) + (1 - \theta) f(\vec{y})
+        \]
+    \end{quote}
+    The first order condition is altered to:
+    \[
+        \forall \vec{x}, \vec{y} \in Domain(f), f(\vec{y}) > f(\vec{x}) + \dv{f}{x} \cdot (\vec{y} - \vec{x})
+    \]
+    The second order condition is altered along a very similar logic:
+    \[
+        \nabla^2 f(\vec{x}) > 0
+    \]
+    And in summary, a strictly convex function must have a unique minimum (unlike, say, a ReLU function).
+\end{ln-define}
+
+But just like humans, not only can convexity have strict variants, they can also have strong variants.
+Strong convexity implies strict convexity, and strict convexity implies convexity. These definitions are increasingly difficult to satisfy:
+\begin{ln-define}{Strong Convexity}{}
+    If $f$ is differentiable, then for some $\mu > 0$, it is $\mu$-strongly convex if domain of $f$ is convex and
+    \[
+        \forall \vec{x}, \vec{y} \in domain(f), f(\vec{y}) \geq f(\vec{x}) + \dv{f}{x} \cdot (\vec{y} - \vec{x}) + \frac{\mu}{2} \pnorm[2]{\vec{y} - \vec{x}}{2}
+    \]
+\end{ln-define}
+The insight such variant provides is, for some $\mu$-strongly convex function:
+\[
+    \nabla^2 f(x) \succcurlyeq \mu I \implies \nabla^2 f(x) - \mu I \succcurlyeq 0
+\]
+The smallest possible eigenvalue of the Hessian of $f$ is then $\mu$.
+The larger such value $\mu$ is, the stronger its convex; in other words, the further the function is from being nonconvex.
+
+\section{Gradient Descent}
+As you might have learned in prior courseworks (during college, or, high school given Berkeley), there are many variants of Gradient Descent. \\
+Let's think about the vanilla version of gradient descent first, as an unconstrained optimization problem:
+
+\subsection{Inventing Gradient Descent}
+\[
+    p^* = \min_{\vec{x} \in \R^n} f_0(\vec{x})
+\]
+The foundation of gradient descent algorithm is an ``oracle'' that \underline{guides us at the direction of some greatest descent} along the provided function $f$. \\
+Now, we should understand when does the ``oracle'' guide us to convergence, such that we do not get lost in the search space.
+\par
+Let's find the ``oracle'' via some perspectives on linear perturbation:
+\begin{align*}
+    f(\vec{x} + \Delta \vec{x}) = f(\vec{x}) + \dv{f}{x} \cdot (\Delta \vec{x}) + \text{H.O.T.}
+\end{align*}
+If $\Delta \vec{x}$ is a good direction to perturb $\vec{x}$ to, then we wish as well that $f(\vec{x} + \Delta \vec{x}) < f(\vec{x})$. \\
+Suppose that $\Delta \vec{x} = s \vec{v}$, where $s$ is a real scalar and $\vec{v}$ is some direction-resembling vector. \\
+Then, let us rewrite $f(\vec{x} + s \vec{v})$ as:
+\begin{align*}
+    f(\vec{x} + s \vec{v})
+    &= f(\vec{x}) + s \dv{f}{x} {} \vec{v} \\
+    &= f(\vec{x}) + s \langle \nabla f(\vec{x}), \vec{v} \rangle < f(\vec{x}) \\
+    \langle \nabla f(\vec{x}), \vec{v} \rangle &< 0
+\end{align*}
+This means $\nabla f(\vec{x})$ and $\vec{v}$ should be in opposite direction. \\
+Therefore,
+\[
+    \vec{v} = - \nabla f(\vec{x})
+\]
+and we conclude that the opposite direction of gradient is the great direction of descent-- the ``oracle''.
+\par
+Now, let us write up a draft for the gradient descent algorithm (which I will follow the minimal-energy principle of Physics and shamelessly copy from my notes in prior courseworks), that:
+\begin{ln-define}{Gradient Descent Algorithm}{}
+    Let the initial guess of minimum be $\vec{x_0}$. \\
+    Then, provided a stepsize $\eta$, and defining $\vec{x_k}$ to be the $k^{th}$ guess of minimum, the iterative approach of algorithm follows as:
+    \[
+        \vec{x}_{k + 1} = \vec{x}_k - \eta \nabla f(\vec{x_k})
+    \]
+\end{ln-define}
+To get better constant stepsizes, we can perform hyperparamter tuning; or, solve the next subsection.
+
+\subsection{Finding $\eta$}
+Let us first define the function we perform gradient descent on, to demonstrate the process of finding $\eta$. \\
+Let
+\begin{align*}
+    f_0 (\vec{x}) &= \pnorm[2]{A \vec{x} - \vec{b}}{2} \\
+    \nabla f_0 (\vec{x}) &= 2 A^T (A \vec{x} - \vec{b})
+\end{align*}
+The iterative rule of gradient descent on function $f_0$ is thus:
+\begin{align*}
+    \vec{x}_{k + 1}
+    &= I \vec{x}_k - 2 \eta A^T (A \vec{x} - \vec{b}) \\
+    &= (I - 2 \eta A^T A) \vec{x}_k + 2 \eta A^T \vec{b}
+\end{align*}
+Let us discuss the recursion in the above form. \\
+First of all, we require that the matrix coefficient of guess term: $(I - 2 \eta A^T A)$, to provide some scaling that does not consistently scale the vector larger, so to prevent divergence.
+In matrices, we may consider eigenvalue as the indicator of such divergence or convergence. We require that the eigenvalues of $(I - 2 \eta A^T A)$ satisfy some condition such that it does not lead to a consistently larger guess.
+\par
+Now, let us look at the guess rule:
+\begin{align*}
+    \vec{x}_{k + 1} - \vec{x}^*
+    &= (I - 2 \eta A^T A) \vec{x}_k + 2 \eta A^T \vec{b} - {(A^T A)}^{-1} A^T \vec{b} \\
+    &= (I - 2 \eta A^T A) \vec{x}_k + (2 \eta A^T A - I) {(A^T A)}^{-1} A^T \vec{b} \\
+    &= (I - 2 \eta A^T A) [\vec{x}_k - {(A^T A)}^{-1} A^T \vec{b}] \\
+    &= (I - 2 \eta A^T A) [\vec{x}_k - \vec{x}^*]
+\end{align*}
+Solve the recursion above,
+\begin{align*}
+    \vec{x}_{k + n} - \vec{x}^*
+    &= (I - 2 \eta A^T A) [\vec{x}_{k + (n - 1)} - \vec{x}^*] \\
+    &\vdots \\
+    &= {(I - 2 \eta A^T A)}^n [\vec{x}_{k + (n - n)} - \vec{x}^*]
+\end{align*}
+Upon the fact that $I - 2 \eta A^T A$ is a symmetric matrix (i.e., it is diagonalizable), we are granted the following statements:
+\begin{align*}
+    I - 2 \eta A^T A &= U \Lambda U^T \\
+    \vec{x}_k - {(A^T A)}^{-1} A^T \vec{b}
+    &= {(I - 2 \eta A^T A)}^k [\vec{x}_0 - {(A^T A)}^{-1} A^T \vec{b}] \\
+    &= U \Lambda^k U^T [\vec{x}_0 - {(A^T A)}^{-1} A^T \vec{b}]
+\end{align*}
+Hinting at what a good choice of $\eta$ is such that we may guarantee the subsequent guesses decrease as timestep increase.
+Particularly, we choose some $\eta$ such that the eigenvalues of $(I - 2 \eta A^T A)$ are less than $1$ in magnitude.
+This allows us to upperbound the scaling effect of a matrix on some vector to not increase the vector's size (in the sense that, our guess does not travel away from the optimum we attempt to find via gradient descent).
+
+\subsection{Generalizations}
+For functions that are $\mu$-strongly convex, their gradients do not change too slowly. \\
+For functions that are $L$-smooth, such that
+\[
+    f(\vec{y}) \leq f(\vec{x}) + \nabla f(\vec{x}) \cdot (\vec{y} - \vec{x}) + \frac{L}{2} \pnorm[2]{\vec{y} - \vec{x}}{2}
+\]
+their gradients do not change too fast.
+
+\begin{ln-theorem}{Lemma on Gradients of L-smooth Functions}{}
+    \textbf{Lemma:} For an L-smooth function $f$
+    \[
+        \pnorm[2]{\nabla f(\vec{x})}{2} \leq 2L (f(\vec{x}) - f(\vec{x}^*))
+    \]
+    \tcblower
+    Using the $L$-smooth property of a function,
+    \begin{align*}
+        f(\vec{y})
+        &\leq f(\vec{x}) + \nabla f(\vec{x}) \cdot (\vec{y} - \vec{x}) + \frac{L}{2} \pnorm[2]{\vec{y} - \vec{x}}{2} \\
+        f(\vec{x} - \eta \nabla f(\vec{x}))
+        &\leq f(\vec{x}) + \dv{f}{x} {} (-\eta \nabla f(\vec{x})) + \frac{L}{2} \pnorm[2]{\eta \nabla f(\vec{x})}{2}
+    \end{align*}
+\end{ln-theorem}

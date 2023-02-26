@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  21 FEB 2023 10:56
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  25 FEB 2023 18:10
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1123,109 +1123,107 @@ Underfull \hbox (badness 10000) in paragraph at lines 44--49
 
  []
 
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 116--118
+[6] [7]) [8] (./subnotes/ln02.tex
+Chapter 2.
+
+Underfull \hbox (badness 10000) in paragraph at lines 34--36
 
  []
 
-[7]) [8] (./subnotes/ln02.tex
-Chapter 2.
-[9
 
-] [10]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4673) has occurred while \output is active []
 
- [11]) [12] (./subnotes/ln03.tex
+ [9
+
+] [10] [11] [12]) [13] (./subnotes/ln03.tex
 Chapter 3.
-[13
+[14
 
-] [14] [15]) [16] (./subnotes/ln04.tex
+] [15] [16]) [17] (./subnotes/ln04.tex
 Chapter 4.
-[17
+[18
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 82--84
 
  []
 
-[18]
+[19]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19]) [20] (./subnotes/ln05.tex
+ [20]) [21] (./subnotes/ln05.tex
 Chapter 5.
-[21
+[22
 
 ]
 File: figs/ln05/svd_geometry.png Graphic file (type bmp)
 <figs/ln05/svd_geometry.png>
- [22] [23]) [24] (./subnotes/ln06.tex
+ [23] [24]) [25] (./subnotes/ln06.tex
 Chapter 6.
 
 Underfull \hbox (badness 10000) in paragraph at lines 32--33
 
  []
 
-[25
+[26
 
-] [26] [27]) [28] (./subnotes/ln07.tex
+] [27] [28]) [29] (./subnotes/ln07.tex
 Chapter 7.
-[29
+[30
 
-] [30] [31]) [32] (./subnotes/ln08.tex
+] [31] [32]) [33] (./subnotes/ln08.tex
 Chapter 8.
-[33
+[34
 
 ]
 Underfull \vbox (badness 1383) has occurred while \output is active []
 
- [34]) [35] (./subnotes/ln09.tex
+ [35]) [36] (./subnotes/ln09.tex
 Chapter 9.
-[36
+[37
 
 ]
 Underfull \vbox (badness 2922) has occurred while \output is active []
 
- [37] [38]) [39] [40] (./subnotes/ln10.tex
+ [38] [39]) [40] [41] (./subnotes/ln10.tex
 Chapter 10.
 
 Underfull \vbox (badness 4967) has occurred while \output is active []
 
- [41
+ [42
 
-] [42]
+] [43]
 Underfull \hbox (badness 10000) in paragraph at lines 108--110
 
  []
 
-[43]
+[44]
 Underfull \hbox (badness 2096) in paragraph at lines 167--168
 []\T1/ptm/m/n/10 Any line seg-ment be-tween two points $\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x; f\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 ))\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y; f\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y\OT1/cmr/m/n/10 ))$ \T1/ptm/m/n/10 of a con-vex func-tion would
  []
 
-) [44] (./subnotes/ln11.tex
+) [45] (./subnotes/ln11.tex
 Chapter 11.
-[45
+[46
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [46]) [47] (./main.aux)
+ [47]) [48] (./subnotes/ln12.tex
+Chapter 12.
+[49
 
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 39B9816818817DD6EBD2E78A0F0A3FB5;7096
-(rerunfilecheck)             After:  2AAB776C54C3223595945896415D5824;7294.
+] [50] [51]) [52] (./main.aux)
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 21901D660677B830F59E77E3719AC408;7735.
  ) 
 Here is how much of TeX's memory you used:
- 63840 strings out of 475882
- 1613137 string characters out of 5806027
- 2239379 words of memory out of 5000000
- 83946 multiletter control sequences out of 15000+600000
- 508979 words of font info for 87 fonts, out of 8000000 for 9000
+ 63853 strings out of 475882
+ 1613323 string characters out of 5806027
+ 2240382 words of memory out of 5000000
+ 83954 multiletter control sequences out of 15000+600000
+ 510027 words of font info for 90 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,20n,145p,852b,2082s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (47 pages).
+Output written on main.pdf (52 pages).

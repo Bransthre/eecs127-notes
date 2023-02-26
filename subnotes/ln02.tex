@@ -9,9 +9,10 @@ In the previous lecture, we have recognized the following symbol:
     \[
         {\lVert \vec{x} \rVert}_2 = \sqrt{\sum_i x_i^2}
     \]
-    which measures the distance between the starting and terminal point of a vector.
+    which measures the Euclidean distance (Pythagorean Theorem's results) between the starting and terminal point of a vector.
 \end{ln-symbol}
-However, there exist more norms to that. Particularly, \textbf{norms} are functions that satisfy the following properties:
+While the Euclidean Norm is an extremely common norm, there exist more norms to vectors. \\
+Particularly, \textbf{norms} are functions that satisfy the following properties:
 \begin{ln-define}{Norm}{}
     A norm is a function $f: \mathcal{X} \rightarrow \R$ such that:
     \begin{bindenum}
@@ -20,6 +21,11 @@ However, there exist more norms to that. Particularly, \textbf{norms} are functi
         \item[3.] Scalar Multiplication: $\forall \alpha \in \R, \vec{x} \in \mathcal{X}, \lVert \alpha \vec{x} \rVert = \alpha \lVert \vec{x} \rVert$
     \end{bindenum}
 \end{ln-define}
+
+\subsection{LP-Norms}
+It is noteworthy to mention that, almost every norm demonstrates one property of the vector.
+For the diversity of characteristics that a vector may have, there certainly exists a diversity of norms for vectors.
+\par
 For example, a general family of norms that satisfy the above properties would be the \textbf{LP-norms}:
 \begin{ln-define}{LP-Norms}{}
     LP-Norms are norm functions defined as:
@@ -27,13 +33,14 @@ For example, a general family of norms that satisfy the above properties would b
         {\lVert \vec{x} \rVert}_p = {\bigg( \sum_{i = 1}^n |x_i|^p \bigg)}^{\frac{1}{p}}
     \]
     for some natural number $p$. \\
-    Particularly, the Euclidean Norm, otherwise known as the \textit{2-norm} is LP-norm with $p = 2$. \\
-    And, the interesting observation is:
-    \begin{align*}
-        {\lVert \vec{x} \rVert}_1 &= \sum_{i = 1}^n |x_i| \\
-        {\lVert \vec{x} \rVert}_\infty &= \max_{i = 1, \dots, n} |x_i| \\
-    \end{align*}
 \end{ln-define}
+Particularly, the Euclidean Norm, otherwise known as the \textit{2-norm} is LP-norm with $p = 2$. \\
+Meanwhile, the $1$-norm and $\infty$-norm are defined as follows:
+\begin{align*}
+    {\lVert \vec{x} \rVert}_1 &= \sum_{i = 1}^n |x_i| \\
+    {\lVert \vec{x} \rVert}_\infty &= \max_{i = 1, \dots, n} |x_i|
+\end{align*}
+where, the $1$-norm of a vector can be stated as the Manhattan distance (Taxicab geometry) of between that vector's starting and terminal point.
 
 \section{Cauchy-Schwartz Inequality}
 This inequality was active in EECS 16A!
@@ -43,26 +50,28 @@ This inequality was active in EECS 16A!
         |\vec{x}^T \vec{y}| \leq {\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2
     \]
     And using the property,
-    \[|\forall x \in \R, |\cos(x)| \leq 1\]
-    this inequality originates from the following algebraic work:
+    \[\forall x \in \R, |\cos(x)| \leq 1\]
+    \tcblower
+    This inequality originates from the following algebraic work:
     \begin{align*}
         |\langle \vec{x}, \vec{y} \rangle| &= |\vec{x}^T \vec{y}| = |\vec{y}^T \vec{x}| \\
-        &= |{\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2 \cos(\theta_{\vec{x}, \vec{y}})| \\
-        &\leq |{\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2|
+        &= |{\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2 \cos(\theta_{\vec{x}, \vec{y}})|
+        \leq |{\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2|
     \end{align*}
 \end{ln-define}
 
-The last two lines of the above derivation is justified by the mechanics along which we find the projection of $\vec{x}$ onto $\vec{y}$:
+We observe that the above derivation holds statement on equivalence between inner product and product of magnitudes, cosine. \\
+That is justified by the mechanics along which we find the projection of $\vec{y}$ onto $\vec{x}$:
 \[
-    {proj}_{\vec{x}}^{\vec{y}} = \vec{y} \frac{\vec{x}^T\vec{y}}{{\lVert \vec{y} \rVert}_2^2}
+    \proj{\vec{x}}{\vec{y}} = \vec{x} \frac{\vec{x}^T\vec{y}}{{\lVert \vec{x} \rVert}_2^2}
 \]
-Where, since the projection is a multiple of $\vec{y}$ such that ${proj}_{\vec{x}}^{\vec{y}} = t\vec{y}$, we also recognize that,
+where, since the projection is a multiple of $\vec{x}$ such that $\proj{\vec{x}}{\vec{y}} = t\vec{x}$, we also recognize that,
 \[
-    \cos(\theta_{\vec{x}, \vec{y}}) = \frac{{\lVert t\vec{y} \rVert}_2}{{\lVert \vec{x} \rVert}_2}
+    \cos(\theta_{\vec{x}, \vec{y}}) = \frac{{\lVert t\vec{x} \rVert}_2}{{\lVert \vec{y} \rVert}_2}
 \]
-And upon matching the two equations, I acquire:
+Upon matching the two equations, I acquire:
 \begin{align*}
-    t = \cos(\theta_{\vec{x}, \vec{y}}) \frac{{\lVert t\vec{x} \rVert}_2}{{\lVert \vec{y} \rVert}_2} &= \frac{\vec{x}^T\vec{y}}{{\lVert \vec{y} \rVert}_2^2} \\
+    t = \cos(\theta_{\vec{x}, \vec{y}}) \frac{\pnorm{\vec{y}}{2}}{\pnorm{\vec{x}}{2}} &= \frac{\vec{x}^T\vec{y}}{\pnorm[2]{\vec{x}}{2}} \\
     |{\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2| &= \langle \vec{x}, \vec{y} \rangle
 \end{align*}
 
@@ -77,18 +86,23 @@ In fact, we find that the Cauchy-Schwartz is a general case of this inequality:
 From this concept, let us consider the concept of \textit{``norm ball''}: the geographical object containing all vectors such that their lp-norm is $1$.
 
 \begin{bindenum}
-    \item For a $2-norm$, for example, the norm ball looks like a unit circle (containing all 2D vectors with length $1$, hence a circle of radius $1$).
-    \item For a $1-norm$, similar logic guides us to a diagonally placed circle (rotated $45^\circ$) centered at the origin with side lengths $2$.
-    \item For the $\infty-norm$, has a norm ball of a square centered at origin with side length $2$. This embeds the unit ball from $2-norm$, which embeds the unit ball from $1-norm$.
+    \item For a $2$-norm, for example, the norm ball looks like a unit circle (containing all 2D vectors with length $1$, hence a circle of radius $1$).
+    \item For a $1$-norm, similar logic guides us to a diagonally placed circle (rotated $45^\circ$) centered at the origin with side lengths $2$.
+    \item For the $\infty$-norm, has a norm ball of a square centered at origin with side length $2$. This embeds the unit ball from $2$-norm, which embeds the unit ball from $1$-norm.
 \end{bindenum}
-In this sense, the area of norm ball is larger for any increase in $p$ such that it embeds the prior norm balls.
+The last bullet point hints that the area of norm ball is larger for any increase in $p$ such that it embeds the prior norm balls.
+\par
+Now, let us attempt to solve for some optimization regarding a norm ball:
+\[\max_{\pnorm{\vec{x}}{p} \leq 1} \vec{x}^T \vec{y}\]
 
-\begin{ln-explain}{Optimization Problem Regarding Norm Ball}{}
-    \textbf{Problem Formulation:} Solve for \[\max_{{\Vert \vec{x} \rVert}_2 \leq 1} \vec{x}^T \vec{y}\]
-    \tcblower
-    \textbf{p = 2}: The solution would be, by the Cauchy Schwartz's implication,
+\underline{\textbf{p = 2}}:
+\begin{quote}
+    The solution would be, by the Cauchy Schwartz's implication,
     \[\vec{x}^* = \frac{\vec{y}}{\lVert \vec{y} \rVert}_2\]
-    \textbf{p = 1}: The expression of dot product is equivalently
+\end{quote}
+\underline{\textbf{p = 1}}:
+\begin{quote}
+    The expression of dot product is equivalently
     \[x_1 y_1 + \cdots + x_n y_n\]
     Where the constraint is
     \[|x_1| + \cdots + |x_n| \leq 1\]
@@ -104,19 +118,22 @@ In this sense, the area of norm ball is larger for any increase in $p$ such that
     \[
         |\vec{x}^T \vec{y}| \leq {\lVert \vec{x} \rVert}_1 {\lVert \vec{y} \rVert}_\infty = \max_i |y_i|
     \]
-    Where,
     \begin{quote}
-        \textbf{The formulation in above section shows achievability, and Holder's Inequality expresses an upper bound to prove the approach correct.}
+        The Holder's Inequality expresses \textbf{an upper bound}, and the formulation in above section shows \textbf{achievability of upper bound}.
     \end{quote}
-    \textbf{\textit{Alternative proof of p = 1 via Triangle Inequality}}: Via the triangle inequality, we acquire:
+    \textbf{\textit{Alternative proof of p = 1 via Triangle Inequality}}: \\
+    Via the triangle inequality, we acquire:
     \begin{align*}
         |\vec{x}^T \vec{y}| &= |\sum_i x_i y_i| \\
         &\underset{Triangle\ Inequality}{\leq} \sum_i |x_i y_i| \\
         &= \sum_i |x_i||y_i| \\
         &\leq \sum_i |x_i| \max_i |y_i| = \max_i |y_i| = {\lVert \vec{x} \rVert}_\infty
     \end{align*}
-    We see that the upperbound of $|\vec{x}^T \vec{y}|$ \textbf{has an upperbound} that is \textbf{achievable}, assembling all necessary aspects of a complete proof. \\
-    \textbf{p = $\infty$}: We can find upper bound via Holder's Inequality,
+    We see the expression $|\vec{x}^T \vec{y}|$ has an \textbf{achievable upper bound}, assembling all necessary aspects of deriving the solution for the optimization problem.
+\end{quote}
+\underline{\textbf{p = $\infty$}}:
+\begin{quote}
+    We can find upper bound of the expressionvia Holder's Inequality,
     \[
         |\vec{x}^T \vec{y}| \leq {\lVert \vec{x} \rVert}_1 {\lVert \vec{y} \rVert}_\infty = \sum_i |y_i|
     \]
@@ -129,7 +146,7 @@ In this sense, the area of norm ball is larger for any increase in $p$ such that
         x_i = sgn(y_i)
     \]
     to find and certify the achievability of this upper bound.
-\end{ln-explain}
+\end{quote}
 
 \section{Gram-Schmidt Orthonormalization and QR Decomposition}
 Gram-Schmidt Orthonormalization is an algorithmic technique to find an orthonormal basis for a set of vectors. \\
@@ -139,13 +156,70 @@ The procedure of such algorithm is portrayed as defined in the following cell:
     \begin{bindenum}
         \item[1] $\vec{q_1} = \frac{\vec{a_1}}{{\lVert \vec{a_1} \rVert}_2}$
         \item[2] for $i$ in $\{2, \dots, n\}$:
-        \item[3] \hspace{0.6cm} $\vec{z_i} = {proj}_{\{\vec{q_1}, \dots, \vec{q_{i - 1}}\}} \vec{a_i}$
+        \item[3] \hspace{0.6cm} $\vec{z_i} = {proj}_{\{\vec{q_1}, \dots, \vec{q_{i - 1}}\}} \vec{a_i} = = \sum_{j = 1}^{i - 1} \vec{q_j} \langle \vec{a_i}, \vec{q_j} \rangle$
         \item[4] \hspace{0.6cm} $\vec{s_i} = \vec{a_i} - \vec{z_i}$
         \item[5] \hspace{0.6cm} $\vec{q_i} = \frac{\vec{s_i}}{{\lVert \vec{s_i} \rVert}_2}$
         \item[6] return $\{\vec{q_1}, \dots, \vec{q_n}\}$
     \end{bindenum}
-    And note that,
-    \[
-        \vec{z_i} = \sum_{j = 1}^{i - 1} \vec{q_j} \langle \vec{a_i}, \vec{q_j} \rangle
-    \]
 \end{ln-define}
+\par
+Then, QR Decomposition is a technique to factorize a matrix $A$ based on its orthonormal basis:
+\begin{ln-define}{QR Decomposition}{}
+    The QR decomposition of a matrix $A$ is to factorize $A$ as the product $QR$, where the two matrices are decided as:
+    \[
+        \begin{cases}
+            Q, &\text{An orthonormal matrix whose span is equal to that of $A$} \\
+            R, &R_{ij} = \vec{q_i} \cdot \vec{a_j}
+        \end{cases}
+    \]
+    where we may define vectors $\vec{a_i}$ as the $i^{th}$ column of $A$, and set of vectors $\vec{q_i}$ may be found as the orthonormal base of $\mathcal{R}(A)$ via Gram-Schmidt.
+\end{ln-define}
+\begin{ln-explain}{Example of QR Decomposition}{}
+    \textbf{Problem}: 
+    Solve for its QR Decomposition of
+    \[
+        A = 
+        \begin{bmatrix}
+            3 & -3 & 1 \\
+            4 & -4 & 7 \\
+            0 & 3 & 3
+        \end{bmatrix}
+    \]
+    \tcblower
+    Finding the first column of $Q$:
+    \begin{align*}
+        \vec{q_1} &= \frac{1}{5} \begin{bmatrix} 3 \\ 4 \\ 0 \end{bmatrix}
+    \end{align*}
+    Finding the second column of $Q$:
+    \begin{align*}
+        \proj{\vec{q_1}}{\vec{a_2}}
+        &= (\vec{a_2} \cdot \vec{q_1}) \vec{q_1} \\
+        \vec{z_2} &= \vec{a_2} - \proj{\vec{q_1}}{\vec{a_2}} \\
+        &= \begin{bmatrix} -3 \\ -4 \\ 3 \end{bmatrix} - \begin{bmatrix} -3 \\ -4 \\ 0 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 3 \end{bmatrix} \\
+        \vec{q_2} &= \frac{\vec{z_2}}{\pnorm{\vec{z_2}}{2}} = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}
+    \end{align*}
+    Finding the third column of $Q$:
+    \begin{align*}
+        \proj{\{\vec{q_1}, \vec{q_2}\}}{\vec{a_3}}
+        &= (\vec{a_3} \cdot \vec{q_1}) \vec{q_1} + (\vec{a_3} \cdot \vec{q_2}) \vec{q_2} \\
+        &= \begin{bmatrix} -3 \\ -4 \\ 3 \end{bmatrix} \\
+        \vec{z_3} &= \vec{a_3} - \proj{\{\vec{q_1}, \vec{q_2}\}}{\vec{a_3}} \\
+        &= \begin{bmatrix} 1 \\ -7 \\ 3 \end{bmatrix} - \begin{bmatrix} -3 \\ -4 \\ 3 \end{bmatrix} = \begin{bmatrix} 4 \\ -3 \\ 0 \end{bmatrix} \\
+        \vec{q_3} &= \frac{\vec{z_3}}{\pnorm{\vec{z_3}}{2}} = \frac{1}{5} \begin{bmatrix} 4 \\ -3 \\ 0 \end{bmatrix}
+    \end{align*}
+    And now, finding out that we still have to find the matrix $R$ (sob emoji):
+    \[
+        R = 
+        \begin{bmatrix}
+            \vec{q_1} \cdot \vec{a_1} & \vec{q_1} \cdot \vec{a_2} & \vec{q_1} \cdot \vec{a_3} \\
+            0 & \vec{q_2} \cdot \vec{a_2} & \vec{q_2} \cdot \vec{a_3} \\
+            0 & 0 & \vec{q_3} \cdot \vec{a_3}
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            5 & -5 & -5 \\
+            0 & 3 & 3 \\
+            0 & 0 & 5
+        \end{bmatrix}
+    \]
+\end{ln-explain}
