@@ -109,10 +109,11 @@ Now, let us look at the guess rule:
 \end{align*}
 Solve the recursion above,
 \begin{align*}
-    \vec{x}_{k + n} - \vec{x}^*
-    &= (I - 2 \eta A^T A) [\vec{x}_{k + (n - 1)} - \vec{x}^*] \\
+    \vec{x}_{m + n} - \vec{x}^*
+    &= (I - 2 \eta A^T A) [\vec{x}_{m + (n - 1)} - \vec{x}^*] \\
     &\vdots \\
-    &= {(I - 2 \eta A^T A)}^n [\vec{x}_{k + (n - n)} - \vec{x}^*]
+    &= {(I - 2 \eta A^T A)}^n [\vec{x}_{m + (n - n)} - \vec{x}^*]
+    = {(I - 2 \eta A^T A)}^n [\vec{x}_m - \vec{x}^*]
 \end{align*}
 Upon the fact that $I - 2 \eta A^T A$ is a symmetric matrix (i.e., it is diagonalizable), we are granted the following statements:
 \begin{align*}

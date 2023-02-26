@@ -156,7 +156,7 @@ The procedure of such algorithm is portrayed as defined in the following cell:
     \begin{bindenum}
         \item[1] $\vec{q_1} = \frac{\vec{a_1}}{{\lVert \vec{a_1} \rVert}_2}$
         \item[2] for $i$ in $\{2, \dots, n\}$:
-        \item[3] \hspace{0.6cm} $\vec{z_i} = {proj}_{\{\vec{q_1}, \dots, \vec{q_{i - 1}}\}} \vec{a_i} = = \sum_{j = 1}^{i - 1} \vec{q_j} \langle \vec{a_i}, \vec{q_j} \rangle$
+        \item[3] \hspace{0.6cm} $\vec{z_i} = {proj}_{\{\vec{q_1}, \dots, \vec{q_{i - 1}}\}} \vec{a_i} = \sum_{j = 1}^{i - 1} \vec{q_j} \langle \vec{a_i}, \vec{q_j} \rangle$
         \item[4] \hspace{0.6cm} $\vec{s_i} = \vec{a_i} - \vec{z_i}$
         \item[5] \hspace{0.6cm} $\vec{q_i} = \frac{\vec{s_i}}{{\lVert \vec{s_i} \rVert}_2}$
         \item[6] return $\{\vec{q_1}, \dots, \vec{q_n}\}$

@@ -9,8 +9,7 @@ where,
 \begin{bindenum}
     \item The set $\{\vec{u_1}, \dots, \vec{u_n}\}$ is orthonormal
     \item The set $\{\vec{v_1}, \dots, \vec{v_n}\}$ is orthonormal
-    \item $\forall i \in [1, r], \sigma_i > 0$
-    \subitem $\forall i \in [1, n], \sigma_i \geq 0$
+    \item $\forall i \in [1, r], \sigma_i > 0$, and $\forall i \in [1, n], \sigma_i \geq 0$
 \end{bindenum}
 \begin{ln-symbol}{Compact SVD}{}
     The above dyadic decomposition of SVD written in terms of matrix transformation would be:
@@ -52,9 +51,9 @@ The squareness of $U$ and $V$ in full SVD allows us to also decompose $A^T A$ as
 which is more convenient than the compact form SVD that instead uses rectangular $U$ and $V$.
 
 \subsection{Formation of SVD}
-As singular vectors are eigenvectors of symmetric matrices $A^T A$, by applying Spectral Theorem, we find that singular vectors of $A$ would all be orthonormal.
+As singular vectors are eigenvectors of symmetric matrices $A^T A$, by applying Spectral Theorem, we find that singular vectors of $A$ would all be orthonormal. \\
 Then, let's use this point as an opportunity to praise $A^T A$'s symmetricness:
-\begin{ln-theorem}{The Properties and Formation of SVD}{}
+\begin{ln-theorem}{The Formation of SVD}{}
     Let the nonzero eigenvalues of $A^T A$ be
     \[
         \lambda_1 \geq \cdots \geq \lambda_r > 0
@@ -74,7 +73,7 @@ Then, let's use this point as an opportunity to praise $A^T A$'s symmetricness:
     \]
 \end{ln-theorem}
 Let us now check, whether the above formation grants an orthonormal $U$:
-\begin{ln-explain}{Orthonormality of Set of $\vec{u_i}$}{}
+\begin{ln-theorem}{Orthonormality of Set of $\vec{u_i}$}{}
     Let us follow the definition of $\vec{u_i}$ from the last block. \\
     Then,
     \[A \vec{v_i} = \sigma_i \vec{u_i}\]
@@ -84,7 +83,7 @@ Let us now check, whether the above formation grants an orthonormal $U$:
         &= \frac{\vec{v_i}^T A^T}{\sigma_i} \frac{A \vec{v_j}}{\sigma_j} \\
         &= \frac{\vec{v_i}^T \lambda_j \vec{v_j}}{\sigma_i \sigma_j} = 0
     \end{align*}
-\end{ln-explain}
+\end{ln-theorem}
 Now that we have proven the orthonormality and note the definitions of $\vec{u_i}$ and $\vec{v_i}$, we arrive at the conclusion:
 \[
     A V = U \Sigma, A = U \Sigma V^T
@@ -96,7 +95,7 @@ This is once again a demonstration of significance of full SVD.
 \begin{ln-fig}{Geometric Property of SVD as Transformation}{}
     We may see from the below image's operations,
     \begin{center}
-        \includegraphics[scale=0.1]{figs/ln05/svd_geometry.png}
+        \includegraphics[scale=0.14]{figs/ln05/svd_geometry.png}
     \end{center}
     that SVD is, as priorly mentioned, a combination of three transformations. Where,
     \begin{bindenum}
@@ -122,7 +121,6 @@ For example:
 \end{bindenum}
 Therefore, along these interpretations, we may present respective definitions of matrix norms.
 \begin{ln-define}{Frobenius Norm}{}
-    \textit{insert most recent COMPSCI 189 weeder homework PTSD.} \\
     The Frobenius Norm is defined as:
     \[
         \pnorm{A}{F} = \sqrt{\sum_{i = 1}^m \sum_{j = 1}^n A_{i,j}^2} = \sqrt{Trace(A^T A)}
@@ -137,7 +135,7 @@ Therefore, along these interpretations, we may present respective definitions of
     \]
 \end{ln-define}
 The Frobenius Norm has some interesting properties:
-\begin{ln-theorem}{Orthonormal Matrices and Frobenius Norm}{}
+\begin{ln-theorem}{Invariance of Frobenius Norm upon Orthonormal Matrices}{}
     Let $U_1 \in \R^{m \times m}$, $A \in \R^{m \times n}$, and $U_2 \in \R^{n \times n}$, where $U_1, U_2$ are orthonormal. \\
     Then,
     \begin{align*}
@@ -146,7 +144,7 @@ The Frobenius Norm has some interesting properties:
         &= \sqrt{Trace(A^T A)} = \pnorm{A}{F} \\
         \pnorm{A U_2}{F}
         &= \sqrt{Trace(U_2^T A^T A U_2)} \\
-        &\underset{\text{Commutivity in Trace}}{=} \sqrt{Trace(A^T A)} = \pnorm{A}{F} \\
+        &\underset{\text{Cyclic Property}}{=} \sqrt{Trace(A^T A)} = \pnorm{A}{F} \\
     \end{align*}
 \end{ln-theorem}
 Now, let's discuss another definition of matrix norm:
@@ -155,31 +153,37 @@ Now, let's discuss another definition of matrix norm:
     \[
         \pnorm{A}{2} = \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{A \vec{x}}{2} = \sigma_{max}(A)
     \]
-    \tcblower
-    \textbf{Solution to Above Optimization Problem.}
-    \begin{align*}
-        \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{A \vec{x}}{2}
-        = \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T A^T A \vec{x}}
-        = \sqrt{\lambda_{max}(A^T A)} = \sigma_{max}(A)
-    \end{align*}
-    Suppose we attach another orthonormal matrix $U$ to the original matrix $A$, then the optimization problem develops a solution fairly similaly:
-    \begin{align*}
-        \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{AU \vec{x}}{2}
-        &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T U^T A^T A U \vec{x}} \\
-        &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{y}^T A^T A \vec{y}} \\
-        &= \sqrt{\lambda_{max}(A^T A)} = \sigma_{max}(A)
-    \end{align*}
-    where since we still find that $\vec{y}$ is normal, the attachment of $U$ providing no change to the optimization problem. \\
-    Meanwhile, we find this phenomenon to persist even if $U$ is multiplied from an opposite direction:
-    \begin{align*}
-        \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{UA \vec{x}}{2}
-        &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T A^T U^T U A \vec{x}} \\
-        &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T A^T A \vec{x}} \\
-        &= \sqrt{\lambda_{max}(A^T A)} = \sigma_{max}(A)
-    \end{align*}
-    Therefore, we may also observe similar properties in norms, where:
-    \[
-        \pnorm{A}{2} = \pnorm{U_1A}{2} = \pnorm{AU_2}{2} \text{ for orthonormal matrices } U_1, U_2
-    \]
 \end{ln-define}
+The derivation follows:
+\begin{align*}
+    \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{A \vec{x}}{2}
+    &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T A^T A \vec{x}} \\
+    &\underset{\text{Rayleigh Coefficient}}{=} \sqrt{\lambda_{max}(A^T A)} = \sigma_{max}(A)
+\end{align*}
 
+Alternatively, it may be stated as the maximum possible transformation some matrix $A$ can offer a normal vector.
+Upon that above statement,
+\[
+    \forall \vec{x}, \pnorm{A \vec{x}}{2} \leq \pnorm{A}{2} \pnorm{\vec{x}}{2}
+\]
+\par
+Furthermore, L2-Norms are also invariant upon orthonormal matrices. \\
+Suppose we attach another orthonormal matrix $U$ to the original matrix $A$, then the optimization problem develops a solution fairly similaly:
+\begin{align*}
+    \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{AU \vec{x}}{2}
+    &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T U^T A^T A U \vec{x}} \\
+    &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{y}^T A^T A \vec{y}} \\
+    &= \sqrt{\lambda_{max}(A^T A)} = \sigma_{max}(A) = \pnorm{A}{2}
+\end{align*}
+where since we still find that $\vec{y}$ is normal, the attachment of $U$ providing no change to the optimization problem. \\
+Meanwhile, we find this phenomenon to persist even if $U$ is multiplied from an opposite direction:
+\begin{align*}
+    \max_{\pnorm{\vec{x}}{2} = 1} \pnorm{UA \vec{x}}{2}
+    &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T A^T U^T U A \vec{x}} \\
+    &= \max_{\pnorm{\vec{x}}{2} = 1} \sqrt{\vec{x}^T A^T A \vec{x}} \\
+    &= \sqrt{\lambda_{max}(A^T A)} = \sigma_{max}(A) = \pnorm{A}{2}
+\end{align*}
+Therefore, we may also observe similar properties in Frobenius Norm, where:
+\[
+    \pnorm{A}{2} = \pnorm{U_1A}{2} = \pnorm{AU_2}{2} \text{ for orthonormal matrices } U_1, U_2
+\]

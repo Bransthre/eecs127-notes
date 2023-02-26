@@ -59,10 +59,10 @@ Meanwhile, symmetric matrices also enjoy special properties in their eigenvalues
     \begin{align*}
         \vec{y}^T \Lambda \vec{y}
         &= \sum \lambda_i y_i^2 \\
-        &< \sum \lambda_{max} y_i^2 = \lambda_{max} \\
+        &\leq \sum \lambda_{max} y_i^2 = \lambda_{max} \\
         \vec{y}^T \Lambda \vec{y}
         &= \sum \lambda_i y_i^2 \\
-        &> \sum \lambda_{min} y_i^2 = \lambda_{min}
+        &\geq \sum \lambda_{min} y_i^2 = \lambda_{min}
     \end{align*}
     So we have now found the upper bound and lower bound of the optimization problem, justifying the boundaries of inequality. \\
     And, we may also acknowledge that providing $\vec{x}$ as the normalized eigenvector of maximum and minimum eigenvalues provide the solution for achieving the lower and upper bound:
@@ -92,71 +92,71 @@ We will pick up from last lecture with a new formulation for optimization proble
 \end{ln-explain}
 Let us find the first principal component, $\vec{w}$, then, such that the dataset projected on this direction is as close to the original data as possible. Then, we will repeat the process of:
 \begin{bindenum}
-    \item Find principal component $\vec{w_i}$
-    \item[$\downarrow$] Remove all projected components onto principal component $i$
-    \item Repeat process to find principal component $\vec{w_{i + 1}}$
+    \item Find principal component $\vec{w}_i$
+    \item[$\downarrow$] Remove from dataset (usually a matrix) all projected components onto principal component $i$
+    \item Repeat process to find principal component $\vec{w}_{i + 1}$
 \end{bindenum}
-Let us now formulate the mathematical aspects of PCA:
-\begin{ln-explain}{Mathematical Formulation of Principal Component Analysis as Problem}{}
-    \textbf{Metric of Optimization.}
-    Suppose we have a set of vectors:
-    \[
-        \{\vec{x_1}, \dots, \vec{x_n}\}, \forall i (\vec{v_i} \in \R^p)
-    \]
-    Let us find a vector $\vec{w}$ such that:
-    \[
-        \begin{cases}
-            {\lVert \vec{w} \rVert}_2 = 1 \\
-            MSE(\vec{w}) = \frac{1}{n} \sum_{i = 1}^n e_i^2
-        \end{cases}
-    \]
-    where, the individual error terms were defined and derived into:
-    \begin{align*}
-        {\lVert \vec{e_i} \rVert}_2^2
-        &= {(\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w})}^T \cdot (\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w}) \\
-        &= {\lVert \vec{x_i} \rVert}_2^2 - 2 {\langle \vec{x_i}, \vec{w} \rangle}^2 + {\langle \vec{x_i}, \vec{w} \rangle}^2 {\lVert \vec{w_i} \rVert}_2^2 \\
-        &= {\lVert \vec{x_i} \rVert}_2^2 - {\langle \vec{x_i}, \vec{w} \rangle}^2
-    \end{align*}
-    Therefore,
-    \[
-        MSE(\vec{w}) = \frac{1}{n} \sum_{i = 1}^n ({\lVert \vec{x} \rVert}_2^2 - {\langle \vec{w}, \vec{x_i} \rangle}^2)
-    \]
-    \tcblower
-    \textbf{Formulation of Optimization.}
-    To consider the optimization problem holistically, we should formulate that,
-    \[
-        \underset{\vec{w}}{argmin} MSE(\vec{w}) = \underset{\vec{w}}{argmin} -\frac{1}{n} \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
-    \]
-    which is equivalently solving for
-    \[
-        \underset{\vec{w}}{argmax} \frac{1}{n} \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
-    \]
-    and we would recognize so becuase the aspect of MSE, $\frac{1}{n} \sum_{i = 1}^n {\lVert \vec{x} \rVert}_2^2$, is a fixed cost.
-\end{ln-explain}
+
+\subsection{Formulating PCA as an Optimization Problem}
+Let us now formulate the mathematical aspects of PCA.
+\par
+Suppose we have a set of vectors:
+\[
+    \{\vec{x_1}, \dots, \vec{x_n}\}, \text{and } \forall i (\vec{v_i} \in \R^p)
+\]
+Let us find a vector $\vec{w}$ along the constraint and objective function that:
+\[
+    \begin{cases}
+        {\lVert \vec{w} \rVert}_2 &= 1 \\
+        MSE(\vec{w}) &= \frac{1}{n} \sum_{i = 1}^n e_i^2
+    \end{cases}
+\]
+where, the individual projection error terms were defined and derived into:
+\begin{align*}
+    {\lVert \vec{e_i} \rVert}_2^2
+    &= {(\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w})}^T \cdot (\vec{x_i} - \langle \vec{w}, \vec{x_i} \rangle \vec{w}) \\
+    &= {\lVert \vec{x_i} \rVert}_2^2 - 2 {\langle \vec{x_i}, \vec{w} \rangle}^2 + {\langle \vec{x_i}, \vec{w} \rangle}^2 {\lVert \vec{w_i} \rVert}_2^2 \\
+    &= {\lVert \vec{x_i} \rVert}_2^2 - {\langle \vec{x_i}, \vec{w} \rangle}^2
+\end{align*}
+Therefore,
+\[
+    MSE(\vec{w}) = \frac{1}{n} \sum_{i = 1}^n (\pnorm[2]{\vec{x}_i}{2} - {\langle \vec{w}, \vec{x_i} \rangle}^2)
+\]
+\par
+To consider the optimization problem holistically, we should formulate that,
+\[
+    \underset{\vec{w}}{argmin} MSE(\vec{w}) = \underset{\vec{w}}{argmin} -\frac{1}{n} \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
+\]
+which is equivalently solving for
+\[
+    \underset{\vec{w}}{argmax} \ \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
+\]
+and we would recognize so becuase the ignored aspect of MSE, $\frac{1}{n} \sum_{i = 1}^n {\lVert \vec{x} \rVert}_2^2$, is a nonnegative fixed cost.
+
+\subsection{Solution to PCA as an Optimization Problem}
 Now, let us attempt to solve for the above formulation:
-\begin{ln-explain}{Solving PCA Optimization Problem}{}
-    Keep in mind that our data matrix would appear as:
-    \[
-        X = \begin{bmatrix} \vec{x_1}^T \\ \vdots \\ \vec{x_n}^T \end{bmatrix}
-    \]
-    We may begin with the algebraic work then.
-    \[
-        X \vec{w} = \begin{bmatrix} \vec{x_1}^T \vec{w} \\ \vdots \\ \vec{x_n}^T \vec{w} \end{bmatrix}
-    \]
-    Let us capture the information and make some algebraic derivation:
-    \begin{align*}
-        \frac{1}{n} \sum {\langle \vec{w}, \vec{x_i} \rangle}^2
-        &= \frac{1}{n} \sum {(\vec{x_i}^T \vec{w})}^2 \\
-        &= \frac{1}{n} {\lVert X \vec{w} \rVert}_2^2 \\
-        &= \vec{w}^T \frac{X^T X}{n} \vec{w}
-    \end{align*}
-    We call the matrix in above intermediate form the covariance matrix:
-    \[
-        C = \frac{X^T X}{n} = C^T
-    \]
-    And, using the knowledge from Section 4.1, we obtain that the solution of:
-    \[
-        {argmax}_{\vec{w}} \vec{w}^T C \vec{w} \text{ subject to } {\lVert \vec{w} \rVert}_2^2
-    \]
-    would be the eigenvector of $\lambda_{max}(C)$.
-\end{ln-explain}
+
+Keep in mind that our data matrix would appear as:
+\[
+    X = \begin{bmatrix} \vec{x_1}^T \\ \vdots \\ \vec{x_n}^T \end{bmatrix}
+\]
+We may begin with the algebraic work then.
+\[
+    X \vec{w} = \begin{bmatrix} \vec{x_1}^T \vec{w} \\ \vdots \\ \vec{x_n}^T \vec{w} \end{bmatrix}
+\]
+Let us capture the information and make some algebraic derivation:
+\begin{align*}
+    \frac{1}{n} \sum {\langle \vec{w}, \vec{x_i} \rangle}^2
+    &= \frac{1}{n} \sum {(\vec{x_i}^T \vec{w})}^2 \\
+    &= \frac{1}{n} {\lVert X \vec{w} \rVert}_2^2 \\
+    &= \vec{w}^T \frac{X^T X}{n} \vec{w}
+\end{align*}
+We call the matrix in above intermediate form the covariance matrix:
+\[
+    C = \frac{X^T X}{n} = C^T
+\]
+And, using the knowledge from Section 4.1 about Rayleigh coefficient, we obtain that the solution of:
+\[
+    {argmax}_{\vec{w}} \ \vec{w}^T C \vec{w} \text{ subject to } {\lVert \vec{w} \rVert}_2^2 = 1
+\]
+would be the eigenvector of $\lambda_{max}(C)$.
