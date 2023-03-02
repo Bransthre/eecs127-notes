@@ -1,5 +1,4 @@
 \chapter{Convex Optimization Problems}
-We are slowly shifting to the second half of course.
 
 \section{Convex Functions, Continued}
 We have defined last time that
@@ -76,7 +75,7 @@ But, ready or not, there are more definitions of convexity:
 \begin{ln-define}{First Order Condition of Convexity}{}
     Let $f$ be a differentiable function, then $f$ is convex iff the following condition is satisfied:
     \[
-        f(\vec{y}) \geq f(\vec{x}) + \dv{f}{x} \big|_{\vec{x}} \cdot (\vec{y} - \vec{x})
+        \forall \vec{x}, \vec{y} \in Domain(f), f(\vec{y}) \geq f(\vec{x}) + \dv{f}{x} \big|_{\vec{x}} \cdot (\vec{y} - \vec{x})
     \]
     The implication of such definition is:
     \[
@@ -91,12 +90,12 @@ But, ready or not, there are more definitions of convexity:
     \]
     Rearranging the above inequality grants
     \begin{align*}
-        \theta f(\vec{y}) \geq f((1 - \theta) \vec{x} + \theta \vec{y}) - f(\vec{x}) + \theta f(\vec{x})
-        f(\vec{y}) \geq \frac{1}{\theta} f(\vec{x} + \theta (\vec{y} - \vec{x})) - \frac{1}{\theta} f(\vec{x}) + f(\vec{x})
+        \theta f(\vec{y}) &\geq f((1 - \theta) \vec{x} + \theta \vec{y}) - f(\vec{x}) + \theta f(\vec{x}) \\
+        f(\vec{y}) &\geq \frac{1}{\theta} f(\vec{x} + \theta (\vec{y} - \vec{x})) - \frac{1}{\theta} f(\vec{x}) + f(\vec{x})
     \end{align*}
     Upon aligning the above equation with the definition of derivative, we may discover that:
     \[
-        \lim_{t \rightarrow 0} \frac{f(\vec{x} + \theta (\vec{y} - \vec{x})) - f(\vec{x})}{t (\vec{y} - \vec{x})} = \dv{f}{x}
+        \lim_{t \rightarrow 0} \frac{f(\vec{x} + \theta (\vec{y} - \vec{x})) - f(\vec{x})}{\theta (\vec{y} - \vec{x})} = \dv{f}{x}
     \]
     Therefore, let us substitute the above derivative term into the function:
     \[
@@ -118,7 +117,7 @@ But, ready or not, there are more definitions of convexity:
     \begin{align*}
         \theta f(\vec{x}) + (1 - \theta) f(\vec{y})
         &\geq f(\vec{z}) + \theta f'(\vec{z}) (\vec{x} - \vec{z}) + (1 - \theta) f'(\vec{z}) (\vec{y} - \vec{z}) \\
-        &= f(\vec{z}) + \theta f'(vec{z}) (\theta \vec{x} - \theta \vec{z} + (1 - \theta) \vec{y} - (1 - \theta) \vec{z}) \\
+        &= f(\vec{z}) + \theta f'(\vec{z}) (\theta \vec{x} - \theta \vec{z} + (1 - \theta) \vec{y} - (1 - \theta) \vec{z}) \\
         &= f(\vec{z})
     \end{align*}
 \end{ln-define}

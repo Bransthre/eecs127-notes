@@ -46,10 +46,11 @@
 \contentsline {section}{\numberline {8.2}Perturbation Analysis, Effect of Noise}{37}{section.8.2}%
 \contentsline {chapter}{\numberline {9}Ridge Regression}{39}{chapter.9}%
 \contentsline {section}{\numberline {9.1}Perturbation Analysis Guides into Ridge Regression}{39}{section.9.1}%
-\contentsline {section}{\numberline {9.2}Ridge Regression}{39}{section.9.2}%
+\contentsline {section}{\numberline {9.2}Ridge Regression}{40}{section.9.2}%
 \contentsline {subsection}{\numberline {9.2.1}Development of Ridge Regression}{40}{subsection.9.2.1}%
 \contentsline {section}{\numberline {9.3}Probabilistic Information from Ridge Regression}{41}{section.9.3}%
 \contentsline {subsection}{\numberline {9.3.1}Maximum Likelihood Estimation and Maximum A-Posteriori}{41}{subsection.9.3.1}%
+\contentsline {subsection}{\numberline {9.3.2}A Personal Learning on MLE vs MAP}{43}{subsection.9.3.2}%
 \contentsline {chapter}{\numberline {10}Convexity}{44}{chapter.10}%
 \contentsline {section}{\numberline {10.1}Convex Set}{44}{section.10.1}%
 \contentsline {subsection}{\numberline {10.1.1}Proof of Convexity}{45}{subsection.10.1.1}%
@@ -64,3 +65,8 @@
 \contentsline {subsection}{\numberline {12.2.1}Inventing Gradient Descent}{52}{subsection.12.2.1}%
 \contentsline {subsection}{\numberline {12.2.2}Finding $\eta $}{53}{subsection.12.2.2}%
 \contentsline {subsection}{\numberline {12.2.3}Generalizations}{53}{subsection.12.2.3}%
+\contentsline {chapter}{\numberline {13}Descent Methods and Convex Optimizations}{55}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Continued, Gradient Descent Convergence Proof}{55}{section.13.1}%
+\contentsline {subsection}{\numberline {13.1.1}Breads of Quadratic Sandwich}{55}{subsection.13.1.1}%
+\contentsline {subsection}{\numberline {13.1.2}Quadratic Sandwich}{56}{subsection.13.1.2}%
+\contentsline {section}{\numberline {13.2}Stochastic Gradient Descent}{57}{section.13.2}%

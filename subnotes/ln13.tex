@@ -1,0 +1,146 @@
+\chapter{Descent Methods and Convex Optimizations}
+
+\section{Continued, Gradient Descent Convergence Proof}
+While there was a splendid convergence rate for the least squares problem, we want to discuss how gradient descent operates for other functions. \\
+To have some similar quadratic form for the gradient descent convergence proof, we may work with smooth and strongly convex function, and it would offer the interval at which a gradient descent convergence lies at.
+In lecture, this was phrased as a ``quadratic sandwich''.
+\begin{quote}
+    *Puts two bread across the two side of a strongly convex, smooth function \\
+    \textbf{WHAT ARE YOU} \\
+    \textit{A quadratic sandwich, chef}
+\end{quote}
+sorry for the digression.
+
+\subsection{Breads of Quadratic Sandwich}
+Here, let us review two definitions introduced in the prior lecture:
+\begin{ln-define}{Review: Strong Convexity}{}
+    If $f$ is differentiable, then for some $\mu > 0$, it is $\mu$-strongly convex if domain of $f$ is convex and
+    \[
+        \forall \vec{x}, \vec{y} \in domain(f), f(\vec{y}) \geq f(\vec{x}) + \dv{f}{x} \cdot (\vec{y} - \vec{x}) + \frac{\mu}{2} \pnorm[2]{\vec{y} - \vec{x}}{2}
+    \]
+\end{ln-define}
+\begin{ln-define}{L-smooth Functions}{}
+    For an $L$-smooth function,
+    \begin{align*}
+        f(\vec{y})
+        &\leq f(\vec{x}) + \nabla f(\vec{x}) \cdot (\vec{y} - \vec{x}) + \frac{L}{2} \pnorm[2]{\vec{y} - \vec{x}}{2} \\
+        f(\vec{x} - \eta \nabla f(\vec{x}))
+        &\leq f(\vec{x}) + \dv{f}{x} {} (-\eta \nabla f(\vec{x})) + \frac{L}{2} \pnorm[2]{\eta \nabla f(\vec{x})}{2}
+    \end{align*}
+\end{ln-define}
+The L-smoothness of a function guarantees the gradient doesn't change too fast, while the $\mu$-strong convexity guarantees the gradient doesn't change too slow.
+
+Let us prove the lemma addressed in prior lecture regarding the $L$-smooth functions:
+\begin{ln-theorem}{Lemma on Gradients of $L$-smooth Functions}{}
+    \textbf{Lemma:} For an $L$-smooth function $f$
+    \[
+        \pnorm[2]{\nabla f(\vec{x})}{2} \leq 2L (f(\vec{x}) - f(\vec{x}^*))
+    \]
+    \tcblower
+    \textbf{Proof:} Suppose the current guess is some vector $\vec{x}$, such that the next guess is $\vec{y} =  \vec{x} - \eta \nabla f(\vec{x})$. \\
+    Provided that $f(\vec{x}^*)$ is a global minimum, we may determine that,
+    \[
+        \forall \vec{x}, f(\vec{x}^*) \leq f(\vec{y}) = f(\vec{x} - \eta \nabla f(\vec{x}))
+    \]
+    Meanwhile, we may find via the L-smoothness condition that,
+    \begin{align*}
+        f(\vec{x} - \eta \nabla f(\vec{x}))
+        &\leq f(\vec{x}) + \dv{f}{x} {} (-\eta \nabla f(\vec{x})) + \frac{L}{2} \pnorm[2]{\eta \nabla f(\vec{x})}{2} \\
+        &= f(\vec{x}) - \eta \pnorm[2]{\nabla f(\vec{x})}{2} + \frac{\eta^2 L}{2} \pnorm[2]{\nabla f(\vec{x})}{2} \\
+        &= f(\vec{x}) + \eta \bigg( \frac{\eta L}{2} - 1 \bigg) \pnorm[2]{\nabla f(\vec{x})}{2}
+    \end{align*}
+    To produce the most efficient upperbound, we should minimize the coefficient of gradient's squared L2 norm. \\
+    This brings us to a convex optimization problem:
+    \[
+        \min_\eta \frac{\eta^2 L}{2} - \eta
+    \]
+    which we may solve via calculus to see,
+    \[
+        \eta^* = \frac{1}{L}
+    \]
+    Let us substitute this back into the above derivation,
+    \begin{align*}
+        f(\vec{x} - \eta \nabla f(\vec{x}))
+        &= f(\vec{x}) + \eta \bigg( \frac{\eta L}{2} - 1 \bigg) \pnorm[2]{\nabla f(\vec{x})}{2} \\
+        &= f(\vec{x}) - \frac{L}{2} \pnorm[2]{\nabla f(\vec{x})}{2}
+    \end{align*}
+    Once again, via the property of $f(\vec{x}^*)$ to be the global minimum,
+    \begin{align*}
+        f(\vec{x}^*)
+        &\leq f(\vec{x} - \eta \nabla f(\vec{x})) \\
+        &= f(\vec{x}) - \frac{L}{2} \pnorm[2]{\nabla f(\vec{x})}{2}
+    \end{align*}
+    This can then be derived into the aforementioned lemma.
+\end{ln-theorem}
+
+\subsection{Quadratic Sandwich}
+Let us now demonstrate the ``quadratic sandwich'' we discussed in prior:
+\begin{ln-theorem}{Quadratic Sandwich}{}
+    \textbf{Theorem.} For function $f$ that is $L$-smooth and $\mu$-strongly convex, then for some appropriate $\alpha$,
+    \[
+        \pnorm[2]{\vec{x}_{t + 1} - \vec{x}^*}{2} \leq \alpha \pnorm[2]{\vec{x}_t - \vec{x}^*}{2}
+    \]
+    \tcblower
+    \textbf{Proof.} For a $\mu$-strongly convex function, we may see that,
+    \[
+        f(\vec{x}') \leq f(\vec{x}) + \dv{f}{x} \cdot (\vec{x}' - \vec{x}) + \frac{\mu}{2} \pnorm[2]{\nabla f(\vec{x})}{2}
+    \]
+    Be a little bit manipulative, and we will obtain:
+    \[
+        \dv{f}{x} \cdot (\vec{x}' - \vec{x}) \leq f(\vec{x}') - f(\vec{x}) - \frac{\mu}{2} \pnorm[2]{\nabla f(\vec{x})}{2}
+    \]
+    Now, to find a relationship (such that we may continue a proof), we will have to dedicate the following algebraic effort.\\
+    Particularly, we attempt to find a relationship between different guesses that are one timestamp across:
+    \begin{align*}
+        \pnorm[2]{\vec{x}_{t + 1} - \vec{x}^*}{2}
+        &= \pnorm[2]{\vec{x}_t - \eta \nabla f(\vec{x}_t) - \vec{x}^*}{2} \\
+        &= \pnorm[2]{(\vec{x}_t - \vec{x}^*) - \eta \nabla f(\vec{x}_t)}{2} \\
+        &= {\big( (\vec{x}_t - \vec{x}^*) - \eta \nabla f(\vec{x}_t) \big)}^T \big( (\vec{x}_t - \vec{x}^*) - \eta \nabla f(\vec{x}_t) \big) \\
+        &= \pnorm[2]{\vec{x}_t - \vec{x}^*}{2} + \pnorm[2]{\eta \nabla f(\vec{x}_t)}{2} + 2 {(\eta \nabla f(\vec{x}_t))}^T {(\vec{x}^* - \vec{x}_t)} \\
+        &\leq \pnorm[2]{\vec{x}_t - \vec{x}^*}{2} + 2L \eta^2 (f(\vec{x}_t) - f(\vec{x}^*)) + 2 \eta (f(\vec{x}^*) - f(\vec{x}_t) - \frac{\mu}{2} \pnorm[2]{\nabla f(\vec{x})}{2}) \\
+        &= (1 - \eta \mu) \pnorm[2]{\vec{x}_t - \vec{x}^*}{2} + (2L \eta^2 - 2\eta) (f(\vec{x}_t) - f(\vec{x}^*))
+    \end{align*}
+    Here, by letting $\eta = \frac{1}{L}$, we can cancel out the latter term. \\
+    We thus obtain that the appropriate $\alpha$ is:
+    \[
+        \alpha = 1 - \eta \mu = 1 - \frac{\mu}{L}
+    \]
+    Therefore, our interval of convergence for $L$ is:
+    \begin{align*}
+        -1 < 1 - \frac{\mu}{L} < 1 \\
+        0 < \mu < 2L
+    \end{align*}
+\end{ln-theorem}
+The implication of quadratic sandwich is that it bounds any function's convergence in gradient descent via some working quadratic forms. \\
+If boundable by quadratics, convergence can nicely occur.
+
+\section{Stochastic Gradient Descent}
+There is a variety of other names, but SGD is perhaps the most popular choice. \\
+Essentially, SGD is ``lazy gradient descent''.
+This name comes from its algorithmic property of reducing computational cost to avoid computing an entire gradient for some large vector or dataset.
+
+The loss function of a dataset is very frequently written in the form:
+\[
+    L(\vec{x}) = \frac{1}{m} \sum_{i = 1}^m L_i (\vec{x})
+\]
+For example, in least squares algorithm,
+\[
+    L(\vec{x}) = \frac{1}{m} \pnorm[2]{A \vec{x} - \vec{b}}{2} = \frac{1}{m} \sum_{i = 1}^m {(\vec{a}_i^T \vec{x} - \vec{b_i})}^2
+\]
+Fortunately, by the additive property of derivatives, we may also state that:
+\[
+    \nabla f(\vec{x}) = \frac{1}{m} \sum_{i = 1}^m \nabla f_i(\vec{x})
+\]
+In SGD, instead of stepping in the direction of $\nabla f(\vec{x})$, we take a step in $\nabla f_i (\vec{x})$. \\
+This is a legitimate approach, because
+\[
+    \E[\nabla f_i(\vec{x})] = \frac{1}{m} \sum_{i = 1}^m \nabla f_i (\vec{x}) = \nabla f(\vec{x})
+\]
+
+The features of SGD involve:
+\begin{bindenum}
+    \item Computationally efficient!
+    \item Can be comfortably applied on online data
+    \item Is a more noisy algorithm, and will thus help to escape local minimum
+\end{bindenum}
+

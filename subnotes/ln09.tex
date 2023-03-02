@@ -12,17 +12,21 @@ Then, our solution (cited in Chapter 8, or Lecture 8) is as follows:
 From whcich, we discover the characteristic of a matrix called \textbf{condition number}:
 \[\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}\]
 
+Let us connect the above discussion to the Least Squares Problem. \\
 In the context of least squares problem, we are provided a more robust normal equation via the use of pseudoinverse:
 \[
     (A^\dagger A) \vec{x} = A^T \vec{b}
 \]
-Then, provided that our least square system is sensitive to noise, we may investigate the condition number of $A^T A$ to observe the system's change in its solution provided the perturbation in system measurements. \\
+As our least square system is sensitive to noise, we may investigate the condition number of $A^T A$ to observe the system's change in its solution provided the perturbation in system measurements. \\
 This is significant in computations. A high condition number makes a system's matrix highly unstable for numerical precisions to persist provided noise in measurements and systems.
-Such property is, in fact, demonstrated by the convergence warnings in Jupyter iPython notebooks! \\
+Such property is, in fact, demonstrated by the convergence warnings in Jupyter iPython notebooks!
+\par
 But, provided the significance of condition number, we may also discuss ways to alleviate its problems.
 To reduce the condition number of some matrix, we may attempt to reduce the ratio of singular values via adding some multiple of identity matrix ($\lambda I$) to it.
 This allows us to greatly reduce the condition number, shifting it away from instability and being less prone to variance in training data:
 \[A^T A + \lambda I\]
+As a side note, in CS189, we discover similar approaches that can help tackle training data that leads to singular covariance matrices. \\
+Let us investigate below why adding a multiple of diagonal matrix does not make our regression problem have a very deviated solution (despite the fact we somehow alter the design matrix of our problem).
 
 \section{Ridge Regression}
 In the least squares problem, we have a formulated optimization problem of:
@@ -65,12 +69,13 @@ This is also known as the shift property of eigenvalues:
 Therefore, small $\lambda$ corresponds to less regularizaiton effort, and vice versa.
 
 \subsection{Development of Ridge Regression}
-Now, suppose we have a least square system where $\vec{x}$ has a smaller norm, where perhaps $\lambda^2 I \vec{x} \sim \vec{0}$. \\
-Then, adding the information of $\lambda^2 I$ into the least squares problem formulation would not alter the original formulation too much, due to the close-to-zero-ness of ridge regression's current least squares solution. \\
-This allows us to use larger $\lambda$ (have greater regularization). We have two ways of incorporating such information into the least squares problem now:
+Now, suppose we have a least square system where $\vec{x}$ has a smaller norm, where $\lambda I \vec{x} \sim \vec{0}$. \\
+Then, by that close-to-zero property we observe in $\lambda I \vec{x}$, adding the information of $\lambda I$ into the least squares problem formulation would barely alter the original formulation too much, due to the close-to-zero-ness of ridge regression's current least squares solution. \\
+This allows us to use larger $\lambda$ (have greater regularization). \\
+We have two ways of incorporating such information into the least squares problem now:
 \begin{bindenum}
     \item Vertically concatenate $\lambda I$ below $A$.
-    \item Use Ridge Regression's format, which uses a similar idea to preserve the original system as muvh as possible.
+    \item Use Ridge Regression's format, which uses a similar idea to preserve the original system as much as possible. We will prove later that this is exactly the first idea.
 \end{bindenum}
 In the concatenation idea, our system of least squares problem is reformulated as:
 \[
@@ -83,8 +88,10 @@ Let's use both block matrix and normal equation to further explore the idea of c
     &= (A^T A + \lambda^2 I) (A^T \vec{b} + \lambda^2 I \vec{x}) \\
     &\sim (A^T A + \lambda^2 I) A^T \vec{b}
 \end{align*}
-and we have therefore demonstrated the similarity between the two ideas of ridge regression.
-
+and we have therefore demonstrated the similarity between the two ideas of ridge regression. \\
+It is noteworthy that the common notation of ridge regression does not use the notation $\lambda^2$ when addressing regularization parameter.
+We are doing so in the context of demonstrating how ridge regression is developed, through a simpler set of mathematical notations.
+\par
 Once we expand the idea to adding weights for matrices, creating the system:
 \[
     \begin{bmatrix} W_1 A \\ W_2 I \end{bmatrix} \vec{x} = \begin{bmatrix} W_1 \vec{b} \\ W_2 \vec{x_0} \end{bmatrix}
@@ -99,9 +106,9 @@ which we call the \textbf{Tikhonov Regularization} technique. \\
 \section{Probabilistic Information from Ridge Regression}
 Suppose that we instead now have probabilistic information:
 \[
-    (\vec{x_i}, y_i), y_i = g(x_i) + z_i
+    (\vec{x_i}, y_i), \text{ where } y_i = g(x_i) + z_i
 \]
-where, $z_i \sim \mathcal{N}(0, \sigma_i^2)$. \\
+and, $z_i \sim \mathcal{N}(0, \sigma_i^2)$ is a noise defined on a Gaussian distribution. \\
 And, suppose we have a linear model,
 \[
     y_i = \vec{w}^T \vec{x} + z_i
@@ -110,7 +117,7 @@ Then, we may state that,
 \[
     f_{z_i} (z_i) = \frac{\exp(-\frac{z_i^2}{2\sigma_i^2})}{\sqrt{2 \pi} \sigma_i}
 \]
-and we attempt to learn the weights $\vec{w}$ to complete the model. \\
+and we attempt to learn the weights $\vec{w}$ to complete the model for some related problem. \\
 Therefore, with multivariate Gaussian noise $\vec{z}$ and datapoint matrices $X$, we formulate this as a least square system,
 \[
     X \vec{w} + \vec{z} = \vec{y}
@@ -132,13 +139,11 @@ This is related to the technique of Maximum Likelihood Estimation. Let me shamel
         \mathcal{L}(p) = \P(X = k) = \binom{n}{k} p^k {(1 - p)}^{n - k}
     \]
     where it is a function of distribution parameters.
-    Then, Maximum Likelihood Estimation (MLE) is the method of estimating the praameters of a statistical distribution by picking the parameters that maximize $\mathcal{L}$.
-    Furthermore, it would be a method of density estimation, where we estimate some probability density function from the provided dataset.
 \end{ln-explain}
-Here, we would thus solve the optimization problem of:
-\[
-    {argmax}_{\vec{w_0}} f (\vec{y} | \vec{w} = \vec{w_0})
-\]
+Then, Maximum Likelihood Estimation (MLE) is the method of estimating the parameters of a statistical distribution by picking the parameters that maximize $\mathcal{L}$.
+Furthermore, it would be a method of density estimation, where we estimate some probability density function from the provided dataset.
+\par
+In this case, we are performing MLE to obtain weight $\vec{w}$ provided the Gaussian noise $\vec{z}$:    
 \begin{ln-explain}{Solving Maximum Likelihood Estimation Phrased Optimization}{}
     Let us begin from the prompt:
     \begin{align*}
@@ -147,7 +152,7 @@ Here, we would thus solve the optimization problem of:
         &= {argmax}_{\vec{w_0}} \prod_{i = 1}^n f(z_i = y_i - \vec{x_i}^T \vec{w} | \vec{w} = \vec{w_0}) \\
         &= {argmax}_{\vec{w_0}} \prod_{i = 1}^n \frac{\exp(-\frac{{(y_i - \vec{x_i}^T)}^2}{2\sigma_i^2})}{\sqrt{2 \pi} \sigma_i} \\
         &= {argmax}_{\vec{w_0}} \frac{1}{{\sqrt{2\pi}}^n} \exp \bigg( \sum_{i = 1}^n \frac{-(y_i - \vec{x_i}^T \vec{w})}{2 \sigma_i^2} \bigg) \prod_{i = 1}^n \frac{1}{\sigma_i} \\
-        &= {argmin}_{\vec{w_0}} \sum_{i = 1}^n \frac{-{(y_i - \vec{x_i}^T \vec{w})}^2}{2 \sigma_i^2} \\
+        &= {argmin}_{\vec{w_0}} \sum_{i = 1}^n \frac{{(y_i - \vec{x_i}^T \vec{w})}^2}{2 \sigma_i^2} \\
         &= {argmin}_{\vec{w_0}} \pnorm[2]{S(X \vec{w_0} - \vec{y})}{2}
     \end{align*}
     where,
@@ -163,7 +168,7 @@ Here, we would thus solve the optimization problem of:
     Furthermore, upon IID uniform Gaussians, we will end up with $S = \frac{1}{\sqrt{2} \sigma_i}$.
 \end{ln-explain}
 
-Meanwhile, the Maximum A-Posteriori approach attempts to provide a priori distribution on $\vec{w}$.
+Meanwhile, the Maximum A-Posteriori approach attempts to provide a priori distribution on $\vec{w}$. \\
 We solve the optimization problem of:
 \[
     {argmax}_{\vec{w_0}} f(\vec{w} = \vec{w_0} | \vec{y})
@@ -174,3 +179,12 @@ As you may observe, both techniques offer the most likely weights for some condi
     \item MLE find the most likely $\vec{w}$ to \textbf{lead to current observation}.
     \item MAP find the most likely $\vec{w}$ \textbf{given the current observation} that occurs.
 \end{bindenum}
+
+\subsection{A Personal Learning on MLE vs MAP}
+While this is not entirely the focus of exam scope, I'd like to address the difference between MLE and MAP with a few lines. \\
+First of all, We may notice the relationship between objective function of MLE and MAP to have the following relationship:
+\[
+    f(\vec{y} | \vec{w} = \vec{w_0}) = \pi_y f(\vec{w} = \vec{w_0} | \vec{y})
+\]
+If we consider the priori $\pi_y$ to be uniform (for example, all possible components of $\vec{y}$ address an event of uniform distribution like coin flips or dice rolls), then maximizing the MLE objective function indeed maximizes the MAP objective function (as they are scalar multiples of each other).
+This means MLE and MAP, under a uniform priori for any possible component of $\vec{y}$, are equal optimization problems.
