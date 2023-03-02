@@ -1,0 +1,124 @@
+\chapter{Applications and Extensions of Gradient Descent}
+
+\section{Stochastic Gradient Descent, Continued}
+From last lecture, we have obtained the guess rule of gradient descent, and produced another guess rule named ``Stochastic Gradient Descent'' that is a comparatively effortless guess version of gradient descent. \\
+For objective functions that can be decomposed into some components:
+\[
+    f(\vec{x}) = \frac{1}{m} \sum_{i = 1}^m f_i (\vec{x})
+\]
+the SGD guess rule is that
+\[
+    \vec{x}_{k + 1} = \vec{x}_k - \eta \nabla f_i (\vec{x}_k)
+\]
+where we may, via prior derivation, see that:
+\[
+    \E[\nabla f_i (\vec{x}_k) = \nabla f(\vec{x}_k)]
+\]
+SGD is a rather noisy algorithm that doesn't use the true gradient. \\
+Consequently, SGD may not converge with a constant stepsize, and it also loses the property of gradient descent where: upon convergence, the increment between guesses becomes zero due to the gradient at optimum points being $\nabla f(\vec{x}^*) = \vec{0}$.
+For SGD, then, there needs to have a decaying stepsize over time to portray some similar property of convergence.
+
+\subsection{A Demonstration of SGD}
+Let us consider an example:
+    Let us discuss the objective function:
+\[
+    f(\vec{x}) = \frac{1}{m} \sum_{i = 1}^m \frac{1}{2} \pnorm[2]{\vec{x} - \vec{p}_i}{2}
+\]
+which provides the optimum:
+\[
+    \vec{x}^* = \frac{1}{m} \sum_{i = 1}^n \vec{p}_i
+\]
+Suppose we initiate our guess at $\vec{0}$, and provide $\eta = \frac{1}{k}$. \\
+SGD may either randomly choose one component of the objective function to take guess rule along, or do so circularly (which is easier to implement).
+The circular approach comes with occasional benefits and elegance. \\
+Let us discuss its iterations below.
+\begin{align*}
+    \vec{x}_1
+    &= \vec{x}_0 - \eta_1 \nabla f_1 (\vec{x}_0)
+    = - (\vec{x}_0 - \vec{p}_1) = \vec{p_1} \\
+    \vec{x}_2
+    &= \vec{x}_1 - \eta_2 \nabla f_2 (\vec{x}_1)
+    = \vec{p_1} - \frac{1}{2} (\vec{x_1} - \vec{p_2}) = \frac{1}{2} (\vec{p_1} + \vec{p_2}) \\
+    \vec{x}_3
+    &= \vec{x}_2 - \eta_3 \nabla f_3 (\vec{x}_2)
+    = \frac{1}{2} (\vec{p}_1 + \vec{p}_2) - \frac{1}{3} (\vec{x}_2 - \vec{p}_3) = \frac{1}{3} (\vec{p}_1 + \vec{p}_2 + \vec{p}_3)
+\end{align*}
+where we may see the guess is the mean of all points $\vec{p}_i$ involved until the current guess.
+
+Choosing the stepsize decay pattern is a dark art of itself.
+It’s not a story the Jedi would tell you. It’s a Sith legend of Hyperparameter Tuning.
+The dark side of the Force is a pathway to many abilities some consider to be unnatural, but convex-optimal.
+
+\subsection{Mathematical Case Study on Convergence of SGD}
+Let us perform a case study for the least squares problem applied with SGD.
+We will use a variant of MSE for the loss function to optimize on:
+\[
+    f(x) = \frac{1}{m} \sum_{i = 1}^m \frac{1}{2} {(a_i x - b_i)}^2
+\]
+where,
+\[
+    \begin{bmatrix} a_1 \\ \vdots \\ a_m \end{bmatrix} x =
+    \begin{bmatrix} b_1 \\ \vdots \\ b_m \end{bmatrix}, \vec{x}^* = \frac{\vec{a} \cdot \vec{b}}{\pnorm[2]{\vec{a}}{2}}
+\]
+We may observe:
+\[
+    \nabla f_i (x) = a_i (a_i x - b_i), \vec{x}_i^* = \frac{b_i}{a_i}
+\]
+Then, we would want to show that,
+\[
+    \min_i \vec{x}_i^* \leq \vec{x}^* \leq \max_i \vec{x}_i^*
+\]
+Let us perform some algebraic manipulation as follows:
+\begin{align*}
+    \vec{x}^* &= \frac{\vec{a} \cdot \vec{b}}{\pnorm[2]{\vec{a}}{2}}
+    = \frac{\sum_{i = 1}^m a_i^2 \frac{b_i}{a_i}}{\pnorm[2]{\vec{a}}{2}} \\
+    &\leq \frac{\max_i \vec{x}_i^* \sum_{i = 1}^m a_i^2}{\pnorm[2]{\vec{a}}{2}}
+    = \max_i \vec{x}_i^*
+\end{align*}
+observing that such logic can be applied onto the case of $\min_i \vec{x}_i^*$ as well.
+
+The implication of such phenomenon aids us towards convergence.
+Provided that our gradient of least squares loss function is:
+\[
+    \nabla f_i (x) = a_i^2 (x - \frac{b_i}{a_i})
+\]
+If we have $x > \frac{b_i}{a_i}$, which means it would be larger than the maximum possible optimum $\max_i \vec{x}_i^*$, and we would be pushed towards the interval marked by $[\min_i \vec{x}_i^*, \max_i \vec{x}_i^*]$. \\
+Furthermore, a similar logic applies to the case of $x < \frac{b_i}{a_i}$. \\
+Our oracle (gradient) is generally correct (albeit occasionally inelegant). Now, we only require the step size to be some appropriate amount such that, provided the correct direction towards which the next guess should exist, we do not overshoot outside the aforementioned proper interval of optimization.
+
+Keep in mind that such interval is still highly theoretical and will not be realistically attained, so the tuning of step size highly depends on whether the phenomenon of convergence is truly observed (via some plotting measure).
+
+\section{Gradient Descent with Prior Optimization Constraint}
+Suppose that we attempt to solve the following problem:
+\[
+    \min_{\vec{x} \in \mathcal{X}} f(\vec{x})
+\]
+where, $\mathcal{X}$ is a convex, compact set upon which we perform gradient descent on. \\
+However, using conventional methods of the general, unconstrained gradient descent would possibly put the convergence outside $\mathcal{X}$.
+The concept of solution is \textbf{Projected Gradient Descent}, where we define the projection of one point $\vec{y}$ onto another point $\vec{x}$ as:
+\[
+    \Pi_{\mathcal{X}} (\vec{y}) = {argmax}_{\vec{x} \in \mathcal{X}} \pnorm{\vec{y} - \vec{x}}{2}
+\]
+Therefore, as we obtain a guess that is outside $\mathcal{X}$, we project that guess back into $\mathcal{X}$ to satisfy the constraint. \\
+In other words, upon the usual guess rule computation, we would also add the computational cost of projections onto each iterative step of the original gradient descent algorithm.
+The guess rule of PGD is therefore:
+\[
+    \vec{x}_{k + 1} = \Pi_{\mathcal{X}} (\vec{x}_k - \eta f(\nabla f(\vec{x}_k)))
+\]
+Such problem is rarely used in practice, however, because we would be solving another optimization problem per step.
+The effect of such operation is inefficiency.
+Hence, although PGD works conceptually, it is not employed practically.
+
+\subsection{Conditional Gradient Descent}
+We may also propose an alternative variation from Frank Wolfe, where suppose we are solving for:
+\[
+    \vec{y_k} \in {argmin}_{\vec{y} \in \mathcal{X}} \nabla f(\vec{x}_k) \cdot \vec{y}
+\]
+and $\gamma$ is a fixed decating stepsize sequence. \\
+Then the guess rule of CGD would be phrased as:
+\begin{align*}
+    \vec{x}_{k + 1}
+    &= (1 - \gamma_k) \vec{x}_k + \gamma_k \vec{y}_k \\
+    &= \vec{x}_k + \gamma_k (\vec{y}_k - \vec{x}_k)
+\end{align*}
+This setup allows the iterated guess to be a convex combination within $\mathcal{X}$.
