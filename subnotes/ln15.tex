@@ -1,0 +1,91 @@
+\chapter{Interlude: Logistic Regression}
+insert something about taking 127 and 189 together here
+
+\section{Monotone Transformations}
+In prior work, we have minimized a positive function by minimizing its squared value. \\
+For example:
+\[
+    {argmin}_{\vec{x}} \pnorm{A\vec{x} - \vec{b}}{2}
+    = {argmin}_{\vec{x}} \pnorm[2]{A\vec{x} - \vec{b}}{2}
+\]
+This is an example of monotone transformation:
+\begin{ln-define}{Monotone Transformation}{}
+    For a function $\Phi(x)$ that is continuous and strictly increasing, then
+    \[
+        p^* = \min_{\vec{x}} f_0 (\vec{x}) \text{ s.t. } \forall i \in [1, n] f_i(\vec{x}) \leq 0
+    \]
+    Then, such problem is equivalent to the following:
+    \[
+        g^* = \min_{\vec{x}} \Phi(f_0 (\vec{x})) \text{ s.t. } \forall i \in [1, n] f_i(\vec{x}) \leq 0
+    \]
+\end{ln-define}
+There are many continuous and strictly increasing functions, including but not excluded to:
+\begin{bindenum}
+    \item $\Phi(x) = x^2$, with domain restructed to non-negative $x$
+    \item $\Phi(x) = \log (x)$
+    \item $\Phi(x) = e^x$
+\end{bindenum}
+
+\subsection{Building Logistic Regression}
+Suppose we have datapoints $\{(\vec{x}_1, y_1), \dots, (\vec{x}_n, y_n)\}$, such that:
+\[
+    \forall i \in [1, n], y_i \in \{-1, 1\}
+\]
+The task of logistic regression is to build a classifier between class labels $0$ and $1$ via predicting the probability that some datapoint belongs to a certain class:
+\[
+    \P(y_i = 1 | x = \vec{x}) = q(\vec{x})
+\]
+
+Now, suppose that we construct such function as an affine transformation:
+\[
+    q(\vec{x}) = \vec{w}^T \vec{x} + \beta
+\]
+However, the probability of an event must be between $0$ and $1$ (inclusively), so we must apply some other transformation such that $\vec{w}^T \vec{x}$ is no longer unbounded as it is now.
+Here, $q$ is some other function we will involve in our estimation for probability, where maximizing $q$ should grant a maximization of $\vec{w}^T\vec{x}$ as well.
+
+Concretely, performing the monotone transformation $\Phi(x) = \log (x)$ onto $\vec{w}^T \vec{b}$ would make its range just unbounded in one single direction: $(\log(0), \log(1)) = (-\infty, 0)$. \\
+And similarly, performing the monotone transformation $\Phi(x) = \frac{x}{1 - x}$ makes $\vec{w}^T \vec{b}$ unbounded in anotehr direction: $(0, \infty)$. \\
+Combining the above result, let us perform the monotone transformation:
+\[
+    \log (\frac{q(\vec{x})}{1 - q(\vec{x})}) = \vec{w}^T \vec{x} + \beta
+\]
+such that $\vec{w}^T \vec{x}$ is indeed a suitable function for predicting probability.
+
+From above, we may perform some algebraic manipulation, and would eventually find that:
+\[
+    q(\vec{x}) = \frac{\exp (\vec{w}^T \vec{x} + \beta)}{1 + \exp (\vec{w}^T \vec{x} + \beta)}
+\]
+To maximize the probability at which we obtain our current dataset, we also have the option of performing MLE. \\
+Suppose we apply MLE (Maximum Likelihood Estimation) on our above hypothesis for probability function, then we would be solving the optimization problem of maximizing the following expression:
+\[
+    \P(y_1, \dots, y_n | \vec{w}^T, \beta)
+\]
+Furthermore, suppose the probability at which $\P(y_i = 1)$ is as noted above, then we may dictate that:
+\[
+    \P(y_i = -1 | x = \vec{x}_i) = \frac{1}{1 + \exp (\vec{w}^T \vec{x}_i + \beta)} = \frac{\exp (- (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (- (\vec{w}^T \vec{x}_i + \beta))}
+\]
+Then, substituting such expression:
+\begin{align*}
+    \P(Y = y_i) = \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}
+\end{align*}
+such that the expressions of $\P(Y = y_i)$ is coherent with our algebraic works above:
+\[
+    \P(Y = y_i) =
+    \begin{cases}
+        \frac{ \exp ( (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp ( (\vec{w}^T \vec{x}_i + \beta))}, &y_i = 1 \\
+        \frac{ \exp (- (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (- (\vec{w}^T \vec{x}_i + \beta))}, &y_i = -1
+    \end{cases}
+\]
+
+Finally, applying maximum likelihood, we solve:
+\[
+    (\vec{w}^*, \beta^*) = {argmax}_{\vec{w}, \beta} \prod_{i = 1}^n \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}
+\]
+to build the parameters of logistic regression classifier. \\
+Now, performing a monotone transformation with $\Phi(x) = \log(x)$ will grant us a convex objective function to optimize for:
+\[
+    (\vec{w}^*, \beta^*) = {argmax}_{\vec{w}, \beta} \log (\prod_{i = 1}^n \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))})
+\]
+Namely, while monotone transformations may change the convexity of a function, it will still provide an equivalent optimization problem.
+
+Thanks for staying through all the maths.

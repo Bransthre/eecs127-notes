@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  2 MAR 2023 10:54
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  7 MAR 2023 10:30
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1227,17 +1227,21 @@ Chapter 14.
 ]
 Missing character: There is no ’ ("2019) in font ptmr8t!
 Missing character: There is no ’ ("2019) in font ptmr8t!
-[60]) [61] (./main.aux)
+[60]) [61] (./subnotes/ln15.tex
+Chapter 15.
+[62
+
+]) [63] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1C448F30450028695EA8E51B60C26EEC;9443.
+(rerunfilecheck)             Checksum: AA729B3BA032032AEB6A615B017C36A8;9824.
  ) 
 Here is how much of TeX's memory you used:
- 63854 strings out of 475882
- 1613463 string characters out of 5806027
- 2244197 words of memory out of 5000000
- 83950 multiletter control sequences out of 15000+600000
+ 63863 strings out of 475882
+ 1613612 string characters out of 5806027
+ 2244611 words of memory out of 5000000
+ 83956 multiletter control sequences out of 15000+600000
  504511 words of font info for 82 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,20n,145p,852b,2082s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (61 pages).
+Output written on main.pdf (63 pages).

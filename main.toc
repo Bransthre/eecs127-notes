@@ -76,3 +76,6 @@
 \contentsline {subsection}{\numberline {14.1.2}Mathematical Case Study on Convergence of SGD}{60}{subsection.14.1.2}%
 \contentsline {section}{\numberline {14.2}Gradient Descent with Prior Optimization Constraint}{61}{section.14.2}%
 \contentsline {subsection}{\numberline {14.2.1}Conditional Gradient Descent}{61}{subsection.14.2.1}%
+\contentsline {chapter}{\numberline {15}Interlude: Logistic Regression}{62}{chapter.15}%
+\contentsline {section}{\numberline {15.1}Monotone Transformations}{62}{section.15.1}%
+\contentsline {subsection}{\numberline {15.1.1}Building Logistic Regression}{62}{subsection.15.1.1}%
