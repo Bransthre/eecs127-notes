@@ -1,0 +1,137 @@
+\chapter{Weak Duality}
+\begin{quote}
+    Ok yeah, last time's lecture is kind of chill.
+    Today's, it's not.
+    -- Professor.
+\end{quote}
+
+\section{Active Constraints}
+Let us consider this optimization problem:
+\[
+    \min_{\substack{x \geq 1 \\ x \leq 2}} x^2
+\]
+If moving the constraint causes a shift in the solution to this problem, such constraint is what we define as an \textbf{active constraint}.
+For example, the constraint $x \geq 1$ is an active constraint as it controls the solution of our optimization problem. \\
+On the other hand, for another problem:
+\[
+    \min_{\substack{x \geq -1 \\ x \leq 2}} x^2
+\]
+none of the constraints directly influence the minimum of our optimization problem, so there are no active constraints. \\
+Then, observing another problem below:
+\[
+    \min_{\substack{x_1^2 \leq 2^2 \\ x_2^2 \leq 1^2}} x_1 + x_2
+\]
+both of the constraints occur to be active.
+
+There is no virtual limit on the number of active constraints an optimization problem can have (perhaps except the number of variables it involves), and active constraints can be observed by its definition as we observe whether changing one constraint changes the solution to our optimization problem.
+
+\section{Infimum vs. Minimum}
+Consider the following optimization problem:
+\[
+    \min_{\substack{x \geq 0 \\ x \in \R}} e^{-x}
+\]
+where we, despite knowing that the smallest possible value of such expression is $0$, also acknowledge that it is not an achievable upperbound. \\
+In such situation, we use the term \textbf{infimum}: the largest lower bound findable for an expression, to perform some mathematical conveniences similar to what a minimum provides. \\
+The formal definition of it relies on real analysis.
+
+\section{Introduction to Lagrangian}
+
+\subsection{Phrasing Optimization Problems}
+Let us consider the general optimization problem of:
+\[
+    p^* = \min_{\substack{
+        \forall i \in [1, m],\ f_i(\vec{x}) \leq 0 \\
+        \forall j \in [1, n],\ h_j(\vec{x}) = 0
+    }} f_0 (\vec{x})
+\]
+and a simplified version of it:
+\[
+    s^* = \min_{\substack{
+        f_1(\vec{x}) \leq 0 \\
+        h_1(\vec{x}) = 0
+    }} f_0 (\vec{x})
+\]
+We consider these expressions as \textbf{The Primal}.
+
+Let us also introduce an indicator variable:
+\begin{align*}
+    \mathbbm{1}_{<0} \{f_i(\vec{x})\} =
+    \begin{cases}
+        0, &f_i(\vec{x}) \leq 0 \\
+        \infty, &f_i(\vec{x}) > 0
+    \end{cases} \\
+    \mathbbm{1}_{0} \{h_i(\vec{x})\} =
+    \begin{cases}
+        0, &h_i(\vec{x}) = 0 \\
+        \infty, &h_i(\vec{x}) \neq 0
+    \end{cases}
+\end{align*}
+such that we will re-introduce the simplified version of above minimization problem as:
+\[
+    s^* = \min f_0 (\vec{x}) + \mathbbm{1}_{<0} \{f_1(\vec{x})\} + \mathbbm{1}_{0} \{h_1(\vec{x})\}
+\]
+We may thus write a constrained optimization problem into its unconstrained form. \\
+\[
+    p^* = \min f_0 (\vec{x}) + \sum_{i = 1}^m \mathbbm{1}_{<0} \{f_i(\vec{x})\} + \sum_{j = 1}^n \mathbbm{1}_{0} \{h_j(\vec{x})\}
+\]
+However, these problems present non-continuous objective functions, and we thus cannot directly take the gradient of it to find critical points.
+
+We should then discuss methods of finding some similar expression to the indicator variable. \\
+One choice is as follows:
+\[
+    \mathbbm{1}_{<0} \{f_i(\vec{x})\} \longleftrightarrow \lambda_i f_i (\vec{x}), \lambda_i > 0
+\]
+such that our objective function decreases when $f_i(\vec{x}) < 0$ and achieves a similar effect to having such constraint. \\
+Similarly, 
+\[
+    \mathbbm{1}_{0} \{h_i(\vec{x})\} \longleftrightarrow \nu_i h_i (\vec{x}), \nu_i > 0
+\]
+(note: $\nu$, $v$ are different notations.)
+
+\subsection{Lagrangian of an Optimization Problem}
+The Lagrangian of an optimization problem is then defined as:
+\[
+    L(\vec{x}, \vec{\lambda}, \vec{\nu}) = f_0 (\vec{x}) + \sum_{i = 1}^m \lambda_i f_i (\vec{x}) + \sum_{i = 1}^n \lambda_i h_i (\vec{x})
+\]
+where, $\lambda_i, \nu_i$ are called \textbf{dual variables}. This technique extends into what we call ``Lagrange Multipliers''.
+
+We may notice that, $L(\vec{x}, \vec{\lambda}, \vec{\nu})$ is an affine function of $\vec{\lambda}$, $\vec{\nu}$, which makes it concave. \\
+Then, we may define some function as follows to help with mathematical convenience:
+\[
+    g(\vec{\lambda}, \vec{\nu}) = \inf_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
+\]
+Affine functions are convex and concave, and $g$ is a pointwise maximum. \\
+The infimum is a pointwise minimum, which \underline{introduces $g$ as a concave function} (pointwise minimum of multiple concave functions). \\
+The function $g$ thus extracts the minimum possible value of $L$ based on what $\vec{x}$ minimizes it, when given a pair $(\vec{\lambda}, \vec{\nu})$.
+This function $g$ is called a \textbf{Dual Function}, which is corresponding to its primal.
+
+The purpose of $g$ is esoteric.
+\begin{ln-theorem}{$g$ as Lower Bound of Optimization Solution}{}
+    \textbf{Theorem.} We may consider $g$ as a lower bound on the primal problem's solution $p^*$:
+    \[
+        \forall \vec{\lambda} \geq 0, \vec{\nu},\ g(\vec{\lambda}, \vec{\nu}) \leq p^*
+    \]
+    \tcblower
+    \textbf{Proof.}
+    Consider some $\tilde{\vec{x}}$ as a feasible point for the primal.
+    Then,
+    \[
+        f_i (\tilde{\vec{x}}) \leq 0, h_i (\tilde{\vec{x}}) = 0
+    \]
+    Therefore,
+    \[
+        \lambda_i f_i (\tilde{\vec{x}}) \leq 0, \nu_i h_i (\tilde{\vec{x}}) = 0
+    \]
+    So, when considering the value of $L(\vec{x}, \vec{\lambda}, \vec{\nu})$,
+    \[
+        L(\vec{x}, \vec{\lambda}, \vec{\nu}) = f_0 (\vec{x}) + \sum_{i = 1}^m \lambda_i f_i (\vec{x}) + \sum_{i = 1}^n \lambda_i h_i (\vec{x}) \leq f_0 (\vec{x})
+    \]
+    The Lagrangian itself is always the lower bound of the function value itself whenever we discuss a \underline{feasible point} for the primal. \\
+    Furthermore, conceptually, $g$ is a function to extract the theoretical minimum Lagrangian possible-- it must be smaller than the true minimum of objective function.
+\end{ln-theorem}
+
+We thus phrase that,
+\[
+    d^* = \max_{\vec{\lambda} \geq 0} g(\vec{\lambda}, \vec{\nu})
+\]
+is a \textbf{dual problem} of the primal, which is the maximization of a concave function $g$.

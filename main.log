@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  7 MAR 2023 10:30
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  9 MAR 2023 10:57
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -678,6 +678,12 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 \ALG@tmplength=\skip62
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
+) (c:/texlive/2022/texmf-dist/tex/latex/bbm-macros/bbm.sty
+Package: bbm 1999/03/15 V 1.2 provides fonts for set symbols - TH
+LaTeX Font Info:    Overwriting math alphabet `\mathbbm' in version `bold'
+(Font)                  U/bbm/m/n --> U/bbm/bx/n on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathbbmss' in version `bold'
+(Font)                  U/bbmss/m/n --> U/bbmss/bx/n on input line 35.
 ) (c:/texlive/2022/texmf-dist/tex/latex/tkz-euclide/tkz-euclide.sty
 2022/02/25 4.051b tkz-euclide.sty
 Package: tkz-euclide  2022/02/25 4.051b for pure Euclidean Geometry 
@@ -1231,17 +1237,30 @@ Missing character: There is no ’ ("2019) in font ptmr8t!
 Chapter 15.
 [62
 
-]) [63] (./main.aux)
+]) [63] (./subnotes/ln16.tex
+Chapter 16.
+[64
+
+]
+LaTeX Font Info:    Trying to load font information for U+bbm on input line 68.
+ (c:/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
+File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
+)
+Underfull \hbox (badness 10000) in paragraph at lines 72--74
+
+ []
+
+[65]) [66] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: AA729B3BA032032AEB6A615B017C36A8;9824.
+(rerunfilecheck)             Checksum: 5F4876B480859989862E9F50F03083D4;10433.
  ) 
 Here is how much of TeX's memory you used:
- 63863 strings out of 475882
- 1613612 string characters out of 5806027
- 2244611 words of memory out of 5000000
- 83956 multiletter control sequences out of 15000+600000
- 504511 words of font info for 82 fonts, out of 8000000 for 9000
+ 63925 strings out of 475882
+ 1615051 string characters out of 5806027
+ 2245436 words of memory out of 5000000
+ 84005 multiletter control sequences out of 15000+600000
+ 504906 words of font info for 85 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,20n,145p,852b,2082s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (63 pages).
+Output written on main.pdf (66 pages).
