@@ -85,3 +85,8 @@
 \contentsline {section}{\numberline {16.3}Introduction to Lagrangian}{65}{section.16.3}%
 \contentsline {subsection}{\numberline {16.3.1}Phrasing Optimization Problems}{65}{subsection.16.3.1}%
 \contentsline {subsection}{\numberline {16.3.2}Lagrangian of an Optimization Problem}{65}{subsection.16.3.2}%
+\contentsline {chapter}{\numberline {17}Weak, Strong Duality}{67}{chapter.17}%
+\contentsline {section}{\numberline {17.1}Introduction to Weak vs. Strong Duality via Problems}{67}{section.17.1}%
+\contentsline {subsection}{\numberline {17.1.1}Minimum-Norm Problem, Continued}{67}{subsection.17.1.1}%
+\contentsline {subsection}{\numberline {17.1.2}Partitioning Problem}{68}{subsection.17.1.2}%
+\contentsline {section}{\numberline {17.2}Minmax Inequality}{69}{section.17.2}%

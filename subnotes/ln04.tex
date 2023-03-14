@@ -129,7 +129,7 @@ To consider the optimization problem holistically, we should formulate that,
 \]
 which is equivalently solving for
 \[
-    \underset{\vec{w}}{argmax} \ \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
+    \underset{\vec{w}}{\rm argmax} \ \sum_{i = 1}^n {\langle \vec{w}, \vec{x_i} \rangle}^2
 \]
 and we would recognize so becuase the ignored aspect of MSE, $\frac{1}{n} \sum_{i = 1}^n {\lVert \vec{x} \rVert}_2^2$, is a nonnegative fixed cost.
 
@@ -157,6 +157,6 @@ We call the matrix in above intermediate form the covariance matrix:
 \]
 And, using the knowledge from Section 4.1 about Rayleigh coefficient, we obtain that the solution of:
 \[
-    {argmax}_{\vec{w}} \ \vec{w}^T C \vec{w} \text{ subject to } {\lVert \vec{w} \rVert}_2^2 = 1
+    \underset{\vec{w}}{\rm argmax} \ \vec{w}^T C \vec{w} \text{ subject to } {\lVert \vec{w} \rVert}_2^2 = 1
 \]
 would be the eigenvector of $\lambda_{max}(C)$.

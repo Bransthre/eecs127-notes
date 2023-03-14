@@ -1,0 +1,161 @@
+\chapter{Weak, Strong Duality}
+
+\section{Introduction to Weak vs. Strong Duality via Problems}
+\subsection{Minimum-Norm Problem, Continued}
+The problem is phrased as:
+\[
+    \min_{\substack{A \vec{x} = \vec{b} \\ A \vec{x} - \vec{b} = \vec{0}}} \vec{x}^T \vec{x}
+\]
+where, $A$ is full rank and thus have infinite solutions. \\
+We may write the lagrangian of such problem as a convex, quadratic function of $\vec{x}$:
+\[
+    L(\vec{x}, \vec{\nu}) = \vec{x}^T \vec{x} + {\vec{\nu}}^T (A\vec{x} + \vec{b})
+\]
+and we may therefore derive that,
+\[
+    g(\vec{\nu}) = \min_{\vec{x}} L(\vec{x}, \vec{\nu})
+\]
+Furthermore, as the function $L$ is convex quadratic, we can minimize such function over $\vec{x}$ by setting gradient to be $\vec{0}$:
+\begin{align*}
+    \nabla_{\vec{x}} L(\vec{x}, \vec{\nu})
+    &= 2 \vec{x} + A^T \vec{\nu} \\
+    2 \vec{x}^* + A^T \vec{\nu} &= \vec{0} \\
+    \vec{x}^* &= -\frac{1}{2} A^T \vec{\nu}
+\end{align*}
+Therefore,
+\begin{align*}
+    g(\vec{\nu}) &= L(-\frac{1}{2} A^T \vec{\nu}, \vec{\nu}) \\
+    &= \frac{1}{4} \vec{\nu}^T A A^T \vec{\nu} + \vec{\nu}^T (-\frac{1}{2} A A^T \vec{\nu} - \vec{b}) \\
+    &= - \frac{1}{4} \vec{\nu}^T A A^T \vec{\nu} - \vec{\nu}^T \vec{b}
+\end{align*}
+is a concave quadratic function of $\vec{\nu}$.
+
+We also understand that $g(\vec{\nu})$ is a lowerbound to the true minimum norm solution (see note 16). \\
+Furthermore, via vector calculus, we may obtain that:
+\[
+    \underset{\vec{\nu}}{\rm argmax}\ g(\vec{\nu}) = -2 {(A A^T)}^{-1} \vec{b}
+\]
+And therefore, the true lower lower bound to minimum solution is:
+\[
+    \vec{x}^* = -\frac{1}{2} A^T \vec{\nu}^* = A^T {(A A^T)}^{-1} \vec{b}
+\]
+As we have so obtained in the first notes. \\
+\begin{ln-define}{Strong vs. Weak Duality}{}
+    We phrase that,
+    \[
+        d^* = \max_{\vec{\nu}} g(\vec{x}^*, \vec{\nu})
+    \]
+    is a \textbf{dual problem} of the primal, which is the maximization of a concave function $g$.
+    In such situation, where $p^*$ is equal to its tightest lowerbound $d^*$, we understand this as \textbf{``strong duality''}. \\
+    Otherwise, when $p^* \geq d^*$, we phrase this situation as \textbf{weak duality}.
+\end{ln-define}
+
+\subsection{Partitioning Problem}
+Problem statement:
+\begin{quote}
+    For some symmetric matrix $W \in \mathbb{S}^n$, solve:
+    \[
+        \min_{\substack{\vec{x} \\ x_i^2 = 1}} \vec{x}^T W \vec{x}
+    \]
+\end{quote}
+this is not necessarily a convex optimization problem, and its combinatorial bruteforce solution for finding optimum has an exponential complexity in computation.
+
+Let us first phrase the Lagrangian of this function:
+\begin{align*}
+    L(\vec{x}, \vec{\nu})
+    &= \vec{x}^T W \vec{x} + \sum_i \nu_i (x_i^2 - 1) \\
+    &= \vec{x}^T (W + diag(\vec{\nu})) \vec{x} - \sum_i \nu_i
+\end{align*}
+Then, remind that,
+\[
+    g(\vec{\nu}) = \underset{\vec{x}}{\rm inf}\ L(\vec{x}, \vec{\nu})
+\]
+where, if $W + diag(\vec{\nu}) \succcurlyeq 0$, then $L(\vec{x}, \vec{\nu})$ is a convex functino of $\vec{x}$, and because the quadratic term of $g$ must be nonnegative, the minimum value of this function $g$ becomes $-\sum_{i = 1}^n \mu_i$. \\
+Otherwise, in the case that $W + diag(\vec{\nu}) \preccurlyeq 0$, the minimum of this function becomes $-\infty$. \\
+This phrases the function $g$ as a piecewise function:
+\[
+    g(\vec{\nu}) = 
+    \begin{cases}
+        -\sum_{i = 1}^n \mu_i &,\text{ if } Q \succcurlyeq 0 \\
+        -\infty &,\text{ otherwise}
+    \end{cases}
+\]
+Consequently,
+\begin{align*}
+    d^*
+    &= \max_{\vec{\nu}} g(\vec{x}^*, \vec{\nu}) \\
+    &= \max_{\substack{\vec{\nu} \\ W + diag(\vec{\nu}) \succcurlyeq 0}} - \sum_{i = 1}^n \nu_i
+\end{align*}
+To maximize the above expression, we need that
+\[
+    \vec{\nu} = - \lambda_{\min} (W) \vec{1}
+\]
+Meanwhile, we understand that $W - \lambda_{\min} (W) I \succcurlyeq 0$ by the eigenvalue shift property. \\
+Therefore, we may state that,
+\[
+    p^* \geq d^* = n \lambda_{\min} (W)
+\]
+and conclude a case of weak duality.
+
+\section{Minmax Inequality}
+Let there be a primal problem $p$, and a dual problem $d$, such that: \\
+\textbf{Primal.}
+\[
+    p^* = \min f_0 (\vec{x}) + \sum_{i = 1}^m \mathbbm{1}_{<0} \{f_i(\vec{x})\} + \sum_{j = 1}^n \mathbbm{1}_{0} \{h_j(\vec{x})\}
+\]
+\textbf{Dual.}
+\begin{align*}
+    g(\vec{x}^*, \vec{\nu}) = L(\vec{x}, \vec{\lambda}, \vec{\nu})
+    d^* = \max_{\substack{ \vec{\lambda} \geq 0 \\ \vec{\nu}}} g(\vec{x}^*, \vec{\nu})
+\end{align*}
+Then, the Minmax Inequality states:
+\begin{ln-theorem}{Minmax Inequality}{}
+    For any sets $\mathcal{X}, \mathcal{Y}$, function $f$,
+    \[
+        \min_{\vec{x} \in \mathcal{X}} \max_{\vec{y} \in \mathcal{Y}} f(\vec{x}, \vec{y})
+        \geq
+        \max_{\vec{y} \in \mathcal{Y}} \min_{\vec{x} \in \mathcal{X}} f(\vec{x}, \vec{y})
+    \]
+    Essentially, in a minimax perspective, going second is always more advantageous.
+    \tcblower
+    \textbf{Proof.}
+    Consider some $\vec{x}_0 \in \mathcal{X}$, $\vec{y}_0 \in \mathcal{Y}$, then define
+    \begin{align*}
+        h(\vec{y}_0) := \min_{\vec{x} \in \mathcal{X}} f(\vec{x}, \vec{y}_0) \\
+        g(\vec{x}_0) := \max_{\vec{y} \in \mathcal{Y}} f(\vec{x}_0, \vec{y})
+    \end{align*}
+    Then, let us perform the following algebraic process:
+    \begin{align*}
+        h(\vec{y}_0)
+        &= \min_{\vec{x} \in \mathcal{X}} f(\vec{x}, \vec{y}_0) \\
+        &\leq f(\vec{x}_0, \vec{y}_0) \\
+        &\leq \max_{\vec{y} \in \mathcal{Y}} f(\vec{x}_0, \vec{y}) = g(\vec{x}_0)
+    \end{align*}
+    Then, along that inequality which works for any pair of points $(\vec{x}, \vec{y})$,
+    \[
+        \max_{\vec{y}_0 \in \mathcal{Y}} h(\vec{y}_0) \leq \min_{\vec{x}_0 \in \mathcal{X}} g(\vec{x}_0)
+    \]
+    The above translates to exactly the Minmax Inequality.
+\end{ln-theorem}
+
+Similarly, we consider in an optimization problem that its dual is phrased as:
+\[
+    d^* = \max_{\vec{\lambda}, \vec{\nu}} g(\vec{\lambda}, \vec{\nu}) = \max_{\vec{\lambda}, \vec{\nu}} \min_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
+\]
+Meanwhile, we consider the priori of an optimization problem to phrase,
+\begin{align*}
+    p^* &= \max_{\vec{\lambda}, \vec{\nu}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) \\
+    &= \max_{\vec{\lambda}, \vec{\nu}} (f_o(\vec{x}) + \sum_i \lambda_i f_i(\vec{x}) + \sum_i \nu_i h_i (\vec{x})) \\
+    &= \begin{cases}
+        \infty &,\text{ upon any constraints $f_i, h_i$ violated} \\
+        f_0(\vec{x}) &,\text{ if all constraints are unviolated}
+    \end{cases} \\
+\end{align*}
+So, provided that the constraints are unviolated in the primal problem,
+\begin{align*}
+    p^* &= \min_{\vec{x}} \max_{\vec{\lambda}, \vec{\nu}} (f_o(\vec{x}) + \sum_i \lambda_i f_i(\vec{x}) + \sum_i \nu_i h_i (\vec{x}))
+\end{align*}
+Therefore, along the Minmax Inequality, we may observe that:
+\[
+    d^* \geq p^*
+\]

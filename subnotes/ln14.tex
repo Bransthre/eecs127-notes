@@ -97,7 +97,7 @@ where, $\mathcal{X}$ is a convex, compact set upon which we perform gradient des
 However, using conventional methods of the general, unconstrained gradient descent would possibly put the convergence outside $\mathcal{X}$.
 The concept of solution is \textbf{Projected Gradient Descent}, where we define the projection of one point $\vec{y}$ onto another point $\vec{x}$ as:
 \[
-    \Pi_{\mathcal{X}} (\vec{y}) = {argmax}_{\vec{x} \in \mathcal{X}} \pnorm{\vec{y} - \vec{x}}{2}
+    \Pi_{\mathcal{X}} (\vec{y}) = \underset{\vec{x} \in \mathcal{X}}{\rm argmax}\ \pnorm{\vec{y} - \vec{x}}{2}
 \]
 Therefore, as we obtain a guess that is outside $\mathcal{X}$, we project that guess back into $\mathcal{X}$ to satisfy the constraint. \\
 In other words, upon the usual guess rule computation, we would also add the computational cost of projections onto each iterative step of the original gradient descent algorithm.

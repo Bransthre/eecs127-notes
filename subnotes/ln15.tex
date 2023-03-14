@@ -79,12 +79,12 @@ such that the expressions of $\P(Y = y_i)$ is coherent with our algebraic works 
 
 Finally, applying maximum likelihood, we solve:
 \[
-    (\vec{w}^*, \beta^*) = {argmax}_{\vec{w}, \beta} \prod_{i = 1}^n \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}
+    (\vec{w}^*, \beta^*) = \underset{\vec{w}, \beta}{\rm argmax} \prod_{i = 1}^n \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}
 \]
 to build the parameters of logistic regression classifier. \\
 Now, performing a monotone transformation with $\Phi(x) = \log(x)$ will grant us a convex objective function to optimize for:
 \[
-    (\vec{w}^*, \beta^*) = {argmax}_{\vec{w}, \beta} \log (\prod_{i = 1}^n \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))})
+    (\vec{w}^*, \beta^*) = \underset{\vec{w}, \beta}{\rm argmax} \log (\prod_{i = 1}^n \frac{ \exp (y_i (\vec{w}^T \vec{x}_i + \beta))}{1 + \exp (y_i (\vec{w}^T \vec{x}_i + \beta))})
 \]
 Namely, while monotone transformations may change the convexity of a function, it will still provide an equivalent optimization problem.
 
