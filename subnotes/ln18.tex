@@ -1,0 +1,138 @@
+\chapter{Strong Duality and Optimality Conditions}
+
+\section{Strong Duality}
+We may observe a duality gap of some optimization problem as $p^* - d^*$; then, when is this duality gap $0$, such that we achieve strong duality?
+The cndition of strong duality is phrased as follows:
+\begin{ln-define}{Slater's Condition}{}
+    Assume that the objective function $f_0 (x)$ is convex, constraints $f_i(x)$ are convex, and $h_i(x)$ are affine. \\
+    Then, suppose
+    \[
+        (\exists \text{ a \textit{feasible} }\vec{x}_0 \in ReInt(D) \land \forall i \in \{1, \dots, m\} (f({\vec{x_0}}) < 0)) \implies (p^* = d^*)
+    \]
+    where $ReInt(D)$ stands for the ``relative interior'' of the domain of $f$. \\
+    Here, \textit{feasible} can also be phrased as fitting another statement existing in the constraint, say $A \vec{x}^* = \vec{b}$; in other words, being in the \textit{feasible} region of an optimization.
+\end{ln-define}
+We can further refine the above condition:
+\begin{ln-define}{Refined Slater's Condition}{}
+    Let us have an optimization problem:
+    \[
+        p^* = \min_{
+            \substack{
+                \forall i \in \{1, \dots, k\}, f_i(x) \leq 0 \text{ and are affine} \\
+                \forall i \in \{k + 1, \dots, m\}, f_l(x) \leq 0 \text{ and are non-affine} \\
+                \forall j \in \{1, \dots, n\}, h_j(x) = 0 \text{ and are affine}
+            }
+        } f_0 (x)
+    \]
+    Then, if there exists some $\vec{x}_0$ in the relative interior of domain of $f$ and also within the feasible region of optimization such that $\forall l, f_l (\vec{x}) < 0$, we may determine that strong duality holds.
+\end{ln-define}
+
+\section{Optimality Conditions}
+A certificate helps to pose a upperbound to the difference between the primal and dual feasible point at a current setting $(point, parameter)$.
+\begin{ln-define}{Certificate}{}
+    Suppose we have a dual feasible point $(\lambda, \nu)$ and primal feasible point $\hat{x}$, then we may suppose that:
+    \begin{align*}
+        g (\lambda, \nu) \leq d^* \leq p^* \leq f(\hat{x}) \\
+        f(\hat{x}) - p \leq f(\hat{x}) - g(\lambda, \nu) \leq \epsilon
+    \end{align*}
+    Then, we obtain the following conclusion:
+    \[
+        p^* \in [g(\lambda, \nu), f_0 (\hat{x})]
+    \]
+    and similarly for $d^*$ upon strong duality.
+\end{ln-define}
+We, in convex optimization, deal with errors between the primal and dual optimum of some optimization problem. \\
+This requires us to bound the error, and implies that our answers might not be the optimal solution. In other words, its optimality is not guaranteed. \\
+So how do we find optimality in a solution?
+
+We may attempt to find a defining condition for optimality to occur, where the primal and dual optimal solutions are the same (in the case we simplify a constrained primal optimization problem into an unconstrainted dual optimizartion problem). \\
+Suppose our primal optimal point is $\vec{x}^*$ and dual optimal point is $\vec{\lambda}^*, \vec{\nu}^*$, then:
+\begin{align*}
+    d^* &= \min_{\vec{x}} f_0 (\vec{x}) + \sum \lambda_i^* f_i (\vec{x}) + \sum \nu_j^* h_j (\vec{x}) \\
+    &\leq f_0 (\vec{x}^*) + \sum \lambda_i^* f_i (\vec{x}^*) + \sum \nu_j^* h_j (\vec{x}^*) \\
+    &\leq \min_{\vec{x}} f_0 (\vec{x}) = p^*
+\end{align*}
+If the second line of inequality holds, then we observe $\vec{x}^*$ as the minimizer of $L$.
+\[
+    \nabla_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) = \vec{0}
+\]
+Furthermore, suppose the third line of inequality that $\sum_i \lambda_i^* f_i(\vec{x}) = 0$.
+Since this is a sum of nonpositive values, if strong duality holds such that $p^* = d^*$, the following condition called \textbf{complementary slackness} us be satisfied:
+\[
+    \forall i \in \{1, \dots, n\} \lambda_i^* f_i(\vec{x}) = 0
+\]
+Complementary slackness can be utilized in the case where strong duality holds, and the constraints are differentiable; therefore, this technique is also suited for non-convex problem.
+
+Now, we further extend upon these arguments to form the KKT conditions:
+\begin{ln-define}{KKT Condition}{}
+    KKT (Karush Kuhn Tucker) Condition is a series of conditions where, assuming strong duality holding, we may observe the following statements being satisfied at an optimal point, along each partition of the conditions: \\
+    \textbf{Stationarity}:
+    \[
+        \forall i \in \{1, \dots, m\}, \nabla f_0(x^*) + \sum \lambda_i^* {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
+    \]
+    \textbf{Primal Feasibility}:
+    \[
+        \begin{cases}
+            \forall i \in \{1, \dots, m\}, &f_i(x^*) \leq 0 \\
+            \forall j \in \{1, \dots, n\}, &h_j(x^*) = 0
+        \end{cases}
+    \]
+    \textbf{Dual Feasibility}:
+    \[
+        \forall i \in \{1, \dots, m\}, \lambda_i^* \geq 0
+    \]
+    \textbf{Complementary Slackness}:
+    \[
+        \forall i \in \{1, \dots, n\}, \lambda_i^* f_i(\vec{x}) = 0
+    \]
+\end{ln-define}
+If the point is optimal, then KKT condition holds; however, the converse is not necessarily true.
+Then, restricting the space of points satisfying KKT is not really a restirction for optimality, but every point that satisfies KKT need not be optimal. \\
+However, if our optimization problem is convex, then KKT conditions are sufficient to indicate optimality such that:
+\begin{quote}
+    If $(\tilde{x}, \tilde{\lambda}, \tilde{\nu})$ satisfies KKT condition, then $\tilde{x}$ is a primal optimum and $(\tilde{\lambda}, \tilde{\nu})$ is a dual optimum.
+\end{quote}
+
+\textbf{Summary.} As we ensure the strong duality of a problem by Slater's Condition, we then check for KKT condition to restrict ourselves onto a subset with possibly optimal points; and, in convex optimization problems, KKT conditions guarantee the optimality of its satisfying points.
+
+\section{Linear Program}
+\begin{ln-define}{Linear Program}{}
+    A linear program is an optimization in the form of:
+    \[
+        p^* = \min_{
+            \substack{
+                \forall i \in \{1, \dots, m\}, \vec{a}_i^T \vec{x} \leq b_i \\
+                \forall j \in \{1, \dots, n\}, \vec{u}_j^T \vec{x} = v_j
+            }
+        } (\vec{c}^T \vec{x})
+    \]
+    where its constraints are all affine.
+    Equivalently, we may writea linear program as
+    \[
+        p^* = \min_{
+            \substack{
+                A \vec{x} \leq \vec{b} \\
+                U \vec{x} = \vec{v}
+            }
+        } (\vec{c}^T \vec{x})
+    \]
+\end{ln-define}
+Then, the Lagrangian of a linear program can be derived as:
+\begin{align*}
+    L(\vec{x}, \vec{\lambda}, \vec{\nu}) &= \vec{c}^T \vec{x} + \sum_i \lambda_i (A \vec{x} - \vec{b}) + \sum_i \nu_j (U \vec{x} - \vec{v}) \\
+    g(\vec{\lambda}, \vec{\nu}) &= \min_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
+\end{align*}
+Then, at some optimal point $\vec{x}^*$, we observe that
+\[
+    \nabla_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) = c + A^T \lambda + U^T \nu = 0
+\]
+Therefore, to derive for the optimal solution, we may find an equivalent optimization problem to work on:
+\[
+    \max_{
+        \substack{
+            \forall i \in \{1, \dots, m\}, \lambda \geq 0 \\
+            c + A^T \lambda + U^T \nu = 0
+        }
+    } -(b^T \vec{\lambda} + \vec{\nu}^T \vec{v})
+\]
+Thus, the dual of a linear program can also be phrased as a linear program.
