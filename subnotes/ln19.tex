@@ -1,0 +1,136 @@
+\chapter{Duality and Shadow Prices}
+
+\section{A Review of KKT Condition}
+Suppose the following necessary conditions apply:
+\begin{bindenum}
+    \item Strong duality holds
+    \item The objective function and constraint functions are differentiable
+\end{bindenum}
+And suppose that $\vec{x}^*$ is primal optimal, and $(\vec{\lambda}^*, \vec{\nu}^*)$ is dual optimal. \\
+Then, their optimality implies the following ``KKT Conditions'':
+\begin{ln-define}{KKT Condition}{}
+    KKT (Karush Kuhn Tucker) Condition is a series of conditions where, assuming strong duality holding, we may observe the following statements being satisfied at an optimal point, along each partition of the conditions: \\
+    \textbf{Stationarity (alternatively, First Order Condition)}:
+    \[
+        \forall i \in \{1, \dots, m\}, \nabla f_0(x^*) + \sum \lambda_i^* \nabla {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
+    \]
+    \textbf{Primal Feasibility}:
+    \[
+        \begin{cases}
+            \forall i \in \{1, \dots, m\}, &f_i(x^*) \leq 0 \\
+            \forall j \in \{1, \dots, n\}, &h_j(x^*) = 0
+        \end{cases}
+    \]
+    \textbf{Dual Feasibility}:
+    \[
+        \forall i \in \{1, \dots, m\}, \lambda_i^* \geq 0
+    \]
+    \textbf{Complementary Slackness}:
+    \[
+        \forall i \in \{1, \dots, m\}, \lambda_i^* f_i(\vec{x}) = 0
+    \]
+\end{ln-define}
+
+Different from KKT Conditions are the sufficient conditions of optimality:
+\begin{ln-define}{Sufficient Condition of Optimality}{}
+    Suppose we have some pair of solutions $(\vec{\tilde{x}}, \vec{\tilde{\lambda}}, \vec{\tilde{\nu}})$, and all functions $f$ are convex, all functions $h$ are affine. \\
+    Then, if all five KKT conditions are satisfied on such solution, then we may conclude that,
+    \[
+        \begin{cases}
+            \vec{\tilde{x}} &\text{ must be primal optimal} \\
+            (\vec{\tilde{\lambda}}, \vec{\tilde{\nu}}) &\text{ must be dual optimal}
+        \end{cases}
+    \]
+\end{ln-define}
+The difference between KKT condition per se and sufficient condition lies on the direction of their implication statements.
+
+\section{Dual of a Linear Program}
+Following from last lecture, we obtained that the dual of a linear program can also be phrased as a linear program:
+\[
+    \begin{cases}
+        \text{Primal: } &p^* = \underset{
+            \substack{
+                A \vec{x} \leq \vec{b} \\
+                U \vec{x} = \vec{v}
+            }
+        }{\min} (\vec{c}^T \vec{x}) \\
+        \text{Dual: } &d^* = \underset{
+            \substack{
+                \forall i \in \{1, \dots, m\}, \lambda_i \geq 0 \\
+                c + A^T \lambda + U^T \nu = 0
+            }
+        }{\max} -(b^T \vec{\lambda} + \vec{\nu}^T \vec{v})
+    \end{cases}
+\]
+
+Now, consider the case where we maximize a linear program instead:
+\[
+    \text{Primal: } p^* = \max_{
+            \substack{
+                A \vec{x} \leq \vec{b} \\
+                U \vec{x} = \vec{v}
+            }
+        } (\vec{c}^T \vec{x})
+\]
+this is a convex optimization problem. \\
+Meanwhile, noticing that for a concave function $f$,
+\[
+    \max f(\vec{x}) = -(\min - f(\vec{x}))
+\]
+we may successfully optimize for a concave maximization problem via converting it into a concave minimization problem. \\
+Following such logic, we may phrase the Lagrangian of linear program maximization as:
+\begin{align*}
+    L(\vec{x}, \vec{\lambda}) &= \vec{c}^T \vec{x} + \vec{\lambda}^T (- (A\vec{x} - \vec{b})) \\
+    g(\vec{\lambda}) &= \max_{\vec{x}} L(\vec{x}, \vec{\lambda})
+\end{align*}
+such that, if $A \vec{x} > \vec{b}$, then the Lagrangian's value decreases and cannot reach the maximum of objctive function.
+Therefore, we may perform the following primal-dual translation:
+\[
+    \begin{cases}
+        \text{Primal: } &p^* = \underset{
+            \substack{
+                A \vec{x} \leq \vec{b}
+            }
+        }{\max} (\vec{c}^T \vec{x}) \\
+        \text{Dual: } &d^* = \underset{
+            \substack{
+                \forall i \in \{1, \dots, m\}, \lambda_i \geq 0 \\
+                c - A^T \lambda = 0
+            }
+        }{\min} (b^T \vec{\lambda})
+    \end{cases}
+\]
+
+\section{Shadow Prices}
+Suppose that we currently consider the following optimization problem:
+\begin{bindenum}
+    \item We have $200$ units of merlot grapes, where it earns $\lambda_1$ currency unit per grape unit.
+    \item We have $300$ units of shiraz grapes, where it earns $\lambda_2$ currency unit per grape unit.
+    \item One red blend ($q_1$) costs 4 units of merlot and 1 unit of shiraz, while earning $20$ currency units.
+    \item One blue blend ($q_2$) costs 2 units of merlot and 3 unit of shiraz, while earning $15$ currency units.
+\end{bindenum}
+We may phrase the business on wine mathematically as:
+\[
+    p^* = \max_{
+        \substack{
+            4q_1 + 2q_2 \leq 200 \\
+            q_1 + 3q_2 \leq 300
+        }
+    } 20 q_1 + 15 q_2
+\]
+However, we may also phrase the business on grapes (instead of selling wine) as:
+\begin{align*}
+    \max_{q_1, q_2}\ &20q_1 + 15q_2 + \lambda_1 (200 - 4q_1 - 2q_2) + \lambda_2 (300 - q_1 - 3q_2) \\
+    &= \max_{q_1, q_2}\ (20 - 4\lambda_1 - \lambda_2) q_1 + (15 - 2 \lambda_1 - 3 \lambda_2) q_2 + 200 \lambda_1 + 300 \lambda_2
+\end{align*}
+Note that, suppose both coefficients $(20 - 4\lambda_1 - \lambda_2)$ and $(15 - 2 \lambda_1 - 3 \lambda_2)$ are $0$, then the values of $q_1$ and $q_2$ poses no significance as their coefficient is zero. \\
+This leads to the minimization problem:
+\[
+    \min_{
+        \substack{
+            20 - 4\lambda_1 - \lambda_2 = 0 \\
+            15 - 2 \lambda_1 - 3 \lambda_2 = 0
+        }
+    } 200 \lambda_1 + 300 \lambda_2
+\]
+which is exactly the dual of what optimization problem suggests $p^*$.

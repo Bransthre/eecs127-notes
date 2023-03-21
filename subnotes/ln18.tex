@@ -68,7 +68,7 @@ Now, we further extend upon these arguments to form the KKT conditions:
     KKT (Karush Kuhn Tucker) Condition is a series of conditions where, assuming strong duality holding, we may observe the following statements being satisfied at an optimal point, along each partition of the conditions: \\
     \textbf{Stationarity}:
     \[
-        \forall i \in \{1, \dots, m\}, \nabla f_0(x^*) + \sum \lambda_i^* {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
+        \forall i \in \{1, \dots, m\}, \nabla f_0(x^*) + \sum \lambda_i^* \nabla {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
     \]
     \textbf{Primal Feasibility}:
     \[
@@ -83,7 +83,7 @@ Now, we further extend upon these arguments to form the KKT conditions:
     \]
     \textbf{Complementary Slackness}:
     \[
-        \forall i \in \{1, \dots, n\}, \lambda_i^* f_i(\vec{x}) = 0
+        \forall i \in \{1, \dots, m\}, \lambda_i^* f_i(\vec{x}) = 0
     \]
 \end{ln-define}
 If the point is optimal, then KKT condition holds; however, the converse is not necessarily true.
@@ -130,7 +130,7 @@ Therefore, to derive for the optimal solution, we may find an equivalent optimiz
 \[
     \max_{
         \substack{
-            \forall i \in \{1, \dots, m\}, \lambda \geq 0 \\
+            \forall i \in \{1, \dots, m\}, \lambda_i \geq 0 \\
             c + A^T \lambda + U^T \nu = 0
         }
     } -(b^T \vec{\lambda} + \vec{\nu}^T \vec{v})
