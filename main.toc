@@ -98,3 +98,7 @@
 \contentsline {section}{\numberline {19.1}A Review of KKT Condition}{75}{section.19.1}%
 \contentsline {section}{\numberline {19.2}Dual of a Linear Program}{76}{section.19.2}%
 \contentsline {section}{\numberline {19.3}Shadow Prices}{76}{section.19.3}%
+\contentsline {chapter}{\numberline {20}Linear Programs}{78}{chapter.20}%
+\contentsline {section}{\numberline {20.1}Mathematically Expressing Linear Programs}{78}{section.20.1}%
+\contentsline {subsection}{\numberline {20.1.1}Translating General Forms into Standard Forms}{78}{subsection.20.1.1}%
+\contentsline {section}{\numberline {20.2}Interior Point}{80}{section.20.2}%
