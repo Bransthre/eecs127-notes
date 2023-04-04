@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  23 MAR 2023 10:59
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  4 APR 2023 10:59
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1280,17 +1280,24 @@ Chapter 19.
 Chapter 20.
 [78
 
-] [79] [80]) [81] (./main.aux)
+] [79] [80]) [81] (./subnotes/ln21.tex
+Chapter 21.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [82
+
+]) [83] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 0F3194442D37D2FEB1DF7B1FE57C8F61;12960.
+(rerunfilecheck)             Checksum: E2BA4754F1ACF8AD4D4FA449271819B7;13436.
  ) 
 Here is how much of TeX's memory you used:
- 63991 strings out of 475882
- 1616149 string characters out of 5806027
- 2248155 words of memory out of 5000000
- 84059 multiletter control sequences out of 15000+600000
+ 64001 strings out of 475882
+ 1616315 string characters out of 5806027
+ 2248674 words of memory out of 5000000
+ 84066 multiletter control sequences out of 15000+600000
  508330 words of font info for 87 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,20n,145p,852b,2082s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (81 pages).
+Output written on main.pdf (83 pages).

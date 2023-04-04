@@ -1,0 +1,97 @@
+\chapter{Quadratic Program}
+
+\section{Linear Programs, continued}
+\begin{ln-theorem}{Existence of Solution in Linear Program}{}
+    \textbf{Theorem.}
+    Consider some linear program:
+    \[
+        \min_{\vec{x} \in \mathcal{P}} \vec{c}^T \vec{x}
+    \]
+    Assume $\mathcal{P}$ has at least one extreme point, and an optimal solution exists and is finite.
+    Then, there exists an optimal solution that is an extreme point of $\mathcal{P}$.
+    \tcblower
+    \textbf{Proof.}
+    Because $\mathcal{P}$ has at least one extreme point, it does not contain a line. \\
+    Then, suppose that $v^*$ is an optimal solution of the addressed linear program, where the solution exists by assumption of theorem.
+    We may phrase all possible points presenting this optimal solution to be:
+    \[
+        Q = \{\vec{x} | \vec{x} \in \mathcal{P}, \vec{c}^T \vec{x} = \vec{v}^*\}
+    \]
+    which is a polyhedron and a subset of $\mathcal{P}$. Consequently, $Q$ cannot contain a line, and must contain an extreme point.
+    
+    Suppose $\vec{x}^*$ is an extreme point of $Q$. \\
+    Now, suppose for the sake of contradiction that $\vec{x}^*$ is not an extreme point of $\mathcal{P}$, such that:
+    \[
+        \exists \vec{y}, \vec{z} \in (\mathcal{P} - \{\vec{x}^*\}), \theta \in (0, 1), \big( \vec{x}^* = \theta \vec{y} + (1 - \theta) \vec{z} \big)
+    \]
+    Therefore, 
+    \begin{align*}
+        \vec{c}^T \vec{x}^* &= v^* \\
+        \vec{c}^T [\theta \vec{y} + (1 - \theta) \vec{z}] &= v^* \\
+        \vec{c}^T \vec{x}^*
+        &= \vec{c}^T [\theta \vec{y} + (1 - \theta) \vec{z}] \\
+        &\geq \theta \vec{c}^T \vec{y} + (1 - \theta) \vec{c}^T \vec{z} = v^*
+    \end{align*}
+    Therefore, for the equality to be satisfied, it must be that
+    \[
+        \vec{y} = \vec{z} = \vec{x}^*
+    \]
+    which breaks the premise that $\vec{x}^*$ is an interior point (that $\vec{y} \neq \vec{x}^*$ and so for $\vec{z}$). \\
+    Thus, by the above constraint, $\vec{x}^*$ is not an interior, but an extreme point of $\mathcal{P}$.
+\end{ln-theorem}
+
+\section{Quadratic Programs}
+\begin{ln-define}{Quadratic Program}{}
+    A quadratic program is an optimization problem with a quadratic objective function and linear constraints.
+    \tcblower
+    QPs (quadratic programs) are genreally phrased as:
+    \[
+        \min_{
+            \substack{
+                A \vec{x} \leq \vec{b} \\
+                F \vec{x} = \vec{d}
+            }
+        } \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c}^T \vec{x}
+    \]
+    where $H$ need be positive-semidefinite and symmetric to guarantee convexity.
+\end{ln-define}
+
+\subsection{Solving an Unconstrained QP}
+Consider the quadratic program:
+\[
+    p^* = \min_{\vec{x} \in \R^n} \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c} ^T \vec{x} + d
+\]
+\textbf{Case 1.} Suppose one case where,
+\[
+    H \succcurlyeq 0, \vec{c} \in \mathcal{R}(H)
+\]
+\begin{quote}
+    Then, let $H \vec{x}_0 = -\vec{c}$, and keep in mind that $H$ is summetric.
+    \begin{align*}
+        f(\vec{x})
+        &= \frac{1}{2} {(\vec{x} - \vec{x}_0)}^T H (\vec{x} - \vec{x}_0) + \alpha \\
+        &= \frac{1}{2} \vec{x}^T H \vec{x} + \frac{1}{2} \vec{x}_0^T H \vec{x}_0 - \vec{x}_0^T H \vec{x} + \alpha
+    \end{align*}
+    Then, we may figure that the minimizing argument of this objective function is $\vec{x}_0$ and $p^* = \alpha$. \\
+    Then, suppose $H$ is invertible, we find that $\vec{x}_0 = - H^{-1} \vec{c}$
+\end{quote}
+\textbf{Case 2.} Suppose one other case where,
+\[
+    H \succcurlyeq 0, \vec{c} \not\in \mathcal{R}(H)
+\]
+\begin{quote}
+    In such case, we may phrase that $\vec{c} = -H \vec{x_0} + \vec{r}$, where $\vec{r} \in {\mathcal{R}(H)}^{\perp} = N(H^T) = N(H)$ by the Fundamental Theorem of Linear Algebra. \\
+    Then,
+    \begin{align*}
+        f(k \vec{r})
+        &= \frac{1}{2} {(k \vec{r})}^T H (k \vec{r}) + \vec{c}^T (k \vec{r}) + d \\
+        &= 0 + {(-H \vec{x}_0 + \vec{r}}^T k \vec{t} + d \\
+        &= k \pnorm[2]{\vec{r}}{2} - k \vec{x_0}^T H^T \vec{r} + d \\
+        &= k \pnorm[2]{\vec{r}}{2} + d \\
+        \lim_{k \rightarrow -\infty} f(k \vec{r}) &= -\infty
+    \end{align*}
+\end{quote}
+\textbf{Case 3.} Suppose one last case where, there exists a negative eigenvalue in $H$.
+\begin{quote}
+    Then, as the objective function is concave, its minimum is $-\infty$.
+\end{quote}
