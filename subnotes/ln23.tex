@@ -1,0 +1,150 @@
+\chapter{LASSO}
+
+\section{L1-norm Optimization}
+We have performed regularization using L2 norm, and arrived at Ridge Regression.
+What if, instead, we use the L1 norm to regularize a cost function, where the problem is phrased as follows:
+\[
+    \min_{
+        \substack{
+            \vec{x} \\
+            A \vec{x} = b
+        }
+    } \pnorm{\vec{x}}{1}
+\]
+Recognizing that essentially, $|x| = x \times sgn(x)$, we may transform the above optimization function into the following linear program:
+\[
+    \min_{
+        \substack{
+            \vec{x} \\
+            A \vec{x} = b
+        }
+    } \sum_{i = 1}^n sgn(x_i) \times x_i
+\]
+And we may introduce variables:
+\[
+    |x_i| = x_i^+ + x_i^- \text{, where:}
+    \begin{cases}
+        x_i^+ &= x_i \text{ if } x_i > 0 \text{; otherwise it is } 0 \\
+        x_i^- &= x_i \text{ if } x_i < 0 \text{; otherwise it is } 0
+    \end{cases}
+\]
+to rewrite the above problem as
+\[
+    \min_{
+        \substack{
+            \vec{x} \\
+            A (\vec{x}^+ - \vec{x}^-) = b
+        }
+    } \sum_{i = 1}^n x_i^+ + \sum_{i = 1}^n x_i^-
+\]
+This problem now introduces $\vec{x}^+$ and $\vec{x}^-$ without constraining them, but we understand that for their sum to capture the L1-norm, it must be that the solution $\vec{x}^{+*}, \vec{x}^{-*}$ cannot be at the same time nonzero. \\
+Here, we may realize that if $x_i^+ > 0$ and $x_i^- > 0$, then, for continuing to conform the constraint, we may present a new solution ${x_i^+}', {x_i^-}'$ such that,
+\begin{align*}
+    \text{For some } \epsilon \in \R,
+    &\begin{cases}
+        {x_i^+}' = x_i^+ - \epsilon \\
+        {x_i^-}' = x_i^- - \epsilon \\
+    \end{cases} \\
+    {x_i^+}' - {x_i^-}' &= {x_i^+} - {x_i^-} \\
+    A({x_i^+}' - {x_i^-}') &= A({x_i^+} - {x_i^-}) = b_i
+\end{align*}
+Furthermore, while this new solution satisfies the constraint, the objective function value decreases by $2 \epsilon$. \\
+Therefore, we may always create a more optimal solution than a supposed optimum at where both of $x_i^+, x_i^-$ are nonzero. \\
+Consequently, the optimum exists where for all $i$, either $x_i^+$ or $x_i^-$ is $0$; there must be one non-zero and one zero component.
+
+\subsection{L1 Least Squares}
+Now, let's let the least squares problem participate in the discussion:
+\[
+    \min_{\vec{x}} \pnorm{A \vec{x} - \vec{b}}{1}
+\]
+where, we may rephrase this problem as:
+\[
+    \min_{
+        \substack{
+            \vec{x}, \vec{e} \\
+            A\vec{x} - \vec{b} = \vec{e}
+        }
+    } \pnorm{\vec{e}}{1}
+\]
+to solve it in a aforementioned way.
+
+Alternatively, let us also consider the following optimization problem that is related to the above:
+\[
+    \min_{\vec{x}} \pnorm{\vec{x} - \vec{b}}{1}
+\]
+where each element of $\vec{x}$ are equal.
+To minimize such function, we may analyze the gradient of the above objective function with respect to $\vec{x}$:
+\[
+    \pdv{\pnorm{\vec{x} - \vec{b}}{1}}{x_i} =
+    \begin{cases}
+        1 &, x_i \geq b_i \\
+        -1 &, x_i < b_i \\
+        DNE &, x_i = b_i
+    \end{cases}
+\]
+Additionally, let us consider the following notion:
+\begin{ln-define}{Critical Point}{}
+    Critical point of a function is a point where the derivative of that function is either $0$, undefined, or at the boundary of its function.
+\end{ln-define}
+The derivative of the objective function, $\sum_{i = 1}^n |x - b_i|$, is thus equal to $0$ if we let $x$ become the median of $\vec{b}$. \\
+The implication of this is that median is a more robust solution than the mean, because it is less easily influenced by outliers of a dataset (particularly, outliers influence the mean as they participate in its value, but outliers rarely participate in the detemrination of a median).
+
+An alternative persepctive of the above problem follows. Suppose that $\vec{b} \in n$, where the index $m$ signifies the location of median of $\vec{b}$. \\
+Then, as we phrase the optimization problem above as:
+\[
+    \min_{x} |x - b_m| + \sum_{\substack{i = 1 \\ i \neq m}}^n |x - b_i|
+\]
+we find that the latter term remains invariant in its derivative when $x \in (b_{m - 1}, b_{m + 1})$. \\
+Therefore, to minimize the entire objective function, we may focus on minimizing the former term of the objective function; consequently, we arrive once again at the solution that $x = b_m$.
+
+\section{LASSO (L1) Regularization}
+Now, we attempt to solve the following regularized least squares version, known as LASSO:
+\[
+    \min_{\vec{x}} \pnorm[2]{A \vec{x} - \vec{b}}{2} + \lambda \pnorm{\vec{x}}{1}
+\]
+where we regularize least squares solution with the L1-norm of it. \\
+Alternatively, we phrase the problem as:
+\[
+    \min_{
+        \substack{
+            \vec{x} \\
+            \pnorm{\vec{x}}{1} \leq t
+        }
+    } \pnorm[2]{A \vec{x} - \vec{b}}{2}
+\]
+We would see that the second constraint of the above problem, $\pnorm{\vec{x}}{1} \leq t$, form polytopes whose vertices locate on the dimensions of a coordinate system. \\
+Consequent of the polytope's relationship with coordinate dimensions, the result of LASSO usually yield zero-components in its solution $\vec{x}^*$.
+In other words, LASSO encourages sparsity (where the solution vector contains many zero).
+In the machine learning context, this is by itself a selection on some subset of feature.
+
+\subsection{A Demonstration of LASSO in Scalar Case}
+Let us consider the scalar version of LASSO problem:
+\[
+    \min_x \frac{1}{2} \sum_{i = 1}^n {(a_i x - b_i)}^2 + \lambda |x|
+\]
+Then, the derivative of such problem can be computed as:
+\[
+    \begin{cases}
+        \sum_i a_i(a_i x - b_i) + \lambda &, \text{if} x > 0 \\
+        \sum_i a_i(a_i x - b_i) - \lambda &, \text{if} x < 0 \\
+        DNE &, \text{if} x = 0
+    \end{cases}
+\]
+Then, we find minimizing argument $x^*$ where,
+\[
+    x^* =
+    \begin{cases}
+        \frac{\vec{a} \cdot \vec{b} - \lambda}{\pnorm[2]{\vec{a}}{2}} &, \text{if} x > 0 \\
+        \frac{\vec{a} \cdot \vec{b} + \lambda}{\pnorm[2]{\vec{a}}{2}} &, \text{if} x < 0 \\
+        DNE &, \text{if} x = 0
+    \end{cases}
+\]
+and in other words,
+\[
+    x^*
+    \begin{cases}
+        > 0 &, \text{if} \vec{a} \cdot \vec{b} > \lambda \\
+        < 0 &, \text{if} \vec{a} \cdot \vec{b} < -\lambda
+    \end{cases}
+\]
+Plotting where the solution exists let us see that the solution $x^*$ is $0$ when $\vec{a} \cdot \vec{b} \in (-\lambda, \lambda)$.

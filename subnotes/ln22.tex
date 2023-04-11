@@ -178,15 +178,41 @@ You can't imagine how long I've waited to drop this line, but,
 \end{quote}
 
 \subsection{Facility Location Problem}
-Suppose we have a few asylums spread across the country (eg., University of California, Berkeley; University of Currying, Brocolli; University of CB), how may we allocate resources across these centers to minimize the amount of commute in distributing resources? \\
+Suppose we have a few asylums spread across the country (eg., University of California, Berkeley; University of Currying, Brocolli; University of Critish Bolumbia...), how may we allocate resources across these centers to minimize the amount of commute in distributing resources? \\
 We may formulate this problem as:
 \[
-    \min_{\vec{x}} \frac{1}{m} \sum_{i = 1}^m \pnorm{\vec{x} - \vec{y}_i}{2}
+    \min_{\vec{x}} \frac{1}{m} \sum_{i = 1}^m \pnorm{A_i \vec{x} - b_i}{2}
 \]
 and the argument along which we may debate this is a SOCP is that we may first state,
 \[
-    z_i = \pnorm{\vec{x} - \vec{y}_i}{2}
+    z_i = \pnorm{A_i \vec{x} - b_i}{2}
 \]
-such that we now have a linear objective function. \\
+such that we now have a linear objective function, and the problem is now rephrased as:
+\[
+    \min_{
+        \substack{
+            x \\
+            \pnorm{A_i \vec{x} - b_i}{2} \leq z_i
+        }
+    } \sum_{i = 1}^n z_i
+\]
 Furthermore, we have thus developed a constraint in the form of $\pnorm{A_i \vec{x} + b_i}{2} = \vec{c}_i^T \vec{x} + d_i$.
 We may then relax the constraint to obtain inequality constraints instead, with optimum preserved.
+
+Furthermore, we may perform customizations to maximize specific utilities, where, for example, the asylum with least resources available (my university in this case?) would need the better treatment from this problem. \\
+Through this expression of ``min-max utility'', upon which we rephrase the problem as:
+\[
+    \min_x \max_i \pnorm{\vec{x}_i - \vec{y}_i}{2}
+\]
+we may then rephrase this as a SOCP problem. \\
+Once again, the context of the problem is to minimize $\vec{x}$ on the maximum possible distance (the worst-off asylum's situation of receiving no funding for education). \\
+Now, suppose that $\max_i \pnorm{\vec{x}_i - \vec{y}_i}{2} = R$. Then, we may simplify the problem into
+\begin{align*}
+    \min_{
+        \substack{
+            x, R \\
+            \forall i, \pnorm{A_i \vec{x} - b_i}{2} \leq R
+        }
+    } R
+\end{align*}
+which is a SOCP problem.

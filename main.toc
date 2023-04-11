@@ -113,3 +113,8 @@
 \contentsline {subsection}{\numberline {22.1.3}Another Example of Relaxing an Optimization Problem}{85}{subsection.22.1.3}%
 \contentsline {section}{\numberline {22.2}Second Order Cone Programs (SOCP)}{86}{section.22.2}%
 \contentsline {subsection}{\numberline {22.2.1}Facility Location Problem}{87}{subsection.22.2.1}%
+\contentsline {chapter}{\numberline {23}LASSO}{88}{chapter.23}%
+\contentsline {section}{\numberline {23.1}L1-norm Optimization}{88}{section.23.1}%
+\contentsline {subsection}{\numberline {23.1.1}L1 Least Squares}{89}{subsection.23.1.1}%
+\contentsline {section}{\numberline {23.2}LASSO (L1) Regularization}{89}{section.23.2}%
+\contentsline {subsection}{\numberline {23.2.1}A Demonstration of LASSO in Scalar Case}{90}{subsection.23.2.1}%
