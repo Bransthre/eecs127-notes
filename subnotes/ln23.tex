@@ -125,26 +125,26 @@ Let us consider the scalar version of LASSO problem:
 Then, the derivative of such problem can be computed as:
 \[
     \begin{cases}
-        \sum_i a_i(a_i x - b_i) + \lambda &, \text{if} x > 0 \\
-        \sum_i a_i(a_i x - b_i) - \lambda &, \text{if} x < 0 \\
-        DNE &, \text{if} x = 0
+        \sum_i a_i(a_i x - b_i) + \lambda &, \text{if } x > 0 \\
+        \sum_i a_i(a_i x - b_i) - \lambda &, \text{if } x < 0 \\
+        DNE &, \text{if } x = 0
     \end{cases}
 \]
 Then, we find minimizing argument $x^*$ where,
 \[
     x^* =
     \begin{cases}
-        \frac{\vec{a} \cdot \vec{b} - \lambda}{\pnorm[2]{\vec{a}}{2}} &, \text{if} x > 0 \\
-        \frac{\vec{a} \cdot \vec{b} + \lambda}{\pnorm[2]{\vec{a}}{2}} &, \text{if} x < 0 \\
-        DNE &, \text{if} x = 0
+        \frac{\vec{a} \cdot \vec{b} - \lambda}{\pnorm[2]{\vec{a}}{2}} &, \text{if } x > 0 \\
+        \frac{\vec{a} \cdot \vec{b} + \lambda}{\pnorm[2]{\vec{a}}{2}} &, \text{if } x < 0 \\
+        DNE &, \text{if } x = 0
     \end{cases}
 \]
 and in other words,
 \[
     x^*
     \begin{cases}
-        > 0 &, \text{if} \vec{a} \cdot \vec{b} > \lambda \\
-        < 0 &, \text{if} \vec{a} \cdot \vec{b} < -\lambda
+        > 0 &, \text{if } \vec{a} \cdot \vec{b} > \lambda \\
+        < 0 &, \text{if } \vec{a} \cdot \vec{b} < -\lambda
     \end{cases}
 \]
 Plotting where the solution exists let us see that the solution $x^*$ is $0$ when $\vec{a} \cdot \vec{b} \in (-\lambda, \lambda)$.

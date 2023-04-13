@@ -1,0 +1,114 @@
+\chapter{Descent Methods}
+
+\section{Coordinate Descent}
+Coordinate Descent is another descent method that comes in the form of some simple algorithm. \\
+This algorithm requires a convex objective function, and the idea of coordinate descent is to minimize an objective function one coordinate at a time.
+
+The procedure of this algorithm follows:
+\begin{enumerate}
+    \item {
+        Initiate a guess \[\vec{x}^{(0)} = \begin{bmatrix} x_1^{(0)} \\ \vdots \\ x_n^{(0)} \end{bmatrix}\]
+    }
+    \item {
+        The update rule: \[
+            x_i^{(k)} = \underset{x_i}{\rm argmin} f(x_1^{(k)}, \dots, x_i, x_{i + 1}^{(k - 1)}, \dots, x_n^{(k - 1)})
+        \]
+        iterates for $i$ from $1$ to $n$. \\
+        \begin{quote}
+            For example,
+            \begin{align*}
+                x_1^{(k)} &= \underset{x_1}{\rm argmin} f(x_1, x_{2}^{(k - 1)}, \dots, x_n^{(k - 1)}) \\
+                x_n^{(k)} &= \underset{x_n}{\rm argmin} f(x_1^{(k)}, \dots, x_{n - 1}^{(k)}, x_n)
+            \end{align*}
+        \end{quote}
+    }
+\end{enumerate}
+This above algorithm holds for differentiable, convex scalar-valued functions. \\
+Mind that we recognize the optimum argument $\vec{x}^*$ such that $f(\vec{x}^*)$ minimizes along all coordinate directions. \\
+Therefore, where we find $\vec{x}^*$, for some objective function $f$, $\nabla f (\vec{x}^*) = \vec{0}$.
+As the algorithm updates along each coordinate axis, we gradually approach such point where the gradient becomes $0$.
+
+\subsection{The Descent of LASSO}
+For some function that is formatted as:
+\[
+    f(\vec{x}) = g(\vec{x}) + \sum_{i = 1}^n h_i (x_i)
+\]
+where $g, h_i$ are convex but $h_i$ is not necessarily differentiable.
+In such case, we call $h_i$ separables, and there is a proof that performing coordinate descent on $f$ would still converge to optimum.
+
+An example of some function along the above format would be Least Squares algorithm with LASSO Regularization applied onto it, where $h_i(x_i) = |x_i|$. \\
+To minimize this function using coordinate descent, we may first attempt to compute the gradient of the objective function to obtain the derivative of it w.r.t. $x_i$:
+\[
+    \nabla \frac{1}{2} \pnorm[2]{A \vec{x} - \vec{b}}{2} = A^T (A \vec{x} - \vec{b})
+\]
+and find that,
+\[
+    \frac{\partial}{\partial x_i} \frac{1}{2} \pnorm[2]{A \vec{x} - \vec{b}}{2} = \vec{A_i}^T (A \vec{x} - \vec{b})
+\]
+where $\vec{A_i}$ denotes the $i^{th}$ column of $A$.
+
+Therefore, for the entire LASSO objective function $f$,
+\[
+    \pdv{f(\vec{x})}{x_i} =
+    \begin{cases}
+        \vec{A_i}^T (A \vec{x} - \vec{b}) + \lambda &, x_i > 0 \\
+        \vec{A_i}^T (A \vec{x} - \vec{b}) - \lambda &, x_i < 0 \\
+        DNE &, \text{otherwise}
+    \end{cases}
+\]
+
+\section{Newton's Method}
+Newton's method is an iterative descent method, such that for the formulation
+\[
+    \min_{\vec{v}} \frac{1}{2} \vec{v}^T H \vec{v} + \vec{c}^T \vec{v}
+\]
+Then if $H$ is positive definite and symmetric, such that $\vec{c} \in \mathcal{R}(H)$, we observe that $\vec{v}^* = H^{-1} \vec{c}$. \\
+Newton's Method is surprisingly prevalent due to the capability of Taylor's Theorem to approximate any function as a quadratic polynomial.
+
+Now, suppose we attempt to optimize some function $f$, where we realize via Taylor's Theorem that,
+\[
+    f(\vec{x} + \vec{v}) = f(\vec{x}) + \pdv{f}{\vec{x}} \vec{v} + \frac{1}{2} \vec{v}^T H_f \vec{v}
+\]
+to find the minimum along the approximation curve (defined by $\vec{v}$ in this Taylor context), 
+\[
+    \underset{\vec{v}}{\rm argmin} f(\vec{x} + \vec{v}) = -{H_f(\vec{x})}^{-1} \nabla f(\vec{x})
+\]
+
+The update rule of Newton's Rule will then be used:
+\[
+    \vec{x}_{k + 1} = \vec{x}_k + \vec{v} = \vec{x}_k - {H_f(\vec{x})}^{-1} \nabla f(\vec{x})
+\]
+where, the learning rate is now decided by the Hessian rather than being a customizable hyperparameter.
+This fact makes Newton's Method a second-order method.
+
+Along our discussion above, here are some conclusions on Newton's Method:
+\begin{bindenum}
+    \item If the Hessian of objective function is positive definite, the convergence of Newton's Method occurs much faster than the convergence of Gradient Descent.
+    \item It is computationally expensive, because it has to computer Hessians and its inverses.
+    \item Prone to accumulating perturbation errors.
+\end{bindenum}
+
+\subsection{Equality Constrained Quadratic Program}
+Provided some quadratic objective function,
+\[
+    \min_{A \vec{x} = \vec{b}} \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c}^T \vec{x} + d
+\]
+We may see that the Lagrangian of such objective function may be written as:
+\[
+    \mathcal{L}(\vec{x}, \vec{\nu}) = \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c}^T \vec{x} + d + \vec{\nu}^T (A \vec{x} - \vec{b})
+\]
+where we may find the KKT conditions:
+\[
+    \begin{cases}
+        A \vec{x}^* = \vec{b} \\
+        H \vec{x}^* + \vec{c} + A^T \vec{\nu}^* = 0
+    \end{cases}
+\]
+Let us summarize the above KKT condition in matrix notation:
+\[
+    \begin{bmatrix} H & A^T \\ A & 0 \end{bmatrix}
+    \begin{bmatrix} \vec{x}^* \\ \vec{\nu}^* \end{bmatrix}
+    = \begin{bmatrix} -c \\ b \end{bmatrix}
+\]
+Then, by casting the above constraints to a Newton's Method, we can enable Newton's Method to solve equality constrained quadratic programs.
+

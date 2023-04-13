@@ -118,3 +118,8 @@
 \contentsline {subsection}{\numberline {23.1.1}L1 Least Squares}{89}{subsection.23.1.1}%
 \contentsline {section}{\numberline {23.2}LASSO (L1) Regularization}{89}{section.23.2}%
 \contentsline {subsection}{\numberline {23.2.1}A Demonstration of LASSO in Scalar Case}{90}{subsection.23.2.1}%
+\contentsline {chapter}{\numberline {24}Descent Methods}{91}{chapter.24}%
+\contentsline {section}{\numberline {24.1}Coordinate Descent}{91}{section.24.1}%
+\contentsline {subsection}{\numberline {24.1.1}The Descent of LASSO}{91}{subsection.24.1.1}%
+\contentsline {section}{\numberline {24.2}Newton's Method}{92}{section.24.2}%
+\contentsline {subsection}{\numberline {24.2.1}Equality Constrained Quadratic Program}{93}{subsection.24.2.1}%
