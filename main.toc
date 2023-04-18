@@ -123,3 +123,6 @@
 \contentsline {subsection}{\numberline {24.1.1}The Descent of LASSO}{91}{subsection.24.1.1}%
 \contentsline {section}{\numberline {24.2}Newton's Method}{92}{section.24.2}%
 \contentsline {subsection}{\numberline {24.2.1}Equality Constrained Quadratic Program}{93}{subsection.24.2.1}%
+\contentsline {chapter}{\numberline {25}Optimization Applications I: LQR (Linear-Quadratic Regulator) Control}{94}{chapter.25}%
+\contentsline {section}{\numberline {25.1}Introduction to Model-Based Control}{94}{section.25.1}%
+\contentsline {section}{\numberline {25.2}LQR Control Via Duality and Certificate}{94}{section.25.2}%

@@ -1,0 +1,92 @@
+\chapter{Optimization Applications I: LQR (Linear-Quadratic Regulator) Control}
+
+\section{Introduction to Model-Based Control}
+Control problems have been approached on some model-based method; for example, we mathematically model the relationship of states and controls as:
+\[
+    \vec{x}_{t + 1} = A \vec{x}_t + B \vec{u}_t
+\]
+where $\vec{x}_t$ represents the state of a system at timestamp $t$.
+
+We would like to assess the cost of an LQR to be:
+\[
+    \sum_{t = 0}^{N - 1} \frac{1}{2} (\vec{x}_t^T Q \vec{x}_t + \vec{u}_t^T R \vec{u}_t) + \frac{1}{2} \vec{x}_N^T Q_F \vec{x}_N
+\]
+where $Q, Q_F, R$ are symmetric and positive-semidefinite.
+Here, the term $\vec{x}_t^T Q \vec{x}_t$ accounts for the penalty of a current state, and $\vec{u}_t^T R \vec{u}_t$ provides a cost on the control terms $u$. \\
+We perform a minimization on this control, where we also pose the following constraints to phrase the minimization problem as:
+\[
+    \min_{
+        \substack{
+            \vec{u}_t \\
+            \forall t = 0, \dots, N - 1, \vec{x}_{t + 1} = A \vec{x}_t + B \vec{u}_t \\
+            \vec{x}_0 = \vec{x}_{\rm init}
+        }
+    } \sum_{t = 0}^{N - 1} \frac{1}{2} (\vec{x}_t^T Q \vec{x}_t + \vec{u}_t^T R \vec{u}_t) + \frac{1}{2} \vec{x}_N^T Q_F \vec{x}_N
+\]
+For one of the methods, we may employ dynamic programming with back propagation of information. This is among one of the standard methods to resolve LQR Control problem. \\
+On a simialr logic, as each control and state at a timestamp is dependent upon some term of a timestamp before it, we can formulate large optimization problem as we write every expression in terms of $\vec{x}_0$ and $\vec{u}$s.
+However, this is computationally expensive. We must find a more elegant method: \textbf{A Duality-Based, Iterative Trick}.
+
+\section{LQR Control Via Duality and Certificate}
+Suppose that we rewrite the Lagrangian of our above objectiev function as:
+\[
+    \mathcal{L}(\vec{x}, \vec{u}, \vec{\nu}) =
+    \sum_{t = 0}^{N - 1} \frac{1}{2} (\vec{x}_t^T Q \vec{x}_t + \vec{u}_t^T R \vec{u}_t) + \frac{1}{2} \vec{x}_N^T Q_F \vec{x}_N + \vec{\nu}_0^T (\vec{x}_{\rm init} - \vec{x}_0) + \sum_{t = 0}^{N - 1} \vec{\nu}_{t + 1}^T (A \vec{x}_t + B \vec{u}_t - \vec{x}_{t + 1})
+\]
+
+The associated KKT Conditions for such problem can be organized as follows. \\
+First of all, let us derive the gradient of our Lagrangian w.r.t. its inputs at some specific timestamp $t$:
+\begin{align*}
+    \nabla_{\vec{u}_t} \mathcal{L} &=
+    \begin{cases}
+        Q \vec{x}_t + A^T \vec{\nu}_{t + 1} - \vec{\nu}_t &, 0 \leq t < N \\
+        Q_F \vec{x}_N - \vec{\nu}_N &, t = N
+    \end{cases} \\
+    \nabla_{\vec{x}_t} \mathcal{L} &= R \vec{u}_t + B^T \vec{\nu}_{t + 1}
+\end{align*}
+Consequently, we acquire that,
+\[
+    \begin{cases}
+        \vec{u}_t &= - R^{-1} B^T \vec{\nu}_{t + 1} \\
+        \text{\rm Adjoint System:}
+        &\begin{cases}
+            \vec{\nu}_t = A^T \vec{\nu}_{t + 1} + Q \vec{x}_t \\
+            \vec{\nu}_N = Q_F \vec{x}_N
+        \end{cases}
+    \end{cases}
+\]
+
+We now make a reasonable guess that there exists some linear relationship between $\vec{x}$ and $\vec{\nu}$.
+\[
+    \vec{\nu}_t = P_t \vec{x}_t, P_N = Q_F
+\]
+Then, using backwards induction, we would like to prove the guess:
+\begin{ln-explain}{Proof of the Ricatti Equation}{}
+    \textbf{Proof:} \\
+    \textbf{Base Case.} We know that $\vec{\nu}_N = Q_F \vec{x}_N$. \\
+    \textbf{Induction Hypothesis.} Suppose that for some timestamp t, $\vec{\nu}_t = P_t \vec{x}_t$. \\
+    \textbf{Inductioon Step.} Then, let us substitute the equations we found above for $\vec{\nu}$ and $\vec{x}$ into the above expression:
+    \begin{align*}
+        \vec{\nu}_t &= P_t \vec{x}_t \\
+        &= P_t (A \vec{x}_{t - 1} + B \vec{u}_{t - 1}) \\
+        &= P_t (A \vec{x}_{t - 1} - B R^{-1} B^T \vec{\nu}_t) \\
+        (I + P_t B R^{-1} B^T) \vec{\nu}_t &= P_t A \vec{x}_{t - 1} \\
+        \vec{\nu}_t &= {(I + P_t B R^{-1} B^T)}^{-1} P_t A \vec{x}_{t - 1} \\
+        A^T \vec{\nu}_t &= A^T {(I + P_t B R^{-1} B^T)}^{-1} P_t A \vec{x}_{t - 1} \\
+        &= \vec{\nu}_{t - 1} - Q \vec{x}_{t - 1} \\
+        \vec{\nu}_{t - 1} &= (A^T {(I + P_t B R^{-1} B^T)}^{-1} P_t A + Q) \vec{x}_{t - 1}
+    \end{align*}
+    \tcblower
+    Consequently, we obtain the Ricatti Equation:
+    \[
+        P_{t - 1} = A^T {(I + P_t B R^{-1} B^T)}^{-1} P_t A + Q
+    \]
+\end{ln-explain}
+Therefore, upon our prior work,
+\begin{align*}
+    \vec{u}_{t - 1}
+    &= R^{-1} B \vec{\nu}_t \\
+    &= R^{-1} B {(I + P_t B R^{-1} B^T)}^{-1} P_t A \vec{x}_{t - 1} \\
+    &= K_{t - 1} \vec{x}_{t - 1} \\
+    K_{t - 1} &= R^{-1} B {(I + P_t B R^{-1} B^T)}^{-1} P_t A
+\end{align*}
