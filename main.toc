@@ -126,3 +126,9 @@
 \contentsline {chapter}{\numberline {25}Optimization Applications I: LQR (Linear-Quadratic Regulator) Control}{94}{chapter.25}%
 \contentsline {section}{\numberline {25.1}Introduction to Model-Based Control}{94}{section.25.1}%
 \contentsline {section}{\numberline {25.2}LQR Control Via Duality and Certificate}{94}{section.25.2}%
+\contentsline {chapter}{\numberline {26}Support Vector Machine}{96}{chapter.26}%
+\contentsline {section}{\numberline {26.1}Introduction to Classifiers}{96}{section.26.1}%
+\contentsline {section}{\numberline {26.2}SVM as an Optimization Problem}{96}{section.26.2}%
+\contentsline {subsection}{\numberline {26.2.1}Hard-Margin SVM}{96}{subsection.26.2.1}%
+\contentsline {subsection}{\numberline {26.2.2}Soft-Margin SVM}{98}{subsection.26.2.2}%
+\contentsline {subsection}{\numberline {26.2.3}Support Vector Identification via Duality}{98}{subsection.26.2.3}%

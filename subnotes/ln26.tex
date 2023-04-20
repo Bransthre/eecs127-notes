@@ -1,0 +1,188 @@
+\chapter{Support Vector Machine}
+
+\section{Introduction to Classifiers}
+In the scheme of classification vectors, we attempt to classify some datapoint $(\vec{x}, y)$ among specific classes, where we attempt to predict the label of this datapoint, $y \in \{1, -1\}$, based on its feature vector, $\vec{x}$.
+Support Vector Machine is a classification algorithm.
+Unlike logistic regression, which offers the probability that a point belonging to a class, SVM is an algorithm that directly provides the prediction of a datapoint based on geometric properties. \\
+This geometric property we attempt to find is ``separating hyperplane'', where we find a hyperplane that can separate each class of points on one side of the hyperplane.
+
+Remember that this hyperplane, which becomes the ``decision boundary'' of our classifier (because it is the boundary upon which prediction is decided) can be written as:
+\[
+    f(\vec{x}) = \vec{w}^T \vec{x} + b = \vec{w}^T (\vec{x} + \vec{x}_0)
+\]
+Therefore, our prediction rule becomes:
+\[
+    y_i = \begin{cases}
+        1 &, f(\vec{x}_i) > 0 \\
+        -1 &, f(\vec{x}_i) < 0
+    \end{cases}
+\]
+Compactly rewriting the above expression, we find that we actually require
+\[
+    y_i f(\vec{x}_i) > 0
+\]
+
+\section{SVM as an Optimization Problem}
+If our dataset can be separated by a hyperplane in such manner, we call our data ``linearly separable''. \\
+However, there can exist many hyperplanes to result in a linear separation of some dataset.
+So which hyperplane is better?
+Per convention of optimization problem, we can come up with a heuristic that rates how good each hyperplane works as a decision boundary.
+
+\subsection{Hard-Margin SVM}
+Conceptually, to permit for noise perturbations in datapoints, we would like our decision boundary to have as much distance from each point as possible.
+Here we define this concept as:
+\begin{ln-define}{Margin}{}
+    \textbf{Margin} is the distance between a hyperplane and the closest datapoint to it.
+\end{ln-define}
+We would like our decision boundary to have the maximum margin. This result is called a \textbf{max margin separator}.
+
+What is the distance from a point to a hyperplane? \\
+Fortunately, we have done a similar analysis in the most recent CSM16A worksheet. Let me shamelessly quote a section of that (which is still written by myself):
+\begin{ln-explain}{Distance from Point to Hyperplane}{}
+    \textbf{Problem Statement.} Provided a point $X$ and a hyperplane $\mathcal{H} = \{\vec{x} \big| \vec{w}^T \vec{x} + b = 0\}$, what is the distance between $X$ and $\mathcal{H}$?
+    \tcblower
+    \textbf{Solution.}    
+    Let $\vec{x}$ represent the point $X$, and $\vec{y}$ be ${proj}_{\mathcal{H}}(\vec{x})$. \\
+    Then, such difference should also be a multiple of $\vec{w}$ as well, which is orthogonal to $\mathcal{H}$, such that:
+    \[
+        (\vec{x} - \vec{y}) = \alpha \vec{w}
+    \]
+    Therefore, the arithmetic follows:
+    \begin{align*}
+        (\vec{x} - \vec{y}) &= \alpha \vec{w} \\
+        (\vec{x} - \vec{y}) \cdot \vec{w} &= \alpha \vec{w} \cdot \vec{w} \\
+        \vec{y} \in \mathcal{H} &\implies \vec{y} \cdot \vec{w} + b = 0 \\
+        \vec{x} \cdot \vec{w} + b &= \alpha \vec{w} \cdot \vec{w} \\
+        \alpha &= \frac{\vec{w}^T \vec{x} + b}{\pnorm[2]{\vec{w}}{2}}
+    \end{align*}
+    Then, the shortest distance between $X$ and $\mathcal{H}$ may be expressed as:
+    \[
+        \pnorm{\vec{x} - \vec{y}}{2} = \alpha \pnorm{\vec{w}}{2} = \frac{\vec{w}^T \vec{x} + b}{\pnorm{\vec{w}}{2}}
+    \]
+\end{ln-explain}
+
+The optimization problem for finding the maximal margin separator would thus be:
+\[
+    \max_{
+        \substack{
+            \vec{w}, b, m \\
+            \forall i, \frac{\vec{w}^T \vec{x}_i + b}{\pnorm{\vec{w}}{2}} \geq m \\
+            \forall i, y_i (\vec{w}^T \vec{x}_i + b) > 0
+        }
+    }
+    m
+\]
+This problem is known as the ``Hard-Margin SVM Problem'', more popularly formulated as:
+\[
+    \max_{
+        \substack{
+            \vec{w}, b, m \\
+            \forall i, \frac{y_i (\vec{w}^T \vec{x}_i + b)}{\pnorm{\vec{w}}{2}} \geq m \\
+            m \geq 0
+        }
+    }
+    m
+\]
+To let the problem have a unique solution, we may normalize $\vec{w}$ by choosing $\pnorm{\vec{w}}{2} = m$. \\
+This causes our problem to be further reduced as we eliminate $m$ and change our maximization problem into an equivalent minimization problem:
+\[
+    \min_{
+        \substack{
+            \vec{w}, b \\
+            \forall i, y_i (\vec{w}^T \vec{x}_i + b) \geq 1
+        }
+    }
+    \frac{1}{2} \pnorm[2]{\vec{w}}{2}
+\]
+This is a Quadratic Program.
+
+\subsection{Soft-Margin SVM}
+In soft-margin SVM, we allow for margin violation, such that the problem is rephrased as:
+\[
+    \min_{
+        \substack{
+            \vec{w}, b \\
+            \forall i, y_i (\vec{w}^T \vec{x}_i + b) \geq 1 - \xi_i \\
+            \forall i, \xi_i \geq 0
+        }
+    }
+    \frac{1}{2} \pnorm[2]{\vec{w}}{2}
+\]
+with slack variables $\xi_i$. \\
+However, notice that we would want $\xi_i$ to be small as well. \\
+Therefore, we should regularize our obejctive function with some norm of $\vec{\xi}$:
+\[
+    \min_{
+        \substack{
+            \vec{w}, b, \vec{\xi} \\
+            \forall i, y_i (\vec{w}^T \vec{x}_i + b) \geq 1 - \xi_i \\
+            \forall i, \xi_i \geq 0
+        }
+    }
+    \frac{1}{2} \pnorm[2]{\vec{w}}{2} + C \sum_{i = 1}^n \xi_i
+\]
+where $C > 0$ and controls the strength of regularization just as $\lambda$ does in LASSO Regression:
+\begin{bindenum}
+    \item Small $C$: Less Sensitive to Margin Violation
+    \item Large $C$: More Sensitive to Margin Violation
+\end{bindenum}
+
+Now we may also consider the loss function of SVM. \\
+Suppose we illustrate our loss function to be a $0-1$ loss based on mispredictions, then we would be facing a non-convex loss function.
+We should then attempt on the convexization of such function, resulting in a function that we call \textbf{hinge loss}:
+\[
+    L_{\rm hinge} = \max(1 - y_i (\vec{w}^T \vec{x}_i + b), 0)
+\]
+Furthermore, combining the two optimization problem constraints above does grant us that:
+\[
+    \forall i, \xi_i \geq \max(1 - y_i (\vec{w}^T \vec{x}_i + b), 0)
+\]
+Therefore, our formulation for soft-margin SVM can be further paraphrased as its \textbf{Hinge-Loss Formulation}:
+\[
+    \min_{
+        \substack{
+            \vec{w}, b \\
+            \forall i, y_i (\vec{w}^T \vec{x}_i + b) \geq 1 - \xi_i \\
+            \forall i, \xi_i \geq 0
+        }
+    }
+    \frac{1}{2} \pnorm[2]{\vec{w}}{2} + C \sum_{i = 1}^n L_{\rm hinge} (y_i, \vec{w}^T \vec{x}_i + b)
+\]
+
+\subsection{Support Vector Identification via Duality}
+Suppose that we let the dual variables $\alpha_i$, $\beta_i$ correspond to the soft margin SVM formulation's first and second constraint. \\
+Then, we obtain a Lagrangian:
+\begin{align*}
+    \mathcal{L} &(\vec{w}, b, \vec{\xi}, \vec{\alpha}, \beta) \\
+    &= \frac{1}{2} \pnorm[2]{\vec{w}}{2} + c \sum_{i = 1}^n \xi_i + \sum_{i = 1}^n \alpha_i \big( (1 - \xi_i) - y_i (\vec{w}^T \vec{x}_i + b) \big) \\
+    &= \frac{1}{2} \pnorm[2]{\vec{w}}{2} - \sum_{i=1}^n \alpha_i y_i (\vec{w}^T \vec{x}_i + b) + \sum_{i = 1}^n \alpha_i + \sum_{i = 1}^n (C - \alpha_i - \beta_i) \xi_i
+\end{align*}
+The KKT Condition becomes necessary and sufficient for strong duality to hold, as we have convex, aggine constraint with a feasible set of possible solutions (a more precise version of Slater's Condition will not be readdressed here).
+
+Then, the KKT Conditions should be as quoted in the following:
+\begin{quote}
+    \textbf{First-Order Conditions:}
+    \[
+        \begin{cases}
+            \nabla_{\vec{w}} \mathcal{L} = \vec{w} - \sum_i \alpha_i y_i \vec{x}_i = 0 \\
+            \pdv{\mathcal{L}}{b} = -\sum_i \alpha_i y_i = 0 \\
+            \pdv{\mathcal{L}}{\xi_i} = C - \alpha_i - \beta_i = 0
+        \end{cases}
+    \]
+\end{quote}
+From which we can already extract insights on:
+\begin{bindenum}
+    \item The expression of $\vec{w}$ and $C$
+    \item Some $\alpha_i$ becoming non-zero shows its respective optimization constraint to be active.
+\end{bindenum}
+\begin{quote}
+    \textbf{Complementary Slackness:}
+    \[
+        \begin{cases}
+            \alpha_i \big( (1 - \xi_i) - y_i (\vec{w}^T \vec{x}_i + b) \big) = 0 \\
+            \beta_i \xi_i = 0
+        \end{cases}
+    \]
+\end{quote}
+Here, if $\alpha_i \neq 0$, then $\big( (1 - \xi_i) - y_i (\vec{w}^T \vec{x}_i + b) \big) = 0$. \\
+Therefoer, $\alpha_i$ desides which datapoints are the support vectors of a dataset, and $\beta_i$ decides the value of slack variables.
