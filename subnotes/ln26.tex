@@ -1,4 +1,5 @@
 \chapter{Support Vector Machine}
+This note contains two lectures worth of content, and is put in one chapter for coherency.
 
 \section{Introduction to Classifiers}
 In the scheme of classification vectors, we attempt to classify some datapoint $(\vec{x}, y)$ among specific classes, where we attempt to predict the label of this datapoint, $y \in \{1, -1\}$, based on its feature vector, $\vec{x}$.
@@ -184,5 +185,146 @@ From which we can already extract insights on:
         \end{cases}
     \]
 \end{quote}
-Here, if $\alpha_i \neq 0$, then $\big( (1 - \xi_i) - y_i (\vec{w}^T \vec{x}_i + b) \big) = 0$. \\
-Therefoer, $\alpha_i$ desides which datapoints are the support vectors of a dataset, and $\beta_i$ decides the value of slack variables.
+Here, if $0 < \alpha_i  < C$ (such that it is nonzero), then $\big( (1 - \xi_i) - y_i (\vec{w}^T \vec{x}_i + b) \big) = 0$.
+Therefore, $\alpha_i$ desides which datapoints are the support vectors of a dataset, in that any non-zero $\alpha_i$ indicates its corresponding point to have an active constraint. \\
+Meanwhile, $\beta_i$ decides the non-zero-ness of slack variables, such that upon the first-order KKT condition, $\beta_i$ not being $0$ informs us that $\psi_i$ is $0$.
+Hence:
+\[
+    (0 < \alpha_i < C \land \beta_i \neq 0) \implies y_i (\vec{w}^T \vec{x}_i + b) = 1
+\]
+such vector that lies on the margin is known as a support vector. \\
+On the other hand, having a $\beta_i$ provides that such vector is a support vector, but unknown whether on the margin or not.
+In that regard, any vector that forms an active constraint is a support vector. \\
+A vector with $\alpha_i = 0$ is not a support vector then; we may observe this by the KKT condition, and see that any point with $\alpha_i = 0$ does not contribute to the formulation of $\vec{w}$.
+While they can be on the margin, they are ``coincidentally'' on the margin and do not themselves decide the margin.
+
+\section{Computing the Dual of SVM}
+Because Slater's Condition holds for the dual problem of SVM, strong duality holds. \\
+Let us then consider that our solution obeys the KKT Conditions listed in the previous section, such that
+\begin{align*}
+    \mathcal{L}_{\rm KKT}(\vec{w}, \vec{b}, \vec{\xi}, \vec{\alpha}, \vec{\beta})
+    &= \frac{1}{2} \pnorm[2]{\vec{w}}{2} - \sum_i \alpha_i y_i \vec{w}^T \vec{x}_i + \sum_i \alpha_i \\
+    &= \frac{1}{2} \pnorm[2]{\vec{w}}{2} - \vec{w}^T \sum_i \alpha_i y_i \vec{x}_i + \sum_i \alpha_i \\
+    &= \frac{1}{2} \pnorm[2]{\vec{w}}{2} - \pnorm[2]{\vec{w}}{2} + \sum_i \alpha_i \\
+    &= - \frac{1}{2} \pnorm[2]{\vec{w}}{2} + \sum_i \alpha_i \\
+    &= - \frac{1}{2} {\bigg( \sum_i \alpha_i y_i \vec{x}_i \bigg)}^T {\bigg( \sum_i \alpha_i y_i \vec{x}_i \bigg)} + \sum_i \alpha_i \\
+    &= - \frac{1}{2} \vec{\alpha}^T {\rm diag}(\vec{y}) X X^T {\rm diag}(\vec{y}) \vec{\alpha} + \sum_i \alpha_i \\
+    &= - \frac{1}{2} \vec{\alpha}^T Q \vec{\alpha} + \sum_i \alpha_i \\
+    Q &= {\rm diag}(\vec{y}) X X^T {\rm diag}(\vec{y})
+\end{align*}
+where
+\[
+    X = \begin{bmatrix} \vec{x}_1^T \\ \vdots \\ \vec{x}_n^T \end{bmatrix}
+\]
+is out design matrix. \\
+Then, to solve for the max-min of this KKT-substituted Lagrangian, we may perform the following procedure:
+\[
+    d^* = \max_{
+        \substack{
+            \vec{\alpha}, \vec{\beta} \\
+            \sum \alpha_i y_i = 0 \\
+            \forall i, C - \alpha_i - \beta_i = 0 \\
+            \forall i, \alpha_i \geq 0 \\
+            \forall i, \beta_i \geq 0
+        }
+    } - \frac{1}{2} \vec{\alpha}^T Q \vec{\alpha} + \sum_i \alpha_i
+\]
+
+\section{Kernel Trick}
+Suppose that our dataset is ``linearly separable'' by another coordinate system (for example, a circle in polar coordinates). \\
+Therefore, regarding the question of ``is a dataset linearly separable'', we ask more on ``is there a coordinate system by which a dataset is linearly separable''.
+In doing so, we are effectively lifting features. In the case of circles, we are lifting our feature via a feature function of second-order terms:
+\[
+    \vec{x} = \Phi(\vec{x})
+\]
+We would thus change the constraint on hyperplane separability of planes in soft-margin SVM into:
+\[
+    \forall i, y_i (\vec{w}^T \Phi(\vec{x}_i) + b) \geq 1 - \xi_i
+\]
+This brings us to the question: suppose we lift features to achieve better performance in SVM, how does the computational cost fare, and how do we reduce such cost?
+
+Let us propose the idea of a kernel function:
+\[
+    \{\Phi(\vec{x}_i)\}^T \Phi(\vec{x}_j) = \mathcal{K}(\vec{x}_i, \vec{x}_j)
+\]
+The kernel function's purpose is to reduce the computational cost of inner products of lifted features, such that we may compute the matrix $Q$ relatively efficiently. \\
+There are many choices of the kernel function $\mathcal{K}$, which we introduce in COMPSCI 189. \\
+
+For those who are interested, I introduce a description of Kernel Trick from COMPSCI 189 below.
+
+\section{Kernel Trick (from COMPSCI 189)}
+\subsection{Motivation}
+When we have $d$ input features, degree-$p$ polynomial regression presents $\mathcal{O} (d^p)$ features.
+This is a lot.
+However, there is a magic that allows us to use these features without computing all of them.
+
+Such magical trick is based on two observations that, in every learning algorithm:
+\begin{enumerate}
+    \item The weights can be written as a linear combination of the sample points:
+    \[
+        w = X^T a = \sum_{i = 1}^n a_i X_i, a \in \R^n
+    \]
+    \item We can use inner products of $\Phi(x)$ (lifted features) only, and not have to compute the lifted features themselves. These inner products can be computed rather efficiently.
+\end{enumerate}
+For observation (1), we would substitute the above expression of $w$ into an objective function, and now optimize within the algorithm with respect to $a$ (instead of to $w$).
+
+\subsection{Kernel Ridge Regression}
+We may first center $X$ and $y$ (without interfering with the fictitious dimension) such that they are zero-meaned. \\
+This lets us replace $I'$ (identity matrix that doesn't punish fictitious dimension) with $I$ in normal equations:
+\[
+    (X^T X + \lambda I) w = X^T y
+\]
+Then, suppose $a$ of the kernel trick is a solution to:
+\[
+    (X^T X + \lambda I) a = y
+\]
+we obtain:
+\[
+    X^T y = (X^T X + \lambda I) X^T a
+\]
+such that $w = X^T a$ is a solution to the normal equations, and $w$ is a linear combo of sample points. \\
+Here, then $a$ is a dual solution that solves the dual form of ridge regression:
+\[
+    \min_w \pnorm[2]{X X^T a - y}{} + \lambda \pnorm[2]{X^T w}{}
+\]
+When we train, we solve for the $a$ that suits the training set.
+Then, when we test, we compute the regression function as:
+\[
+    h(z) = w^T z = a^T X z = \sum_{i = 1}^n a_i (X_i^T z)
+\]
+Here, we define a kernel function to speed up the computation. \\
+Let $k(x, z) = x^T z$ be a kernel function, then let the kernel matrix be defined as $K = X X^T$. \\
+In other words, $K_{i,j} = k(X_i, X_j)$.
+
+The dual ridge regression algorithm thus involves the following steps:
+\begin{bindenum}
+    \item $\forall i, j, K_{i,j} \leftarrow k(X_i, X_j)$ (This is $\mathcal{O}(n^2 d)$ times)
+    \item Solve $(K + \lambda I)a = y$ for $a$ (This is $\mathcal{O}(n^3)$ times)
+    \item For each test point $z$, $h(z) \leftarrow \sum_i a_i k(X_i, z)$ (This is $\mathcal{O}(n d)$ times)
+\end{bindenum}
+Here, we see that the dual algorithm solves an $n \times n$ lnear system with $\mathcal{O} (n^3 + n^2 d)$ time.
+The primal algorithm, on the other hand, sovles a $d \times d$ linear system with $\mathcal{O} (d^3 + d^2 n)$ time.
+We prefer dual when $d > n$.
+
+\subsection{The Kernel Trick (Kernelization), Polynomial}
+The polynomial kernel function of degree-$p$ polynomial is:
+\[
+    k(x, z) = {(x^T z + 1)}^p
+\]
+Essentially,
+\[
+    {(x^T z + 1)}^p = {\Phi(x)}^T \Phi(z)
+\]
+where, $\Phi(x)$ contains every monomial in $X$ of degree $o, \dots, p$.
+
+\textbf{Example.}
+For $d = 2$, $p = 2$,
+\begin{align*}
+    {(x^T z + 1)}^2
+    &= x_1^2 z_1^2 + x_2^2 z_2^2 + 2 x_1 z_1 x_2 z_2 + 2 x_1 z_1 + 2 x_2 z_2 + 1 \\
+    &= \begin{bmatrix} x_1^2 & x_2^2 & \sqrt{2} x_1 x_2 & \sqrt{2} x_1 & \sqrt{2} x_2 & 1 \end{bmatrix}
+    \begin{bmatrix} z_1^2 \\ z_2^2 \\ \sqrt{2} z_1 z_2 \\ \sqrt{2} z_1 \\ \sqrt{2} z_2 \\ 1 \end{bmatrix} \\
+    &= {\Phi(x)}^T \Phi(z)
+\end{align*}
+Here, we have computed ${\Phi(x)}^T \Phi(z)$ in $\mathcal{O}(d)$ time instead of $\mathcal{O}(d^p)$.
+Therefore, kerneled ridge regression undderlyingly works with lifted feature vectors instead of feature vectors per se, buy we use the polynomial kernel function such that we do not need to compute the feature vectors themselves.

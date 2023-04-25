@@ -1,0 +1,44 @@
+\chapter{Interior Point Methods}
+
+\section{Introduction to Interior Point Method}
+When working with unconstrained QPs and linear equality constrained QPs, we have generally convenient formulas to solve such problems.
+For any program that is not a QP but can be phrased as one, we may approximate it in a second-order Taylor polynomial under unconstrained settings.
+Meanwhile, equality constrained Newton's Method was developed in prior lectures via the help of KKT Conditions and matrix inversion. \\
+Well, what about solving other constrained programs?
+
+Interior Point Method is a powerful tool that we can use to solve constrained optimization problems, specifically on programs with linear equality and linear inequality constraints. \\
+
+\section{Barrier Function}
+Suppose that we face an optimization problem:
+\[
+    \min_{
+        \substack{
+            A \vec{x} = \vec{b} \\
+            \forall i, f_i(\vec{x}) \leq 0
+        }
+    } f_o (\vec{x})
+\]
+We may add an indicator function to our optimization problem, where the indicator function outputs infinity for any point that does not satisfy the inequality constraint, and $0$ for any point that satisfies the inequality constraint. \\
+Then, we may rewrite the problem as:
+\[
+    \min_{
+        A \vec{x} = \vec{b}
+    } f_o (\vec{x}) + \sum_i \mathbbm{1}_{f_i(\vec{x}) \leq 0}
+\]
+Such indicator function is known as the barrier function.
+\begin{ln-define}{Barrier Function}{}
+    In constrained optimization, a field of mathematics, a barrier function is a continuous function whose value on a point increases to infinity as the point approaches the boundary of the feasible region of an optimization problem
+    (\href{https://en.wikipedia.org/wiki/Barrier_function}{Wikipedia}).
+\end{ln-define}
+Suppose rather than using a piecewise indicator function, we work with an approximated one, such that:
+\[
+    I_{\rm approx} (u) = -\frac{1}{t} \log(-u)
+\]
+is the logarithmic barrier function. \\
+Then, our new optimization problem becomes
+\begin{align*}
+    p^* &= \min_{
+        A \vec{x} = \vec{b}
+    } f_o (\vec{x}) + \frac{1}{t} \Phi(\vec{x}) \\
+    \Phi(\vec{x}) &= \sum_{i = 1}^n -\log(-f_i(\vec{x}))
+\end{align*}
