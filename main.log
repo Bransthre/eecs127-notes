@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  25 APR 2023 10:56
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  27 APR 2023 10:45
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1118,11 +1118,11 @@ Overfull \hbox (67.44942pt too wide) in paragraph at lines 4--9
 
 ) [2] (./main.toc [3
 
-] [4])
+] [4] [5])
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
- (./subnotes/ln01.tex [5] [6]
+ (./subnotes/ln01.tex [6]
 Chapter 1.
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 21.
 (c:/texlive/2022/texmf-dist/tex/latex/psnfss/ts1ptm.fd
@@ -1331,17 +1331,34 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--10
 
 [104
 
-]) [105] (./main.aux)
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 87504BC063B154ABCCC73008C55457A2;17548.
+]) [105] (./subnotes/ln28.tex
+Chapter 28.
+
+Underfull \vbox (badness 2027) has occurred while \output is active []
+
+ [106
+
+] [107]) [108] (./subnotes/revision_log.tex
+Chapter 29.
+) [109
+
+] (./main.aux)
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: BF945D1955647EFF8F8347B45F49471F;18222
+(rerunfilecheck)             After:  E1EE74E3EBE6974853ACA14DD6033AFA;18330.
  ) 
 Here is how much of TeX's memory you used:
- 64064 strings out of 475882
- 1617342 string characters out of 5806027
- 2253076 words of memory out of 5000000
- 84111 multiletter control sequences out of 15000+600000
+ 64132 strings out of 475882
+ 1618412 string characters out of 5806027
+ 2253803 words of memory out of 5000000
+ 84173 multiletter control sequences out of 15000+600000
  508330 words of font info for 87 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,20n,145p,852b,2082s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (105 pages).
+Output written on main.pdf (109 pages).

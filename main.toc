@@ -141,3 +141,10 @@
 \contentsline {chapter}{\numberline {27}Interior Point Methods}{104}{chapter.27}%
 \contentsline {section}{\numberline {27.1}Introduction to Interior Point Method}{104}{section.27.1}%
 \contentsline {section}{\numberline {27.2}Barrier Function}{104}{section.27.2}%
+\contentsline {chapter}{\numberline {28}Mixed: Integer Programming}{106}{chapter.28}%
+\contentsline {section}{\numberline {28.1}Integer Programming}{106}{section.28.1}%
+\contentsline {subsection}{\numberline {28.1.1}Exploration by Example}{106}{subsection.28.1.1}%
+\contentsline {section}{\numberline {28.2}Disjunction of Constraints}{107}{section.28.2}%
+\contentsline {section}{\numberline {28.3}Algorithmic Works}{107}{section.28.3}%
+\contentsline {subsection}{\numberline {28.3.1}Demonstration of BB Algorithm}{108}{subsection.28.3.1}%
+\contentsline {chapter}{\numberline {29}Revision Log}{109}{chapter.29}%

@@ -42,3 +42,5 @@ Then, our new optimization problem becomes
     } f_o (\vec{x}) + \frac{1}{t} \Phi(\vec{x}) \\
     \Phi(\vec{x}) &= \sum_{i = 1}^n -\log(-f_i(\vec{x}))
 \end{align*}
+Here, the selection of $t$ depends on the observed primal-dual gap.
+If such gap is large, we increase $t$ (usually doubling). This allows us to warm-start Newton's Method computations as well.
