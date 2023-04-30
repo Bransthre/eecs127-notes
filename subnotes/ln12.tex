@@ -21,12 +21,12 @@ However, we fail to classify linear functions as either convex or concave. Linea
     \]
     The second order condition is altered along a very similar logic:
     \[
-        \nabla^2 f(\vec{x}) > 0
+        \nabla^2 f(\vec{x}) \succ 0
     \]
-    And in summary, a strictly convex function must have a unique minimum (unlike, say, a ReLU function).
+    What distinguishes a convex and a strictly convex function is that a strictly convex function must have a unique minimum (unlike, say, a ReLU function).
 \end{ln-define}
 
-But just like humans, not only can convexity have strict variants, they can also have strong variants.
+Convexity have strict variants, they can also have strong variants.
 Strong convexity implies strict convexity, and strict convexity implies convexity. These definitions are increasingly difficult to satisfy:
 \begin{ln-define}{Strong Convexity}{}
     If $f$ is differentiable, then for some $\mu > 0$, it is $\mu$-strongly convex if domain of $f$ is convex and
@@ -39,7 +39,7 @@ The insight such variant provides is, for some $\mu$-strongly convex function:
     \nabla^2 f(x) \succcurlyeq \mu I \implies \nabla^2 f(x) - \mu I \succcurlyeq 0
 \]
 The smallest possible eigenvalue of the Hessian of $f$ is then $\mu$.
-The larger such value $\mu$ is, the stronger its convex; in other words, the further the function is from being nonconvex.
+The larger such value $\mu$ is, the stronger its convexity; in other words, the further the function is from being nonconvex.
 
 \section{Gradient Descent}
 As you might have learned in prior courseworks (during college, or, high school given Berkeley), there are many variants of Gradient Descent. \\
@@ -49,7 +49,7 @@ Let's think about the vanilla version of gradient descent first, as an unconstra
 \[
     p^* = \min_{\vec{x} \in \R^n} f_0(\vec{x})
 \]
-The foundation of gradient descent algorithm is an ``oracle'' that \underline{guides us at the direction of some greatest descent} along the provided function $f$. \\
+The foundation of gradient descent algorithm is an ``oracle'' that \underline{guides us at the direction of some greatest descent} along the provided function $f$.
 Now, we should understand when does the ``oracle'' guide us to convergence, such that we do not get lost in the search space.
 \par
 Let's find the ``oracle'' via some perspectives on linear perturbation:
@@ -80,7 +80,7 @@ Now, let us write up a draft for the gradient descent algorithm (which I will fo
         \vec{x}_{k + 1} = \vec{x}_k - \eta \nabla f(\vec{x_k})
     \]
 \end{ln-define}
-To get better constant stepsizes, we can perform hyperparamter tuning; or, solve the next subsection.
+To get better constant stepsizes, we can perform hyperparamter tuning, or solve for the optimal stepsize.
 
 \subsection{Finding $\eta$}
 Let us first define the function we perform gradient descent on, to demonstrate the process of finding $\eta$. \\
@@ -129,7 +129,7 @@ This allows us to upperbound the scaling effect of a matrix on some vector to no
 \subsection{Generalizations}
 For functions that are $\mu$-strongly convex, their gradients do not change too slowly. \\
 For functions that are $L$-smooth, such that
-\[
+\[ 
     f(\vec{y}) \leq f(\vec{x}) + \nabla f(\vec{x}) \cdot (\vec{y} - \vec{x}) + \frac{L}{2} \pnorm[2]{\vec{y} - \vec{x}}{2}
 \]
 their gradients do not change too fast.

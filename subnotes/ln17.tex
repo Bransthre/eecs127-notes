@@ -4,7 +4,7 @@
 \subsection{Minimum-Norm Problem, Continued}
 The problem is phrased as:
 \[
-    \min_{\substack{A \vec{x} = \vec{b} \\ A \vec{x} - \vec{b} = \vec{0}}} \vec{x}^T \vec{x}
+    \min_{A \vec{x} = \vec{b}} \vec{x}^T \vec{x}
 \]
 where, $A$ is full rank and thus have infinite solutions. \\
 We may write the lagrangian of such problem as a convex, quadratic function of $\vec{x}$:
@@ -46,8 +46,8 @@ As we have so obtained in the first notes. \\
         d^* = \max_{\vec{\nu}} g(\vec{x}^*, \vec{\nu})
     \]
     is a \textbf{dual problem} of the primal, which is the maximization of a concave function $g$.
-    In such situation, where $p^*$ is equal to its tightest lowerbound $d^*$, we understand this as \textbf{``strong duality''}. \\
-    Otherwise, when $p^* \geq d^*$, we phrase this situation as \textbf{weak duality}.
+    In such situation, where $p^*$ is equal to its tightest lowerbound $d^*$ (such that $p^* = d^*$), we understand this as \textbf{``strong duality''}. \\
+    Otherwise, it must be that $p^* \geq d^*$; we phrase this situation as \textbf{weak duality}.
 \end{ln-define}
 
 \subsection{Partitioning Problem}
@@ -80,7 +80,7 @@ This phrases the function $g$ as a piecewise function:
         -\infty &,\text{ otherwise}
     \end{cases}
 \]
-Consequently,
+Consequently, for $d^*$ to be some tight and meaningful lower bound of $p^*$, we obtain that:
 \begin{align*}
     d^*
     &= \max_{\vec{\nu}} g(\vec{x}^*, \vec{\nu}) \\
@@ -95,20 +95,10 @@ Therefore, we may state that,
 \[
     p^* \geq d^* = n \lambda_{\min} (W)
 \]
-and conclude a case of weak duality.
+and conclude a case of weak duality, as we do not confirm the equality of primal and dual optimum.
 
-\section{Minmax Inequality}
-Let there be a primal problem $p$, and a dual problem $d$, such that: \\
-\textbf{Primal.}
-\[
-    p^* = \min f_0 (\vec{x}) + \sum_{i = 1}^m \mathbbm{1}_{<0} \{f_i(\vec{x})\} + \sum_{j = 1}^n \mathbbm{1}_{0} \{h_j(\vec{x})\}
-\]
-\textbf{Dual.}
-\begin{align*}
-    g(\vec{x}^*, \vec{\nu}) = L(\vec{x}, \vec{\lambda}, \vec{\nu})
-    d^* = \max_{\substack{ \vec{\lambda} \geq 0 \\ \vec{\nu}}} g(\vec{x}^*, \vec{\nu})
-\end{align*}
-Then, the Minmax Inequality states:
+\section{Minmax Inequality Demonstrates Duality Gap}
+The Minmax Inequality states:
 \begin{ln-theorem}{Minmax Inequality}{}
     For any sets $\mathcal{X}, \mathcal{Y}$, function $f$,
     \[
@@ -116,7 +106,7 @@ Then, the Minmax Inequality states:
         \geq
         \max_{\vec{y} \in \mathcal{Y}} \min_{\vec{x} \in \mathcal{X}} f(\vec{x}, \vec{y})
     \]
-    Essentially, in a minimax perspective, going second is always more advantageous.
+    Essentially, it is more advantageous for a turn-base game's player to minimize the maximum possible adversary score, then to maximize the minimum possible own score.
     \tcblower
     \textbf{Proof.}
     Consider some $\vec{x}_0 \in \mathcal{X}$, $\vec{y}_0 \in \mathcal{Y}$, then define
@@ -138,14 +128,27 @@ Then, the Minmax Inequality states:
     The above translates to exactly the Minmax Inequality.
 \end{ln-theorem}
 
-While we consider in an optimization problem that its dual is phrased as:
+What is the application of this theorem? \\
+Let there be a primal problem $p$, and a dual problem $d$, such that: \\
+\textbf{Primal.}
 \[
-    d^* = \max_{\vec{\lambda}, \vec{\nu}} g(\vec{\lambda}, \vec{\nu}) = \max_{\vec{\lambda}, \vec{\nu}} \min_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
+    p^* = \min f_0 (\vec{x}) + \sum_{i = 1}^m \mathbbm{1}_{<0} \{f_i(\vec{x})\} + \sum_{j = 1}^n \mathbbm{1}_{0} \{h_j(\vec{x})\}
 \]
+\textbf{Dual.}
+\begin{align*}
+    g(\vec{x}^*, \vec{\nu}) &= L(\vec{x}, \vec{\lambda}, \vec{\nu}) \\
+    d^* &= \max_{\vec{\lambda} \geq 0, \vec{\nu}} g(\vec{x}^*, \vec{\nu})
+\end{align*}
+
+While we consider that in an optimization problem, its dual is phrased as:
+\begin{align*}
+    d^* &= \max_{\vec{\lambda}, \vec{\nu}} g(\vec{\lambda}, \vec{\nu}) \\
+    &= \max_{\vec{\lambda}, \vec{\nu}} \min_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
+\end{align*}
 we also consider the primal of an optimization problem to phrase,
 \begin{align*}
     p^* &= \max_{\vec{\lambda}, \vec{\nu}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) \\
-    &= \max_{\vec{\lambda}, \vec{\nu}} (f_o(\vec{x}) + \sum_i \lambda_i f_i(\vec{x}) + \sum_i \nu_i h_i (\vec{x})) \\
+    &= \max_{\vec{\lambda}, \vec{\nu}} (f_0(\vec{x}) + \sum_i \lambda_i f_i(\vec{x}) + \sum_i \nu_i h_i (\vec{x})) \\
     &= \begin{cases}
         \infty &,\text{ upon any constraints $f_i, h_i$ violated} \\
         f_0(\vec{x}) &,\text{ if all constraints are unviolated}
@@ -155,7 +158,12 @@ So, provided that the constraints are unviolated in the primal problem,
 \begin{align*}
     p^* &= \min_{\vec{x}} \max_{\vec{\lambda}, \vec{\nu}} (f_o(\vec{x}) + \sum_i \lambda_i f_i(\vec{x}) + \sum_i \nu_i h_i (\vec{x}))
 \end{align*}
-Therefore, along the Minmax Inequality, we may observe that:
+Therefore,
+\begin{align*}
+    p^* &= \min_{\vec{x}} \max_{\vec{\lambda}, \vec{\nu}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) \\
+    d^* &= \max_{\vec{\lambda}, \vec{\nu}} \min_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
+\end{align*}
+along the Minmax Inequality, we may observe that:
 \[
     p^* \geq d^*
 \]

@@ -12,7 +12,7 @@ Then, their optimality implies the following ``KKT Conditions'':
     KKT (Karush Kuhn Tucker) Condition is a series of conditions where, assuming strong duality holding, we may observe the following statements being satisfied at an optimal point, along each partition of the conditions: \\
     \textbf{Stationarity (alternatively, First Order Condition)}:
     \[
-        \forall i \in \{1, \dots, m\}, \nabla f_0(x^*) + \sum \lambda_i^* \nabla {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
+        \nabla f_0(x^*) + \sum \lambda_i^* \nabla {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
     \]
     \textbf{Primal Feasibility}:
     \[
@@ -102,6 +102,10 @@ Therefore, we may perform the following primal-dual translation:
 \]
 
 \section{Shadow Prices}
+A shadow price of a resource constraint in linear programming is usually defined as the maximum price which should be paid to obtain an additional unit of resource
+(\href{https://pubsonline.informs.org/doi/pdf/10.1287/inte.12.2.61#:~:text=A%20shadow%20price%20of%20a,additional%20unit%20of%20re%2D%20source.}{source}). \\
+In other words, shadow price is a specific genre of linear program, and we are here to see how to solve it using what we just learned.
+
 Suppose that we currently consider the following optimization problem:
 \begin{bindenum}
     \item We have $200$ units of merlot grapes, where it earns $\lambda_1$ currency unit per grape unit.

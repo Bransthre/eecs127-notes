@@ -1,6 +1,6 @@
 \chapter{Strong Duality and Optimality Conditions}
 
-\section{Strong Duality}
+\section{Condition of Strong Duality}
 We may observe a duality gap of some optimization problem as $p^* - d^*$; then, when is this duality gap $0$, such that we achieve strong duality?
 The cndition of strong duality is phrased as follows:
 \begin{ln-define}{Slater's Condition}{}
@@ -24,27 +24,30 @@ We can further refine the above condition:
             }
         } f_0 (x)
     \]
-    Then, if there exists some $\vec{x}_0$ in the relative interior of domain of $f$ and also within the feasible region of optimization such that $\forall l, f_l (\vec{x}) < 0$, we may determine that strong duality holds.
+    such that $p^*$ concerns a convex optimization problem. \\
+    Then, suppose $\vec{x}_0$ is a point that exists within the feasible region of optimization such that $\forall l, f_l (\vec{x}) < 0$.
+    If there exists an $\vec{x}_0$ in the relative interior of domain of $f$, we may determine that strong duality holds.
 \end{ln-define}
 
-\section{Optimality Conditions}
+\subsection{The Concept of Certificate}
 A certificate helps to pose a upperbound to the difference between the primal and dual feasible point at a current setting $(point, parameter)$.
 \begin{ln-define}{Certificate}{}
     Suppose we have a dual feasible point $(\lambda, \nu)$ and primal feasible point $\hat{x}$, then we may suppose that:
     \begin{align*}
-        g (\lambda, \nu) \leq d^* \leq p^* \leq f(\hat{x}) \\
-        f(\hat{x}) - p \leq f(\hat{x}) - g(\lambda, \nu) \leq \epsilon
+        g (\lambda, \nu) \leq d^* \leq p^* \leq f_0 (\hat{x}) \\
+        f_0 (\hat{x}) - p \leq f(\hat{x}) - g(\lambda, \nu) \leq \epsilon
     \end{align*}
-    Then, we obtain the following conclusion:
+    Then, we obtain the following conclusion on the interval within which our primal solution exists at:
     \[
         p^* \in [g(\lambda, \nu), f_0 (\hat{x})]
     \]
-    and similarly for $d^*$ upon strong duality.
+    and upon strong duality, we obtain a similar certificate for $d^*$.
 \end{ln-define}
 We, in convex optimization, deal with errors between the primal and dual optimum of some optimization problem. \\
 This requires us to bound the error, and implies that our answers might not be the optimal solution. In other words, its optimality is not guaranteed. \\
 So how do we find optimality in a solution?
 
+\section{Condition of Optimality: KKT}
 We may attempt to find a defining condition for optimality to occur, where the primal and dual optimal solutions are the same (in the case we simplify a constrained primal optimization problem into an unconstrainted dual optimizartion problem). \\
 Suppose our primal optimal point is $\vec{x}^*$ and dual optimal point is $\vec{\lambda}^*, \vec{\nu}^*$, then:
 \begin{align*}
@@ -68,7 +71,7 @@ Now, we further extend upon these arguments to form the KKT conditions:
     KKT (Karush Kuhn Tucker) Condition is a series of conditions where, assuming strong duality holding, we may observe the following statements being satisfied at an optimal point, along each partition of the conditions: \\
     \textbf{Stationarity}:
     \[
-        \forall i \in \{1, \dots, m\}, \nabla f_0(x^*) + \sum \lambda_i^* \nabla {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
+        \nabla f_0(x^*) + \sum \lambda_i^* \nabla {f_i(x^*)} + \sum \nu_j^* \nabla h_j (x^*) = 0
     \]
     \textbf{Primal Feasibility}:
     \[
@@ -86,14 +89,16 @@ Now, we further extend upon these arguments to form the KKT conditions:
         \forall i \in \{1, \dots, m\}, \lambda_i^* f_i(\vec{x}) = 0
     \]
 \end{ln-define}
-If the point is optimal, then KKT condition holds; however, the converse is not necessarily true.
-Then, restricting the space of points satisfying KKT is not really a restirction for optimality, but every point that satisfies KKT need not be optimal. \\
+If a point is optimal, then KKT condition holds at that point; however, the converse is not necessarily true.
+So, restricting the space of points to those satisfying KKT is not really a restirction onto the optimal points only, as every point satisfies KKT need not be optimal.
 However, if our optimization problem is convex, then KKT conditions are sufficient to indicate optimality such that:
 \begin{quote}
     If $(\tilde{x}, \tilde{\lambda}, \tilde{\nu})$ satisfies KKT condition, then $\tilde{x}$ is a primal optimum and $(\tilde{\lambda}, \tilde{\nu})$ is a dual optimum.
 \end{quote}
+such is the privilege of convex optimization properties: KKT condition becomes necessary and sufficient.
 
-\textbf{Summary.} As we ensure the strong duality of a problem by Slater's Condition, we then check for KKT condition to restrict ourselves onto a subset with possibly optimal points; and, in convex optimization problems, KKT conditions guarantee the optimality of its satisfying points.
+\textbf{Summary.}
+As we ensure the strong duality of a problem by Slater's Condition, we then check for KKT condition to restrict ourselves onto a subset with possibly optimal points; and, in convex optimization problems, KKT conditions guarantee the optimality of its satisfying points.
 
 \section{Linear Program}
 \begin{ln-define}{Linear Program}{}
@@ -119,12 +124,12 @@ However, if our optimization problem is convex, then KKT conditions are sufficie
 \end{ln-define}
 Then, the Lagrangian of a linear program can be derived as:
 \begin{align*}
-    L(\vec{x}, \vec{\lambda}, \vec{\nu}) &= \vec{c}^T \vec{x} + \sum_i \lambda_i (A \vec{x} - \vec{b}) + \sum_i \nu_j (U \vec{x} - \vec{v}) \\
+    L(\vec{x}, \vec{\lambda}, \vec{\nu}) &= \vec{c}^T \vec{x} + \vec{\lambda}^T (A \vec{x} - \vec{b}) + \vec{\nu}^T (U \vec{x} - \vec{v}) \\
     g(\vec{\lambda}, \vec{\nu}) &= \min_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
 \end{align*}
 Then, at some optimal point $\vec{x}^*$, we observe that
 \[
-    \nabla_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) = c + A^T \lambda + U^T \nu = 0
+    \nabla_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu}) = c + A^T \vec{\lambda} + U^T \vec{\nu} = 0
 \]
 Therefore, to derive for the optimal solution, we may find an equivalent optimization problem to work on:
 \[

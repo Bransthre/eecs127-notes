@@ -57,7 +57,7 @@ In addition, we define the derivative of vectors as follows:
 Note that it is only for convex functions where the symmetric argument of Hessian applies. \\
 This is beacuse:
 \[
-    \pdv{f}{x_i}{x_j} = \frac{}{\partial x_i} \pdv{f}{x_j}
+    \pdv{f}{x_i}{x_j} = \pdv{f}{x_i} \pdv{f}{x_j}
 \]
 where the order of variables put matters for functions. \\
 The reason why convex functions can host the symmetric Hessian is because of Clairaut's Theorem (not explicitly mentioned in lecture):
@@ -207,6 +207,6 @@ Last but not least, let us explore chain rule in matrix calculus:
     \end{align*}
     We may thus obtain the gradient to be:
     \[
-        \nabla_{\vec{x}} f = 2 A^T (A \vec{x} = \vec{b})
+        \nabla_{\vec{x}} f = 2 A^T (A \vec{x} - \vec{b})
     \]
 \end{ln-define}

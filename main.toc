@@ -12,9 +12,8 @@
 \contentsline {subsection}{\numberline {1.4.2}Closed-Form Solution of Least Squares Problem}{9}{subsection.1.4.2}%
 \contentsline {chapter}{\numberline {2} Linear Algebra Bootcamp: Norms, Gram-Schmidt, QR, FTLA }{11}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Vectors and Norms}{11}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}LP-Norms}{11}{subsection.2.1.1}%
 \contentsline {section}{\numberline {2.2}Cauchy-Schwartz Inequality}{12}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Holder's Inequality and Norm Ball}{13}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.1}Norm Ball}{13}{subsection.2.2.1}%
 \contentsline {section}{\numberline {2.3}Gram-Schmidt Orthonormalization and QR Decomposition}{14}{section.2.3}%
 \contentsline {chapter}{\numberline {3}Linear Algebra: Symmetric Matrices}{16}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Fundamental Theorem of Linear Algebra}{16}{section.3.1}%
@@ -89,10 +88,11 @@
 \contentsline {section}{\numberline {17.1}Introduction to Weak vs. Strong Duality via Problems}{69}{section.17.1}%
 \contentsline {subsection}{\numberline {17.1.1}Minimum-Norm Problem, Continued}{69}{subsection.17.1.1}%
 \contentsline {subsection}{\numberline {17.1.2}Partitioning Problem}{70}{subsection.17.1.2}%
-\contentsline {section}{\numberline {17.2}Minmax Inequality}{71}{section.17.2}%
+\contentsline {section}{\numberline {17.2}Minmax Inequality Demonstrates Duality Gap}{71}{section.17.2}%
 \contentsline {chapter}{\numberline {18}Strong Duality and Optimality Conditions}{73}{chapter.18}%
-\contentsline {section}{\numberline {18.1}Strong Duality}{73}{section.18.1}%
-\contentsline {section}{\numberline {18.2}Optimality Conditions}{73}{section.18.2}%
+\contentsline {section}{\numberline {18.1}Condition of Strong Duality}{73}{section.18.1}%
+\contentsline {subsection}{\numberline {18.1.1}The Concept of Certificate}{73}{subsection.18.1.1}%
+\contentsline {section}{\numberline {18.2}Condition of Optimality: KKT}{74}{section.18.2}%
 \contentsline {section}{\numberline {18.3}Linear Program}{75}{section.18.3}%
 \contentsline {chapter}{\numberline {19}Duality and Shadow Prices}{76}{chapter.19}%
 \contentsline {section}{\numberline {19.1}A Review of KKT Condition}{76}{section.19.1}%

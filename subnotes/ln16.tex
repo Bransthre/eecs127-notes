@@ -46,52 +46,52 @@ Let us consider the general optimization problem of:
 \]
 and a simplified version of it:
 \[
-    s^* = \min_{\substack{
-        f_1(\vec{x}) \leq 0 \\
-        h_1(\vec{x}) = 0
+    p^* = \min_{\substack{
+        f_i(\vec{x}) \leq 0 \\
+        h_j(\vec{x}) = 0
     }} f_0 (\vec{x})
 \]
 We consider these expressions as \textbf{The Primal}.
 
 Let us also introduce an indicator variable:
 \begin{align*}
-    \mathbbm{1}_{<0} \{f_i(\vec{x})\} =
+    \mathbbm{1}_{\leq 0} \{f_i(\vec{x})\} =
     \begin{cases}
         0, &f_i(\vec{x}) \leq 0 \\
         \infty, &f_i(\vec{x}) > 0
     \end{cases} \\
-    \mathbbm{1}_{0} \{h_i(\vec{x})\} =
+    \mathbbm{1}_{0} \{h_j(\vec{x})\} =
     \begin{cases}
-        0, &h_i(\vec{x}) = 0 \\
-        \infty, &h_i(\vec{x}) \neq 0
+        0, &h_j(\vec{x}) = 0 \\
+        \infty, &h_j(\vec{x}) \neq 0
     \end{cases}
 \end{align*}
 such that we will re-introduce the simplified version of above minimization problem as:
 \[
-    s^* = \min f_0 (\vec{x}) + \mathbbm{1}_{<0} \{f_1(\vec{x})\} + \mathbbm{1}_{0} \{h_1(\vec{x})\}
+    p^* = \min f_0 (\vec{x}) + \mathbbm{1}_{\leq 0} \{f(\vec{x})\} + \mathbbm{1}_{0} \{h(\vec{x})\}
 \]
 We may thus write a constrained optimization problem into its unconstrained form. \\
 \[
-    p^* = \min f_0 (\vec{x}) + \sum_{i = 1}^m \mathbbm{1}_{<0} \{f_i(\vec{x})\} + \sum_{j = 1}^n \mathbbm{1}_{0} \{h_j(\vec{x})\}
+    p^* = \min f_0 (\vec{x}) + \sum_{i = 1}^m \mathbbm{1}_{\leq 0} \{f_i(\vec{x})\} + \sum_{j = 1}^n \mathbbm{1}_{0} \{h_j(\vec{x})\}
 \]
 However, these problems present non-continuous objective functions, and we thus cannot directly take the gradient of it to find critical points.
 
 We should then discuss methods of finding some similar expression to the indicator variable. \\
 One choice is as follows:
 \[
-    \mathbbm{1}_{<0} \{f_i(\vec{x})\} \longleftrightarrow \lambda_i f_i (\vec{x}), \lambda_i > 0
+    \mathbbm{1}_{\leq 0} \{f_i(\vec{x})\} \longleftrightarrow \lambda_i f_i (\vec{x}), \lambda_i \geq 0
 \]
-such that our objective function decreases when $f_i(\vec{x}) < 0$ and achieves a similar effect to having such constraint. \\
+such that our objective function increases when $f_i(\vec{x}) > 0$ and achieves a similar effect to having such constraint. \\
 Similarly, 
 \[
-    \mathbbm{1}_{0} \{h_i(\vec{x})\} \longleftrightarrow \nu_i h_i (\vec{x}), \nu_i > 0
+    \mathbbm{1}_{0} \{h_i(\vec{x})\} \longleftrightarrow \nu_i h_i (\vec{x}), \nu_i \neq 0
 \]
 (note: $\nu$, $v$ are different notations.)
 
 \subsection{Lagrangian of an Optimization Problem}
 The Lagrangian of an optimization problem is then defined as:
 \[
-    L(\vec{x}, \vec{\lambda}, \vec{\nu}) = f_0 (\vec{x}) + \sum_{i = 1}^m \lambda_i f_i (\vec{x}) + \sum_{i = 1}^n \lambda_i h_i (\vec{x})
+    L(\vec{x}, \vec{\lambda}, \vec{\nu}) = f_0 (\vec{x}) + \sum_{i = 1}^m \lambda_i f_i (\vec{x}) + \sum_{j = 1}^n \nu_i h_j (\vec{x})
 \]
 where, $\lambda_i, \nu_i$ are called \textbf{dual variables}. This technique extends into what we call ``Lagrange Multipliers''.
 
@@ -101,13 +101,13 @@ Then, we may define some function as follows to help with mathematical convenien
     g(\vec{\lambda}, \vec{\nu}) = \inf_{\vec{x}} L(\vec{x}, \vec{\lambda}, \vec{\nu})
 \]
 Affine functions are convex and concave, and $g$ is a pointwise maximum. \\
-The infimum is a pointwise minimum, which \underline{introduces $g$ as a concave function} (pointwise minimum of multiple concave functions). \\
+The infimum is a pointwise minimum, which \underline{introduces $g$ as a concave function} (pointwise minimum of multiple concave functions).
 The function $g$ thus extracts the minimum possible value of $L$ based on what $\vec{x}$ minimizes it, when given a pair $(\vec{\lambda}, \vec{\nu})$.
-This function $g$ is called a \textbf{Dual Function}, which is corresponding to its primal.
 
+This function $g$ is called a \textbf{Dual Function}, which is corresponding to its primal.
 The purpose of $g$ is esoteric.
 \begin{ln-theorem}{$g$ as Lower Bound of Optimization Solution}{}
-    \textbf{Theorem.} We may consider $g$ as a lower bound on the primal problem's solution $p^*$:
+    \textbf{Theorem.} At feasible points, we may consider $g$ as a lower bound on the primal problem's solution $p^*$:
     \[
         \forall \vec{\lambda} \geq 0, \vec{\nu},\ g(\vec{\lambda}, \vec{\nu}) \leq p^*
     \]
@@ -133,7 +133,9 @@ The purpose of $g$ is esoteric.
 \begin{ln-define}{Dual Problem}{}
     We thus phrase that,
     \[
-        d^* = \max_{\vec{\lambda} \geq 0} g(\vec{\lambda}, \vec{\nu})
+        d^* = \max_{
+            \vec{\lambda} \geq 0, \vec{\nu}
+        } g(\vec{\lambda}, \vec{\nu})
     \]
     is a \textbf{dual problem} of the primal, which is the maximization of a concave function $g$.
 \end{ln-define}

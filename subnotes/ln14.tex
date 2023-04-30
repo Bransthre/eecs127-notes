@@ -12,7 +12,7 @@ the SGD guess rule is that
 \]
 where we may, via prior derivation, see that:
 \[
-    \E[\nabla f_i (\vec{x}_k) = \nabla f(\vec{x}_k)]
+    \E[\nabla f_i (\vec{x}_k)] = \nabla f(\vec{x}_k)
 \]
 SGD is a rather noisy algorithm that doesn't use the true gradient. \\
 Consequently, SGD may not converge with a constant stepsize, and it also loses the property of gradient descent where: upon convergence, the increment between guesses becomes zero due to the gradient at optimum points being $\nabla f(\vec{x}^*) = \vec{0}$.

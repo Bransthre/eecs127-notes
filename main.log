@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  27 APR 2023 10:45
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.26)  30 APR 2023 11:12
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1137,14 +1137,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 44--49
 [8] [9]) [10] (./subnotes/ln02.tex
 Chapter 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 34--36
+Underfull \hbox (badness 10000) in paragraph at lines 32--34
 
  []
 
-
-Underfull \vbox (badness 4673) has occurred while \output is active []
-
- [11
+[11
 
 ] [12] [13] [14]) [15] (./subnotes/ln03.tex
 Chapter 3.
@@ -1263,12 +1260,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 41--51
 [69
 
 ] [70]
-Underfull \vbox (badness 1028) has occurred while \output is active []
+Underfull \vbox (badness 7963) has occurred while \output is active []
 
  [71]) [72] (./subnotes/ln18.tex
 Chapter 18.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 7981) has occurred while \output is active []
 
  [73
 
@@ -1343,20 +1340,14 @@ Chapter 29.
 ) [109
 
 ] (./main.aux)
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: BF945D1955647EFF8F8347B45F49471F;18222
-(rerunfilecheck)             After:  E1EE74E3EBE6974853ACA14DD6033AFA;18330.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 7C9898AE2C42B52D3CAAAA0B68A4253D;18576.
  ) 
 Here is how much of TeX's memory you used:
- 64132 strings out of 475882
- 1618412 string characters out of 5806027
- 2253803 words of memory out of 5000000
- 84173 multiletter control sequences out of 15000+600000
+ 64134 strings out of 475882
+ 1618446 string characters out of 5806027
+ 2254177 words of memory out of 5000000
+ 84175 multiletter control sequences out of 15000+600000
  508330 words of font info for 87 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,20n,145p,852b,2082s stack positions out of 10000i,1000n,20000p,200000b,200000s

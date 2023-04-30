@@ -22,10 +22,8 @@ Particularly, \textbf{norms} are functions that satisfy the following properties
     \end{bindenum}
 \end{ln-define}
 
-\subsection{LP-Norms}
 It is noteworthy to mention that, almost every norm demonstrates one property of the vector.
 For the diversity of characteristics that a vector may have, there certainly exists a diversity of norms for vectors.
-\par
 For example, a general family of norms that satisfy the above properties would be the \textbf{LP-norms}:
 \begin{ln-define}{LP-Norms}{}
     LP-Norms are norm functions defined as:
@@ -75,7 +73,6 @@ Upon matching the two equations, I acquire:
     |{\lVert \vec{x} \rVert}_2 {\lVert \vec{y} \rVert}_2| &= \langle \vec{x}, \vec{y} \rangle
 \end{align*}
 
-\subsection{Holder's Inequality and Norm Ball}
 In fact, we find that the Cauchy-Schwartz is a general case of this inequality:
 \begin{ln-define}{Holder's Inequality}{}
     Provided the quantities
@@ -83,6 +80,8 @@ In fact, we find that the Cauchy-Schwartz is a general case of this inequality:
     Then, 
     \[|\vec{x}^T \vec{y}| \leq {\lVert \vec{x} \rVert}_p{\lVert \vec{y} \rVert}_p\]
 \end{ln-define}
+
+\subsection{Norm Ball}
 From this concept, let us consider the concept of \textit{``norm ball''}: the geographical object containing all vectors such that their lp-norm is $1$.
 
 \begin{bindenum}
@@ -135,7 +134,7 @@ Now, let us attempt to solve for some optimization regarding a norm ball:
 \begin{quote}
     We can find upper bound of the expressionvia Holder's Inequality,
     \[
-        |\vec{x}^T \vec{y}| \leq {\lVert \vec{x} \rVert}_1 {\lVert \vec{y} \rVert}_\infty = \sum_i |y_i|
+        |\vec{x}^T \vec{y}| \leq {\lVert \vec{x} \rVert}_\infty {\lVert \vec{y} \rVert}_1 \leq \sum_i |y_i|
     \]
     The infinity norm of $\vec{x}$ shows the constraint that:
     \[
@@ -152,13 +151,13 @@ Now, let us attempt to solve for some optimization regarding a norm ball:
 Gram-Schmidt Orthonormalization is an algorithmic technique to find an orthonormal basis for a set of vectors. \\
 The procedure of such algorithm is portrayed as defined in the following cell:
 \begin{ln-define}{The Procedure of Gram-Schmidt Orthonormalization}{}
-    Let us have a set of vectors $\{\vec{a_1}, \dots, \vec{a_n}\}$.
+    Let us have a set of vectors $\{\vec{a}_1, \dots, \vec{a}_n\}$.
     \begin{bindenum}
-        \item[1] $\vec{q_1} = \frac{\vec{a_1}}{{\lVert \vec{a_1} \rVert}_2}$
+        \item[1] $\vec{q}_1 = \frac{\vec{a}_1}{{\lVert \vec{a}_1 \rVert}_2}$
         \item[2] for $i$ in $\{2, \dots, n\}$:
-        \item[3] \hspace{0.6cm} $\vec{z_i} = {proj}_{\{\vec{q_1}, \dots, \vec{q_{i - 1}}\}} \vec{a_i} = \sum_{j = 1}^{i - 1} \vec{q_j} \langle \vec{a_i}, \vec{q_j} \rangle$
-        \item[4] \hspace{0.6cm} $\vec{s_i} = \vec{a_i} - \vec{z_i}$
-        \item[5] \hspace{0.6cm} $\vec{q_i} = \frac{\vec{s_i}}{{\lVert \vec{s_i} \rVert}_2}$
+        \item[3] \hspace{0.5cm} $\vec{z_i} = \proj{\{\vec{q}_1, \dots, \vec{q}_{i - 1}\}}{\vec{a}_i} = \sum_{j = 1}^{i - 1} \vec{q}_j \langle \vec{a}_i, \vec{q}_j \rangle$
+        \item[4] \hspace{0.5cm} $\vec{s_i} = \vec{a}_i - \vec{z}_i$
+        \item[5] \hspace{0.5cm} $\vec{q_i} = \frac{\vec{s}_i}{{\lVert \vec{s}_i \rVert}_2}$
         \item[6] return $\{\vec{q_1}, \dots, \vec{q_n}\}$
     \end{bindenum}
 \end{ln-define}
