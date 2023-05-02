@@ -103,21 +103,18 @@
 \contentsline {subsection}{\numberline {20.1.1}Translating General Forms into Standard Forms}{79}{subsection.20.1.1}%
 \contentsline {section}{\numberline {20.2}Interior Point}{81}{section.20.2}%
 \contentsline {chapter}{\numberline {21}Quadratic Program}{83}{chapter.21}%
-\contentsline {section}{\numberline {21.1}Linear Programs, continued}{83}{section.21.1}%
-\contentsline {section}{\numberline {21.2}Quadratic Programs}{84}{section.21.2}%
-\contentsline {subsection}{\numberline {21.2.1}Solving an Unconstrained QP}{84}{subsection.21.2.1}%
-\contentsline {chapter}{\numberline {22}More on Quadratic Programs, and SOCPs}{85}{chapter.22}%
-\contentsline {section}{\numberline {22.1}More on Quadratic Programs}{85}{section.22.1}%
-\contentsline {subsection}{\numberline {22.1.1}Categories of Quadratic Program}{85}{subsection.22.1.1}%
-\contentsline {subsection}{\numberline {22.1.2}Applications of QP}{86}{subsection.22.1.2}%
-\contentsline {subsection}{\numberline {22.1.3}Another Example of Relaxing an Optimization Problem}{86}{subsection.22.1.3}%
-\contentsline {section}{\numberline {22.2}Second Order Cone Programs (SOCP)}{87}{section.22.2}%
-\contentsline {subsection}{\numberline {22.2.1}Facility Location Problem}{88}{subsection.22.2.1}%
+\contentsline {section}{\numberline {21.1}Quadratic Programs}{83}{section.21.1}%
+\contentsline {subsection}{\numberline {21.1.1}Solving an Unconstrained QP}{83}{subsection.21.1.1}%
+\contentsline {section}{\numberline {21.2}Categories of Quadratic Program}{84}{section.21.2}%
+\contentsline {section}{\numberline {21.3}Applications of QP}{85}{section.21.3}%
+\contentsline {chapter}{\numberline {22}Second Order Cone Programs}{87}{chapter.22}%
+\contentsline {section}{\numberline {22.1}Second Order Cone Programs (SOCP)}{87}{section.22.1}%
+\contentsline {subsection}{\numberline {22.1.1}Facility Location Problem}{88}{subsection.22.1.1}%
 \contentsline {chapter}{\numberline {23}LASSO}{89}{chapter.23}%
 \contentsline {section}{\numberline {23.1}L1-norm Optimization}{89}{section.23.1}%
 \contentsline {subsection}{\numberline {23.1.1}L1 Least Squares}{90}{subsection.23.1.1}%
 \contentsline {section}{\numberline {23.2}LASSO (L1) Regularization}{90}{section.23.2}%
-\contentsline {subsection}{\numberline {23.2.1}A Demonstration of LASSO in Scalar Case}{91}{subsection.23.2.1}%
+\contentsline {subsection}{\numberline {23.2.1}A Demonstration of LASSO Sparsity in Scalar Case}{91}{subsection.23.2.1}%
 \contentsline {chapter}{\numberline {24}Descent Methods}{92}{chapter.24}%
 \contentsline {section}{\numberline {24.1}Coordinate Descent}{92}{section.24.1}%
 \contentsline {subsection}{\numberline {24.1.1}The Descent of LASSO}{92}{subsection.24.1.1}%

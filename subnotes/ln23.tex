@@ -37,8 +37,10 @@ to rewrite the above problem as
         }
     } \sum_{i = 1}^n x_i^+ + \sum_{i = 1}^n x_i^-
 \]
-This problem now introduces $\vec{x}^+$ and $\vec{x}^-$ without constraining them, but we understand that for their sum to capture the L1-norm, it must be that the solution $\vec{x}^{+*}, \vec{x}^{-*}$ cannot be at the same time nonzero. \\
-Here, we may realize that if $x_i^+ > 0$ and $x_i^- > 0$, then, for continuing to conform the constraint, we may present a new solution ${x_i^+}', {x_i^-}'$ such that,
+This problem now introduces $\vec{x}^+$ and $\vec{x}^-$ without constraining them, but we understand that for their sum to capture the L1-norm, it must be that the solution $\vec{x}^{+*}, \vec{x}^{-*}$ cannot be at the same time nonzero.
+\par
+Let us perform a quick conceptual proof of the above concept. \\
+If it happens that $x_i^+ > 0$ and $x_i^- > 0$, then, still conforming the constraint that $A \vec{x} = \vec{b}$, we present a new solution ${x_i^+}', {x_i^-}'$ as follows:
 \begin{align*}
     \text{For some } \epsilon \in \R,
     &\begin{cases}
@@ -49,7 +51,8 @@ Here, we may realize that if $x_i^+ > 0$ and $x_i^- > 0$, then, for continuing t
     A({x_i^+}' - {x_i^-}') &= A({x_i^+} - {x_i^-}) = b_i
 \end{align*}
 Furthermore, while this new solution satisfies the constraint, the objective function value decreases by $2 \epsilon$. \\
-Therefore, we may always create a more optimal solution than a supposed optimum at where both of $x_i^+, x_i^-$ are nonzero. \\
+Therefore, we may always create a more optimal solution than a supposed optimum at where both of $x_i^+, x_i^-$ are nonzero.
+\par
 Consequently, the optimum exists where for all $i$, either $x_i^+$ or $x_i^-$ is $0$; there must be one non-zero and one zero component.
 
 \subsection{L1 Least Squares}
@@ -89,7 +92,8 @@ Additionally, let us consider the following notion:
 The derivative of the objective function, $\sum_{i = 1}^n |x - b_i|$, is thus equal to $0$ if we let $x$ become the median of $\vec{b}$. \\
 The implication of this is that median is a more robust solution than the mean, because it is less easily influenced by outliers of a dataset (particularly, outliers influence the mean as they participate in its value, but outliers rarely participate in the detemrination of a median).
 
-An alternative persepctive of the above problem follows. Suppose that $\vec{b} \in n$, where the index $m$ signifies the location of median of $\vec{b}$. \\
+An alternative persepctive of the above problem follows. \\
+Suppose that $\vec{b} \in n$, where the index $m$ signifies the location of median of $\vec{b}$.
 Then, as we phrase the optimization problem above as:
 \[
     \min_{x} |x - b_m| + \sum_{\substack{i = 1 \\ i \neq m}}^n |x - b_i|
@@ -117,7 +121,7 @@ Consequent of the polytope's relationship with coordinate dimensions, the result
 In other words, LASSO encourages sparsity (where the solution vector contains many zero).
 In the machine learning context, this is by itself a selection on some subset of feature.
 
-\subsection{A Demonstration of LASSO in Scalar Case}
+\subsection{A Demonstration of LASSO Sparsity in Scalar Case}
 Let us consider the scalar version of LASSO problem:
 \[
     \min_x \frac{1}{2} \sum_{i = 1}^n {(a_i x - b_i)}^2 + \lambda |x|

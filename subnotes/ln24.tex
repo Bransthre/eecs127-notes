@@ -39,7 +39,7 @@ In such case, we call $h_i$ separables, and there is a proof that performing coo
 An example of some function along the above format would be Least Squares algorithm with LASSO Regularization applied onto it, where $h_i(x_i) = |x_i|$. \\
 To minimize this function using coordinate descent, we may first attempt to compute the gradient of the objective function to obtain the derivative of it w.r.t. $x_i$:
 \[
-    \nabla \frac{1}{2} \pnorm[2]{A \vec{x} - \vec{b}}{2} = A^T (A \vec{x} - \vec{b})
+    \nabla_{\vec{x}} \frac{1}{2} \pnorm[2]{A \vec{x} - \vec{b}}{2} = A^T (A \vec{x} - \vec{b})
 \]
 and find that,
 \[
@@ -111,4 +111,4 @@ Let us summarize the above KKT condition in matrix notation:
     = \begin{bmatrix} -c \\ b \end{bmatrix}
 \]
 Then, by casting the above constraints to a Newton's Method, we can enable Newton's Method to solve equality constrained quadratic programs.
-
+Equality constrained Newton's Method is out of scope.

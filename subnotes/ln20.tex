@@ -96,12 +96,12 @@ Now, let us look at a slightly more complicated example:
     \[
         \begin{cases}
             x_1 + 2x_2 \leq 3 &\rightarrow x_1 + 2x_2 + \xi_1 = 3 \\
-            2x_1 + x_2 \leq 3 &\rightarrow 2x_1 + x_2 + \xi_2 = 3 \\
+            2x_1 + x_2 \leq 3 &\rightarrow 2x_1 + x_2 + \xi_2 = 3
         \end{cases}
     \]
     Furthermore, as both $x_1$ and $x_2$ are not constrained to be nonnegative, we would add four more variables to rephrase them as the arithmetic results of nonnegative numbers:
     \begin{align*}
-        x_1 &= x_1^+ - x_1^-, \text{ where } x_1^+, x_1^- \geq 0
+        x_1 &= x_1^+ - x_1^-, \text{ where } x_1^+, x_1^- \geq 0 \\
         x_2 &= x_2^+ - x_2^-, \text{ where } x_2^+, x_2^- \geq 0
     \end{align*}
     The resulting standard form of LP would then be:
@@ -115,20 +115,13 @@ Now, let us look at a slightly more complicated example:
         } \begin{bmatrix} -1 \\ -1 \end{bmatrix}^T \vec{x}
     \]
     Furthermore, as we observe the graph of the above linear program, we will discover that the minimum lies on the intersection.
-    \par
-    Alternatively, we may find the dual problem of this linear program, and discover that 
 \end{ln-explain}
-We will phrase the observation again as follows:
-\begin{quote}
-    For linear programs, its optimum lies on what we call an extreme point, where the two constraints of our aforementioned LP in Example 20.1.2 intersect. \\
-    Here is a temporary definition to satiate your curiosities:
-    \begin{ln-define}{Extreme Point}{}
-        A point $p$ of a contex set $\mathcal{S}$ is an extreme point if each line segment that lies completely in $\mathcal{S}$ and contains $p$ has $p$ as an endpoint. \\
-        An extreme point is also called a corner point. \\
-        Quoted per written \href{http://www.columbia.edu/~cs2035/courses/csor4231.F09/lpdef.pdf}{this source}.
-    \end{ln-define}
-\end{quote}
-But that's for \href{https://www.youtube.com/watch?v=dQw4w9WgXcQ}{next section}. Let's come back on track.
+For linear programs, its optimum lies on what we call an extreme point, where the two constraints of our aforementioned LP in Example 20.1.2 intersect.
+\begin{ln-define}{Extreme Point}{}
+    A point $p$ of a contex set $\mathcal{S}$ is an extreme point if each line segment that lies completely in $\mathcal{S}$ and contains $p$ has $p$ as an endpoint. \\
+    An extreme point is also called a corner point. \\
+    Quoted per written \href{http://www.columbia.edu/~cs2035/courses/csor4231.F09/lpdef.pdf}{this source}.
+\end{ln-define}
 
 \section{Interior Point}
 Let us define the interior points of a linear program's feasible region:
@@ -137,6 +130,7 @@ Let us define the interior points of a linear program's feasible region:
     \[
         \exists \epsilon > 0, (\forall \vec{z} \in \mathcal{X}, \pnorm{\vec{x} - \vec{z}}{2} \leq \epsilon)
     \]
+    put in a literal sense: if there exists a disk of positive radius centered at $\vec{x}$ that entirely exists in $\mathcal{X}$.
 \end{ln-define}
 Hereby, we introduce the following theorem:
 \begin{ln-theorem}{Optimality of Extreme Point}{}
@@ -162,8 +156,7 @@ Hereby, we introduce the following theorem:
     We reach the contradiction against the assumption that $\vec{x}^*$, the optimizing argument, is an interior point. \\
     Consequently, the optimal argument $\vec{x}^*$ can never be an interior point, and must lie on the boundary of $\mathcal{X}$.
 \end{ln-theorem}
-Furthermore, linear programs' optimal arguments are at what we call an extreme point. \\
-To prove this fact, let us first provide some geometrical definitions to work along:
+Furthermore, linear programs' optimal arguments are at what we call an extreme point.
 \begin{ln-define}{Polyhedron}{}
     A polyhedron is a set:
     \[
@@ -173,7 +166,7 @@ To prove this fact, let us first provide some geometrical definitions to work al
         \}
     \]
     in other words, some set whose points are defined by a linear constraint. \\
-    Keep in mind that not all polyhedrons are not closed sets, but are always convex.
+    Keep in mind that polyhedrons are not necessarily closed sets, but are always convex.
 \end{ln-define}
 \begin{ln-define}{Extreme Point}{}
     Let $\mathcal{P}$ be some polyhedron. \\
@@ -184,10 +177,43 @@ To prove this fact, let us first provide some geometrical definitions to work al
     \]
     Therefore, this is to say that an extreme point is any point in the polyhedron that cannot be expressed as the convex combination of any other two vectors within the polyhedron.
 \end{ln-define}
-\begin{ln-theorem}{Unbounded Polyhedron and Extreme Points}{}
+Then, our arguments are as follows:
+\begin{ln-theorem}{Existence of Solution in Linear Program}{}
     \textbf{Theorem.}
-    Let $\mathcal{P}$ has an extreme point iff $\mathcal{P}$ does not contain a line.
+    Consider some linear program:
+    \[
+        \min_{\vec{x} \in \mathcal{P}} \vec{c}^T \vec{x}
+    \]
+    Assume $\mathcal{P}$ has at least one extreme point, and an optimal solution exists and is finite.
+    Then, there exists an optimal solution that is an extreme point of $\mathcal{P}$.
     \tcblower
-    \textbf{Argument.}
-    Suppose that we have a polyhedron that involves an extreme point where at least two boundaries \underline{intersect}, then any line must intersect at least one boundary that the polyhedron $\mathcal{P}$ involves.
+    \textbf{Proof.}
+    Because we assume $\mathcal{P}$ to have at least one extreme point, it must not contain a line (if it does contain a line, there can't be any extreme points, because extreme points are essentially the intersection of bounds of polyhderon). \\
+    Then, suppose that $v^*$ is an optimal solution of the addressed linear program, where the solution exists by assumption of theorem.
+    We may phrase all possible points presenting this optimal solution to be:
+    \[
+        Q = \{\vec{x} | \vec{x} \in \mathcal{P}, \vec{c}^T \vec{x} = v^*\}
+    \]
+    which is a polyhedron and a subset of $\mathcal{P}$. \\
+    Consequently, as $\mathcal{P}$ already does not contain a line, $Q$ cannot contain a line, and must contain an extreme point.
+
+    Suppose $\vec{x}^*$, one of our working solution that belongs to $Q$, is an extreme point of $Q$.
+    Then, now, suppose for the sake of contradiction that $\vec{x}^*$ is not an extreme point of $\mathcal{P}$, such that:
+    \[
+        \exists \vec{y}, \vec{z} \in (\mathcal{P} - \{\vec{x}^*\}), \theta \in (0, 1), \big( \vec{x}^* = \theta \vec{y} + (1 - \theta) \vec{z} \big)
+    \]
+    From there, 
+    \begin{align*}
+        \vec{c}^T \vec{x}^* &= v^* \\
+        \vec{c}^T [\theta \vec{y} + (1 - \theta) \vec{z}] &= v^* \\
+        \vec{c}^T \vec{x}^*
+        &= \vec{c}^T [\theta \vec{y} + (1 - \theta) \vec{z}] \\
+        &= \theta \vec{c}^T \vec{y} + (1 - \theta) \vec{c}^T \vec{z} = v^*
+    \end{align*}
+    For the above equality to be satisfied, considering that $\vec{c}^T \vec{y} \geq \vec{c}^T \vec{x}$ and $\vec{c}^T \vec{z} \geq \vec{c}^T \vec{x}$, it must be that
+    \[
+        \vec{y} = \vec{z} = \vec{x}^*
+    \]
+    which breaks the premise that $\vec{x}^*$ is an interior point (that $\vec{y} \neq \vec{x}^*$ and so for $\vec{z}$). \\
+    Thus, by the above constraint, $\vec{x}^*$ is not an interior, but an extreme point of $\mathcal{P}$.
 \end{ln-theorem}

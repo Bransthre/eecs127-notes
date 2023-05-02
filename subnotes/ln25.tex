@@ -18,7 +18,7 @@ We perform a minimization on this control, where we also pose the following cons
     \min_{
         \substack{
             \vec{u}_t \\
-            \forall t = 0, \dots, N - 1, \vec{x}_{t + 1} = A \vec{x}_t + B \vec{u}_t \\
+            \forall t = \{0, \dots, N - 1\}, \vec{x}_{t + 1} = A \vec{x}_t + B \vec{u}_t \\
             \vec{x}_0 = \vec{x}_{\rm init}
         }
     } \sum_{t = 0}^{N - 1} \frac{1}{2} (\vec{x}_t^T Q \vec{x}_t + \vec{u}_t^T R \vec{u}_t) + \frac{1}{2} \vec{x}_N^T Q_F \vec{x}_N

@@ -1,133 +1,7 @@
-\chapter{More on Quadratic Programs, and SOCPs}
-I know the way chapters are divided is disastrous in terms of topic-wise content organization, but I'll continue the current division style becuase I want to number each chapter by their respective lecture number.
-
-\section{More on Quadratic Programs}
-\subsection{Categories of Quadratic Program}
-Let us formally define an unconstrained quadratic program:
-\begin{ln-define}{Unconstrained Quadratic Programs}{}
-    An unconstrained QP is generally stated as:
-    \[
-        \min_{A \vec{x} \leq \vec{b}} \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c}^T \vec{x} + \vec{d}
-    \]
-    where, since this is a QP, we have a quadratic objective function and linear constraints. \\
-    For any QP with a convex objective function, the optimization problem itself is convex.
-\end{ln-define}
-Furthermore, we discovered that, in the above definition,
-\begin{quote}
-    If $H \succcurlyeq 0$ and $\vec{c} \in \mathcal{R}(H)$, then we may have an explicit solution. \\
-    Else, the primal solution of this QP is $p^* = -\infty$.
-\end{quote}
-Meanwhile, a constrained QP may be defined as follows:
-\begin{ln-define}{Constrained Quadratic Program}{}
-    A constrained QP is generally expressed as:
-    \[
-        \min_{A \vec{x} = \vec{b}} \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c}^T \vec{x} + \vec{d}
-    \]
-\end{ln-define}
-For a constrained QP:
-\[
-    \min_{A \vec{x} = \vec{b}} \frac{1}{2} \vec{x}^T H \vec{x} + \vec{c}^T \vec{x} + \vec{d}
-\]
-Let $A$ have a nullspace such that $N$ is the basis for $\mathcal{N}(A)$, such that if $\vec{x}_0$ is some solution of the optimization problem, the feasible set is expressed as
-\[
-    \{
-        \vec{x} | \vec{x} = \vec{x}_0 + N \vec{z}
-    \}
-\]
-Therefore, we may rewrite the constrained QP as:
-\begin{align*}
-    &\min_{
-        \substack{
-            \vec{x} = \vec{x}_0 + N \vec{z} \\
-            \vec{z}
-        }
-    } \frac{1}{2} {(\vec{x}_0 + N \vec{z})}^T H (\vec{x}_0 + N \vec{z}) + \vec{c}^T (\vec{x}_0 + N \vec{z}) + d \\
-    &=
-    \min_{\vec{z}} \frac{1}{2} \vec{z}^T (N^T H N) \vec{z} + (\vec{x}_0^T H N + \vec{c}^T N) \vec{z} + \frac{1}{2} \vec{x}_0^T H \vec{x}_0 + \vec{c}^T \vec{x}_0 + d
-\end{align*}
-which is an unconstrained QP.
-
-\subsection{Applications of QP}
-\textbf{LQR.} One famous application of Quadratic Programs is the Linear-Quadratic Regulator (LQR) Problem, where
-\begin{quote}
-    Provided some model $\vec{x}(t + 1) = A \vec{x}(t) + B \vec{u}(t)$, we minimize the cost of operation:
-    \[
-        \min \sum_{t = 0}^T \pnorm[2]{\vec{u}(t)}{2} + \pnorm[2]{\vec{x(T) - \vec{g}}}{2}
-    \]
-\end{quote}
-
-\textbf{LASSO.} Another famous application of Quadratic Program is Least Squares (and Ridge Regression) Algorithm (an unconstrained quadratic program). \\
-And notably, the LASSO regularization,
-\[
-    \min_{\vec{x}} \pnorm[2]{A \vec{x} - \vec{b}}{2} + \lambda \pnorm{\vec{x}}{1}
-\]
-is also a quadratic program, as it can be rephrased into a problem of two variables $x_i$ and $t_i = |x_i|$. \\
-\[
-    \min_{
-        \substack{
-            \vec{x}, \vec{t} \\
-            |x_i| = t_i \\
-            t_i \geq 0
-        }
-    } \pnorm[2]{A \vec{x} - \vec{b}}{2} + \lambda \sum_{i = 1}^n t_i
-\]
-and then relaxed as:
-\[
-    \min_{
-        \substack{
-            \vec{x}, \vec{t} \\
-            \forall i, -t_i \leq x \leq t_i \\
-            t_i \geq 0
-        }
-    } \pnorm[2]{A \vec{x} - \vec{b}}{2} + \lambda \sum_{i = 1}^n t_i
-\]
-Why does this relaxation preserve the original minimum? \\
-Suppose that for some $i$, $\exists \epsilon > 0, t_i = x_i + \epsilon$, such that we have some nonzero slack, and find that another better optimal exists at ${t_i}' = t_i - \epsilon$ where the regularizing term becomes smaller. \\
-However, we would in turn find a better optimum than $x$. Therefore, it must be that the true optimum exists where there is zero slack: where the pre-relaxed constraints hold.
-
-\subsection{Another Example of Relaxing an Optimization Problem}
-Let us look at the piecewise linear filling problem, where we observe that for a set $\{y_1, \dots, y_n\}$ and piecewise constants $\{x_1, \dots, x_n\}$,
-\[
-    \forall i, y_i = x_i + noise
-\]
-The problem deamnds us to find $\hat{\vec{x}}$ such that $\hat{\vec{x}}$ does not change on consecutive timesteps.
-
-To solve this problem, let us define a matrix
-\[
-    D =
-    \begin{bmatrix}
-        -1 & 1 & 0 & \cdots & 0 \\
-        0 & -1 & 1 & \cdots & 0 \\
-        \vdots & \ddots & \ddots & \ddots & \vdots \\
-        0 & \cdots & 0 & -1 & 1
-    \end{bmatrix}
-\]
-such that,
-\[
-    -D \vec{x} =
-    \begin{bmatrix}
-        x_2 - x_1 \\
-        x_3 - x_2 \\
-        \vdots
-        x_n - x_{n - 1}
-    \end{bmatrix}
-\]
-and we would like that the cardinality of $D \vec{x}$ is $Card(D \vec{x}) \leq k$.
-Therefore, we may define the Piecewise Linear Filling problem as:
-\[
-    \min_{card(D \hat{\vec{x}}) \leq k}
-    \pnorm[2]{\vec{y} - \hat{\vec{x}}}{2}
-\]
-
-We will then relax the problem to have a L1-norm cosntraint instead of a relaxed one:
-\[
-    \min_{\pnorm{\vec{x}}{1} \leq k}
-    \pnorm[2]{\vec{y} - \hat{\vec{x}}}{2}
-\]
-A class of methods is proficient at solving these problems efficiently, called the Interior Point Methods.
+\chapter{Second Order Cone Programs}
 
 \section{Second Order Cone Programs (SOCP)}
-Let us first define a ``con'':
+Let us first define a ``cone'':
 \begin{ln-define}{Cone}{}
     A set $\mathcal{K}$ is a cone if:
     \[
@@ -146,7 +20,7 @@ Furthermore, we may define a convex cone as a cone that is also convex:
 \end{ln-define}
 Next, we may define a polyhedral cone as follows:
 \begin{ln-define}{Polyhedral Cone}{}
-    Suppose we have a polyhedron $\mathcal{P} = \{ \vec{x} \big| A \vec{x} - \vec{b}\}$. \\
+    Suppose we have a polyhedron $\mathcal{P} = \{ \vec{x} \big| A \vec{x} = \vec{b}\}$. \\
     Then, a polyhedral cone is the set:
     \[
         \mathcal{K} = \{
@@ -159,19 +33,25 @@ And, a second order cone may thus be defined as:
     \mathcal{K} = \{(\vec{x}, t) \big| \pnorm{\vec{x}}{2} \leq t \} \subset \R^{|\vec{x}| + 1}
 \]
 
-Now, let us consider this general class of problem:
+Now, let us consider this general class of problem, called the SOCP:
 \[
-    \min \vec{g}^T \vec{x} \text{ s.t. } \forall i \in \{1, \dots, m\}, \pnorm{A_i \vec{x} + b_i}{2} \leq \vec{c}_i^T \vec{x} + d_i
+    \min_{
+        \forall i \in \{1, \dots, m\}, \pnorm{A_i \vec{x} + b_i}{2} \leq \vec{c}_i^T \vec{x} + d_i
+    } \vec{g}^T \vec{x}
 \]
-It can be in fact summarized as a SOCP, where suppose:
+Why is it called an SOCP, instead of something like, I don't know, Among Us? \\
+Let us considerthe variables:
 \[
     \begin{cases}
-        \vec{y} &= A_i \vec{x} + b_i \\
-        t &= \vec{c}_i^T \vec{x} + d_i
+        \vec{y} = A_i \vec{x} + b_i \\
+        t = \vec{c}_i^T \vec{x} + d_i
     \end{cases}
 \]
-then the problem has a constraint equivalent to $(\vec{y}, t)$ being contained by some second order cone. \\
-With traingle inequality we may prove that the feasible set of this problem, $\{\vec{x} \big| \pnorm{A_i \vec{x} + b_i}{2} \leq \vec{c}_i^T \vec{x} + d_i \}$ is convex.
+then we see that SOCP problems have a constraint equivalent to the set of points $(\vec{y}, t)$ that is being contained by some second order cone:
+\[
+    \mathcal{K} = \{\vec{x} \big| \pnorm{A_i \vec{x} + b_i}{2} \leq \vec{c}_i^T \vec{x} + d_i \}
+\]
+with traingle inequality we may even prove that the feasible set of this problem, this set is convex.
 You can't imagine how long I've waited to drop this line, but,
 \begin{quote}
     This is left as an exercise to the reader.
